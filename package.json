@@ -1,0 +1,28 @@
+{
+  "name": "jpeg-trust-evaluator",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "A command line tool to evaluate JSON data against JPEG Trust Profiles using json-formula rules.",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "@adobe/json-formula": "^2.0.0-beta.1",
+    "jpeg-js": "^0.4.0",
+    "jsonfile": "^6.1.0",
+    "yaml": "^2.8.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0"
+  },
+  "keywords": [
+    "jpeg",
+    "trust",
+    "evaluator",
+    "json",
+    "command-line"
+  ],
+  "author": "Leonard Rosenthol",
+  "license": "MIT"
+}

@@ -1,0 +1,67 @@
+# Example Trust Profile for evaluating camera_credential.json
+---
+
+metadata:
+  name: Experimental Camera Profile
+  issuer: JPEG Trust Committee
+  date: 2023-09-28T13:19:36.705Z
+  version: 1.0.0
+  language: en
+
+profile_metadata:
+  something: value
+
+---
+# Section 1
+
+- 
+  id: generalInfo
+  description: Section 1 - General Information
+  title: General Information
+  report_text: This section provides information about general stuff
+
+-   # check for content modification 
+  # description provides additional context that does not go into the report
+  id: content
+  description: content is unmodified
+  expression: >
+    manifests[0].claim.content_status == "assertion.dataHash.match"
+  result_text:
+    "true":
+      en: This content has not been modified
+      es: Translation in Spanish
+      zh: Translation in Simplified Chinese
+    "false":
+      en: This content has been modified
+
+---
+# Section 2 - GPS & Location information
+
+-   # check the GPS location
+  id: gps
+  description: GPS location approximate to China's
+  expression: >
+    (manifests[0].assertions.'stds.exif'.'exif:GPSLatitude' > 20) && 
+      (manifests[0].assertions.'stds.exif'.'exif:GPSLatitude' < 50) && 
+      (manifests[0].assertions.'stds.exif'.'exif:GPSLongitude' > 80) && 
+      (manifests[0].assertions.'stds.exif'.'exif:GPSLongitude' < 120)
+  report_text:
+    en: The GPS information shows that the image was taken inside of China
+    fr: Translation in French
+    zh: Translation in Simplified Chinese
+  
+
+-   # check the human entered value for the city
+  id: city
+  description: name of the city contains "China"
+  expression: >
+    contains(manifests[0].assertions.'stds.iptc'
+                                    .'Iptc4xmpExt:LocationCreated'
+                                    .'Iptc4xmpExt:City'
+            , "China")
+  report_text:
+    en: The city is in China
+    fr: Translation in French
+    zh: Translation in Simplified Chinese
+    jp: Translation in Japanese
+
