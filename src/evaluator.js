@@ -65,16 +65,15 @@ export class Evaluator {
             throw new Error('Trust Profile not loaded. Please load a profile before evaluation.');
         }
 
-        console.log('Evaluating JSON data against the Trust Profile...');
+        const trustReport = {};
 
-        // for (const doc of this.profile) {
-        //     console.log(doc.toJSON());
-        // }
+        console.log('Evaluating JSON data against the Trust Profile...');
 
         // start with the first document in the profile, which contains the metadata
         // name, version, issuer, date and are required fields
         const doc0 = this.profile[0].toJSON();
         const metadata = doc0.metadata;
+        trustReport.metadata = metadata; // Store metadata in the report
         const profileInfo = `${metadata.name} (${metadata.version})`;
         console.log(`Evaluating "${profileInfo}" from "${metadata.issuer}" dated ${metadata.date}.`);
 
@@ -94,14 +93,8 @@ export class Evaluator {
             }
         }
 
-        const results = {};
-
-        // for (const rule of this.profile.rules) {
-        //     const formula = rule.formula;
-        //     results[rule.name] = jsonFormula.evaluateFormula(formula, jsonData);
-        // }
-
-        return results;
+        // After processing all sections, we can summarize the results
+        return trustReport;
     }
 }
 

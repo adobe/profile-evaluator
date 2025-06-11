@@ -49,7 +49,7 @@ async function main() {
             if (!fs.existsSync(outputDir)) {
                 fs.mkdirSync(outputDir, { recursive: true });
             }
-            const outputPath = path.join(outputDir, 'evaluation_result.json');
+            const outputPath = path.join(outputDir, 'evaluation_report.json');
             fs.writeFileSync(outputPath, JSON.stringify(result, null, 2));
             console.log(`Evaluation result written to ${outputPath}`);
         } else {
