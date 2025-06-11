@@ -5,7 +5,8 @@
   "description": "A command line tool to evaluate JSON data against JPEG Trust Profiles using json-formula rules.",
   "main": "src/index.js",
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "eslint": "eslint src"
   },
   "dependencies": {
     "@adobe/json-formula": "^2.0.0-beta.1",

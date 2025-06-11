@@ -1,4 +1,4 @@
-import jsonFormula from '@adobe/json-formula'
+import jsonFormula from '@adobe/json-formula';
 
 export function evaluateFormula(formula, data) {
     // Implementation for applying the parsed formula to the JSON data
@@ -13,11 +13,10 @@ export function evaluateFormula(formula, data) {
     // now evaluate the formula against the data
     try {
         const globals = {};
-        var result = myFormula.run(compiledFormula, data, globals);
+        const result = myFormula.run(compiledFormula, data, globals);
         console.log('Evaluation Result:', result);
         return result;
-    }
-    catch (error) {
+    } catch (error) {
         console.error('Error in evaluateFormula:', error);
         throw error;
     }

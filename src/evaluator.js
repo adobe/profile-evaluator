@@ -23,6 +23,8 @@ export class Evaluator {
 
         // If the statement is a section (determined by required `title`)
         // we can log its title and description
+        // otherwise it is an expression
+        // and we can evaluate it
         if (statement.title) {
             console.log(`Processing: ${statement.title} with ID: ${statement.id}`);
             if (statement.description) {
@@ -31,10 +33,7 @@ export class Evaluator {
             if (statement.report_text) {
                 console.log(`Report Text: ${statement.report_text}`);
             }
-        } 
-        // otherwise it is an expression
-        // and we can evaluate it
-        else {
+        } else {
             console.log(`Processing expression with ID: ${statement.id}`);
 
             if (statement.description) {
@@ -53,7 +52,7 @@ export class Evaluator {
         }
 
         console.log('Evaluating JSON data against the Trust Profile...');
-        
+
         // for (const doc of this.profile) {
         //     console.log(doc.toJSON());
         // }
@@ -62,7 +61,8 @@ export class Evaluator {
         // name, version, issuer, date and are required fields
         const doc0 = this.profile[0].toJSON();
         const metadata = doc0.metadata;
-        console.log(`Evaluating "${metadata.name} (${metadata.version})" from ${metadata.issuer} dated ${metadata.date}.`);
+        console.log(`Evaluating "${metadata.name} (${metadata.version})" \
+                     from ${metadata.issuer} dated ${metadata.date}.`);
 
         // -1 one for the metadata document
         console.log(`Profile contains ${this.profile.length-1} sections with rules.`);
