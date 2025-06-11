@@ -26,23 +26,37 @@ export class Evaluator {
         // otherwise it is an expression
         // and we can evaluate it
         if (statement.title) {
-            console.log(`Processing: ${statement.title} with ID: ${statement.id}`);
+            console.log(`\tProcessing: ${statement.title} with ID: ${statement.id}`);
             if (statement.description) {
-                console.log(`Description: ${statement.description}`);
+                console.log(`\t\tDescription: ${statement.description}`);
             }
             if (statement.report_text) {
-                console.log(`Report Text: ${statement.report_text}`);
+                console.log(`\t\tReport Text: ${statement.report_text}`);
             }
         } else {
-            console.log(`Processing expression with ID: ${statement.id}`);
+            console.log(`\tProcessing expression with ID: ${statement.id}`);
 
             if (statement.description) {
-                console.log(`Description: ${statement.description}`);
+                console.log(`\t\tDescription: ${statement.description}`);
             }
 
             // Here we would evaluate the expression against the JSON data
             const result = evaluateFormula(statement.expression, jsonData);
-            console.log(`Result for expression ${statement.id}:`, result);
+            console.log(`\t\tResult:`, result);
+
+            // check if there is some report_text to log
+            // we convert the boolean result to a string, then look for a match
+            if (statement.report_text) {
+                if (typeof result === 'boolean') {
+                    const reportTextObj = statement.report_text[result ? 'true' : 'false'];
+                    if ( typeof reportTextObj === 'object') {
+                        const reportText = reportTextObj['en']; // get the english version
+                        console.log(`\t\tReport Text: ${reportText}`);
+                    } else {
+                        console.log(`\t\tNo report text found!`);
+                    }
+                }
+            }
         }
     }
 
@@ -61,8 +75,8 @@ export class Evaluator {
         // name, version, issuer, date and are required fields
         const doc0 = this.profile[0].toJSON();
         const metadata = doc0.metadata;
-        console.log(`Evaluating "${metadata.name} (${metadata.version})" \
-                     from ${metadata.issuer} dated ${metadata.date}.`);
+        const profileInfo = `${metadata.name} (${metadata.version})`;
+        console.log(`Evaluating "${profileInfo}" from "${metadata.issuer}" dated ${metadata.date}.`);
 
         // -1 one for the metadata document
         console.log(`Profile contains ${this.profile.length-1} sections with rules.`);

@@ -14,7 +14,7 @@ export function evaluateFormula(formula, data) {
     try {
         const globals = {};
         const result = myFormula.run(compiledFormula, data, globals);
-        console.log('Evaluation Result:', result);
+        // console.log('Evaluation Result:', result);
         return result;
     } catch (error) {
         console.error('Error in evaluateFormula:', error);
