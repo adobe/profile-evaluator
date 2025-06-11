@@ -21,23 +21,29 @@ export class Evaluator {
         //  Sections are informative only
         //  Expressions contain the rules that need to be evaluated against the JSON data
 
+        const statementReport = {};
+        statementReport.id = statement.id;
+
         // If the statement is a section (determined by required `title`)
-        // we can log its title and description
+        //      we can log its title and description
         // otherwise it is an expression
-        // and we can evaluate it
+        //      and we can evaluate it
         if (statement.title) {
             console.log(`\tProcessing: ${statement.title} with ID: ${statement.id}`);
             if (statement.description) {
                 console.log(`\t\tDescription: ${statement.description}`);
+                statementReport.description = statement.description;
             }
             if (statement.report_text) {
                 console.log(`\t\tReport Text: ${statement.report_text}`);
+                statementReport.report_text = statement.report_text;
             }
         } else {
             console.log(`\tProcessing expression with ID: ${statement.id}`);
 
             if (statement.description) {
                 console.log(`\t\tDescription: ${statement.description}`);
+                statementReport.description = statement.description;
             }
 
             // Here we would evaluate the expression against the JSON data
@@ -52,12 +58,15 @@ export class Evaluator {
                     if ( typeof reportTextObj === 'object') {
                         const reportText = reportTextObj['en']; // get the english version
                         console.log(`\t\tReport Text: ${reportText}`);
+                        statementReport.report_text = reportText;
                     } else {
                         console.log(`\t\tNo report text found!`);
                     }
                 }
             }
         }
+
+        return statementReport;
     }
 
     evaluate(jsonData) {
@@ -80,13 +89,20 @@ export class Evaluator {
         // -1 one for the metadata document
         console.log(`Profile contains ${this.profile.length-1} sections with rules.`);
 
+        trustReport.sections = [];   // init an array of sections
+
         for (let i = 1; i < this.profile.length; i++) {
             const section = this.profile[i].toJSON();
 
             if (Array.isArray(section)) {
+                const sectionReport = [];
+
                 section.forEach((rule, _idx) => {
-                    this.processOneStatement(rule, jsonData);
+                    const oneSectRep = this.processOneStatement(rule, jsonData);
+                    sectionReport.push(oneSectRep);
                 });
+
+                trustReport.sections.push(sectionReport);
             } else {
                 // If the section is not an array, it might be a single rule or a complex structure
                 this.processOneStatement(section, jsonData);

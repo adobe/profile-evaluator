@@ -5,5 +5,31 @@
     "date": "2023-09-28T13:19:36.705Z",
     "version": "1.0.0",
     "language": "en"
-  }
+  },
+  "sections": [
+    [
+      {
+        "id": "generalInfo",
+        "description": "Section 1 - General Information",
+        "report_text": "This section provides information about general stuff"
+      },
+      {
+        "id": "content",
+        "description": "content is unmodified",
+        "report_text": "This content has not been modified"
+      }
+    ],
+    [
+      {
+        "id": "gps",
+        "description": "GPS location approximate to China's",
+        "report_text": "The GPS information shows that the image was taken inside of China"
+      },
+      {
+        "id": "city",
+        "description": "name of the city contains \"China\"",
+        "report_text": "The city is in China"
+      }
+    ]
+  ]
 }
