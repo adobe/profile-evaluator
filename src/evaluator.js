@@ -71,7 +71,7 @@ export class Evaluator {
             const section = this.profile[i].toJSON();
 
             if (Array.isArray(section)) {
-                section.forEach((rule, idx) => {
+                section.forEach((rule, _idx) => {
                     this.processOneStatement(rule, jsonData);
                 });
             } else {

@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import process from 'process';
 import { Evaluator } from './evaluator.js';
 
 // Simple command line parsing
