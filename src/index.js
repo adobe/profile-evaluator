@@ -49,7 +49,8 @@ async function main() {
             if (!fs.existsSync(outputDir)) {
                 fs.mkdirSync(outputDir, { recursive: true });
             }
-            const outputPath = path.join(outputDir, 'evaluation_report.json');
+            const inputFileName = path.basename(jsonFilePath, path.extname(jsonFilePath));
+            const outputPath = path.join(outputDir, `${inputFileName}_report.json`);
             fs.writeFileSync(outputPath, JSON.stringify(result, null, 2));
             console.log(`Evaluation result written to ${outputPath}`);
         } else {
