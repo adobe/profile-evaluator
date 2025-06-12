@@ -10,24 +10,27 @@
     [
       {
         "id": "generalInfo",
-        "description": "Section 1 - General Information",
+        "title": "Section 1 - General Information",
         "report_text": "This section provides information about general stuff"
       },
       {
         "id": "content",
-        "description": "content is unmodified",
+        "title": "content is unmodified",
+        "value": true,
         "report_text": "This content has not been modified"
       }
     ],
     [
       {
         "id": "gps",
-        "description": "GPS location approximate to China's",
+        "title": "GPS location approximate to China's",
+        "value": true,
         "report_text": "The GPS information shows that the image was taken inside of China"
       },
       {
         "id": "city",
-        "description": "name of the city contains \"China\"",
+        "title": "name of the city contains \"China\"",
+        "value": true,
         "report_text": "The city is in China"
       }
     ]

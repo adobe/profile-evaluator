@@ -32,7 +32,7 @@ export class Evaluator {
             console.log(`\tProcessing: ${statement.title} with ID: ${statement.id}`);
             if (statement.description) {
                 console.log(`\t\tDescription: ${statement.description}`);
-                statementReport.description = statement.description;
+                statementReport.title = statement.description;
             }
             if (statement.report_text) {
                 console.log(`\t\tReport Text: ${statement.report_text}`);
@@ -43,12 +43,13 @@ export class Evaluator {
 
             if (statement.description) {
                 console.log(`\t\tDescription: ${statement.description}`);
-                statementReport.description = statement.description;
+                statementReport.title = statement.description;
             }
 
             // Here we would evaluate the expression against the JSON data
             const result = evaluateFormula(statement.expression, jsonData);
-            console.log(`\t\tResult:`, result);
+            console.log('\t\tResult:', result);
+            statementReport.value = result;
 
             // check if there is some report_text to log
             // we convert the boolean result to a string, then look for a match
@@ -56,11 +57,12 @@ export class Evaluator {
                 if (typeof result === 'boolean') {
                     const reportTextObj = statement.report_text[result ? 'true' : 'false'];
                     if ( typeof reportTextObj === 'object') {
-                        const reportText = reportTextObj['en']; // get the english version
+                        const repLang = 'en'; // default to English
+                        const reportText = reportTextObj[repLang];
                         console.log(`\t\tReport Text: ${reportText}`);
                         statementReport.report_text = reportText;
                     } else {
-                        console.log(`\t\tNo report text found!`);
+                        console.log('\t\tNo report text found!');
                     }
                 }
             }
