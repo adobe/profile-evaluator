@@ -1,0 +1,68 @@
+# Example Trust Profile for evaluating no_manifests_credential.json
+---
+
+metadata:
+  name: Experimental Signature Validation Profile
+  issuer: JPEG Trust Committee
+  date: 2023-09-28T13:19:36.705Z
+  version: 1.0.0
+  language: en
+
+profile_metadata:
+  something: value
+
+---
+# Section 1
+
+- 
+  description: Section 1 - Date checks
+  title: Validity checking based on dates
+  report_text: This section checks the validity dates
+
+-   # check for `not_before` 
+  id: not_before
+  description: check the current date is after `not_before`
+  expression: datetime(signature.validity.not_before) < now()
+  result_text:
+    "true":
+      en: The `not_before` date is prior to right now
+      fr: Translation in French
+      zh: Translation in Simplified Chinese
+    "false":
+      en: The certificate is not yet valid
+
+-   # check for `not_after` 
+  id: not_after
+  description: check the current date is before `not_after`
+  expression: datetime(signature.validity.not_after) > now()
+  result_text:
+    "true":
+      en: The certificate is currently valid
+    "false":
+      en: The certificate is no longer valid
+      fr: Translation in French
+      zh: Translation in Simplified Chinese
+
+---
+# Section 2
+
+- 
+  description: Section 2 - Check the CA/issuer
+  title: Make sure the issuer is on our Trust List
+  report_text: This section checks for valid issuers
+
+-   # check the issuer against known ones
+  id: issuer
+  description: see if the issuer is on our trust list
+  expression: >
+    (signature.issuer.CN="Alice's Trust Services" && signature.issuer.C="US") 
+    || (signature.issuer.CN="ЦСК НБУ" && signature.issuer.C="UA")
+  result_text:
+    "true":
+      en: The issuer is trusted
+      fr: Translation in French
+      zh: Translation in Simplified Chinese
+    "false":
+      en: The issuer is not trusted
+
+

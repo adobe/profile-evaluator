@@ -1,0 +1,77 @@
+# Example Trust Profile for evaluating genai_credential.json
+---
+
+metadata:
+  name: Experimental Generative AI Profile
+  issuer: JPEG Trust Committee
+  date: 2023-10-31T00:16:40.346Z
+  version: 1.0.0
+  language: en
+
+profile_metadata:
+  something: value
+
+---
+# Section 1
+
+- 
+  description: Section 1 - General Information
+  title: General Information
+  report_text: This section provides information about general stuff
+
+-   # check for content modification 
+  # description provides additional context that does not go into the report
+  id: content
+  description: content is unmodified
+  expression: >
+      @declaration.content_status == "assertion.dataHash.match"
+  result_text:
+    "true":
+      en: This content has not been modified
+      es: Translation in Spanish
+      zh: Translation in Simplified Chinese
+    "false":
+      en: This content has been modified
+
+---
+# Section 2 - Is produced by Generative AI (AIGC)?
+
+-   # Is Generative AI?
+    # Checks for 'trainedAlgorithmicMedia' which includes both regular and composited flavors.
+  id: aigc
+  description: Is AIGC?
+  expression: >
+    contains(declaration.assertions."c2pa.actions".actions[0].digitalSourceType, 
+              'trainedAlgorithmicMedia')
+  result_text:
+    "true":
+      en: This media asset was produced by generative AI
+      de: Translation in German
+      zh: Translation in Simplified Chinese
+    "false":
+      en: This media asset was not produced by generative AI
+
+-   # See if the asset has been modified after creation
+  id: declaration_only
+  description: is there a declaration and no manifests present?
+  expression:  contains(keys(@), 'declaration') && !contains(keys(@), 'manifest')
+  result_text:
+    "true":
+      en: No modifications took place after it was created
+    "false":
+      en: This media asset was modified after creation, but with full provenance
+
+---
+# Section 3 - Compliance
+
+- # check compliance
+  id: jpt:profile_compliance
+  description: is the asset compliant with this profile?
+  expression: >
+    @profile.aigc && @profile.declaration_only
+  result_text:
+    "true":
+      en: This media asset is compliant with this profile.
+    "false": 
+      en: This media asset is not compliant with this profile.
+
