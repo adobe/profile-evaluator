@@ -1,0 +1,26 @@
+{
+  "metadata": {
+    "name": "Experimental No Manifests Profile",
+    "issuer": "JPEG Trust Committee",
+    "date": "2023-11-02T01:03:16.443Z",
+    "version": "1.0.0",
+    "language": "en"
+  },
+  "sections": [
+    [
+      {
+        "id": "generalInfo",
+        "title": "Section 1 - General Information",
+        "report_text": "This section provides information about general stuff"
+      },
+      {
+        "id": "manifests",
+        "title": "does the asset contain any manifests",
+        "value": false
+      },
+      {
+        "id": "jpt.profile_compliance"
+      }
+    ]
+  ]
+}

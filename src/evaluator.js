@@ -41,6 +41,13 @@ export class Evaluator {
         } else {
             console.log(`\tProcessing expression with ID: ${statement.id}`);
 
+            if (statement.id.startsWith('jpt.')) {
+                console.log(`\t\tSpecial "predefined statement": ${statement.id}`);
+                // BOGUS: aborting for now
+                // TODO
+                return statementReport;
+            }
+
             if (statement.description) {
                 console.log(`\t\tDescription: ${statement.description}`);
                 statementReport.title = statement.description;

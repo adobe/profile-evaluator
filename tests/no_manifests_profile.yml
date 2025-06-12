@@ -15,6 +15,7 @@ profile_metadata:
 # Section 1
 
 - 
+  id: generalInfo
   description: Section 1 - General Information
   title: General Information
   report_text: This section provides information about general stuff
@@ -22,7 +23,7 @@ profile_metadata:
 -   # check for manifests 
   id: manifests
   description: does the asset contain any manifests
-  expression: not_null(@.manifest) || not_null(@.declaration)
+  expression: hasProperty(@, "manifest") || hasProperty(@, "declaration")
   result_text:
     "true":
       en: This media asset has one or more trust manifests
@@ -32,7 +33,7 @@ profile_metadata:
       en: No trust manifests found in this media asset
 
 - # check compliance
-  id: jpt:profile_compliance
+  id: jpt.profile_compliance
   description: is the asset compliant with this profile?
   expression: >
     @profile.manifests

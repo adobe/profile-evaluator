@@ -17,6 +17,34 @@
 				"-p", "${workspaceFolder}/tests/camera_profile.yml",
 				"${workspaceFolder}/tests/camera_indicators.json"
 			]
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "GenAI-Test",
+			"skipFiles": [
+				"<node_internals>/**"
+			],
+			"program": "${workspaceFolder}/src/index.js",
+			"args": [
+				"-o", "${workspaceFolder}/output",
+				"-p", "${workspaceFolder}/tests/genai_profile.yml",
+				"${workspaceFolder}/tests/genai_indicators.json"
+			]
+		},
+				{
+			"type": "node",
+			"request": "launch",
+			"name": "NoManifest-Test",
+			"skipFiles": [
+				"<node_internals>/**"
+			],
+			"program": "${workspaceFolder}/src/index.js",
+			"args": [
+				"-o", "${workspaceFolder}/output",
+				"-p", "${workspaceFolder}/tests/no_manifests_profile.yml",
+				"${workspaceFolder}/tests/no_manifests_indicators.json"
+			]
 		}
 	]
 }
