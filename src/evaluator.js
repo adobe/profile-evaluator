@@ -45,7 +45,7 @@ export class Evaluator {
                 console.log(`\t\tSpecial "predefined statement": ${statement.id}`);
                 // BOGUS: aborting for now
                 // TODO
-                return statementReport;
+                // return statementReport;
             }
 
             if (statement.description) {
@@ -57,6 +57,13 @@ export class Evaluator {
             const result = evaluateFormula(statement.expression, jsonData);
             console.log('\t\tResult:', result);
             statementReport.value = result;
+
+            // store the value in a special entry called "profile" in the original JSON
+            // so that it can be found later
+            if (!jsonData.profile) {
+                jsonData.profile = {};
+            }
+            jsonData.profile[statement.id] = result;
 
             // check if there is some report_text to log
             // we convert the boolean result to a string, then look for a match

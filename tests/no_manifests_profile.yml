@@ -36,7 +36,7 @@ profile_metadata:
   id: jpt.profile_compliance
   description: is the asset compliant with this profile?
   expression: >
-    @profile.manifests
+    @.profile.manifests
   result_text:
     "true":
       en: This media asset is compliant with this profile.

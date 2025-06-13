@@ -69,7 +69,7 @@ profile_metadata:
   id: jpt.profile_compliance
   description: is the asset compliant with this profile?
   expression: >
-    @profile.aigc && @profile.declaration_only
+    @.profile.aigc && @.profile.declaration_only
   result_text:
     "true":
       en: This media asset is compliant with this profile.

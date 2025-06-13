@@ -19,7 +19,9 @@
         "value": false
       },
       {
-        "id": "jpt.profile_compliance"
+        "id": "jpt.profile_compliance",
+        "title": "is the asset compliant with this profile?",
+        "value": false
       }
     ]
   ]
