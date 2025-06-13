@@ -32,7 +32,7 @@
 				"${workspaceFolder}/tests/genai_indicators.json"
 			]
 		},
-				{
+		{
 			"type": "node",
 			"request": "launch",
 			"name": "NoManifest-Test",
@@ -44,6 +44,20 @@
 				"-o", "${workspaceFolder}/output",
 				"-p", "${workspaceFolder}/tests/no_manifests_profile.yml",
 				"${workspaceFolder}/tests/no_manifests_indicators.json"
+			]
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Signature-Test",
+			"skipFiles": [
+				"<node_internals>/**"
+			],
+			"program": "${workspaceFolder}/src/index.js",
+			"args": [
+				"-o", "${workspaceFolder}/output",
+				"-p", "${workspaceFolder}/tests/signature_profile.yml",
+				"${workspaceFolder}/tests/s01-standard-manifest-with-actions-2ed.json"
 			]
 		}
 	]
