@@ -11,6 +11,10 @@ metadata:
 profile_metadata:
   something: value
 
+sample_common:
+  description: This is a sample camera profile for testing purposes
+  number:  1234567890
+
 ---
 # Section 1
 

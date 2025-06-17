@@ -94,9 +94,19 @@ export class Evaluator {
 
         console.log('Evaluating JSON data against the Trust Profile...');
 
-        // start with the first document in the profile, which contains the metadata
-        // name, version, issuer, date and are required fields
+        // start with the first document in the profile
         const doc0 = this.profile[0].toJSON();
+
+        // add all fields from the first document to the jsonData
+        // this allows the profile to access them later (e.g., in expressions or templates)
+        for (const [key, value] of Object.entries(doc0)) {
+            jsonData[key] = value;
+            console.log(`Copying "${key}" to the trust indicators.`);
+        }
+
+        // extract the required `metadata` field
+        //      name, version, issuer, date and are required fields
+        // and add it to the report, as required by the spec
         const metadata = doc0.metadata;
         trustReport.metadata = metadata; // Store metadata in the report
         const profileInfo = `${metadata.name} (${metadata.version})`;
