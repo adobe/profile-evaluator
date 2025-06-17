@@ -1,6 +1,6 @@
 {
 	"@context": [
-		"http://jpeg.org/jpegtrust/"
+		"https://jpeg.org/jpegtrust/"
 	],
 	"declaration" :  {
 	  "claim": {
