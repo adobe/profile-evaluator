@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import YAML from 'yaml';
+import Handlebars from 'handlebars';
 import { evaluateFormula } from './utils/jsonFormula.js';
 
 export class Evaluator {
@@ -35,8 +36,19 @@ export class Evaluator {
                 statementReport.title = statement.description;
             }
             if (statement.report_text) {
-                console.log(`\t\tReport Text: ${statement.report_text}`);
-                statementReport.report_text = statement.report_text;
+                let reportText = statement.report_text;
+
+                // see if the report text contains a template
+                // if it does, we compile it with Handlebars
+                // and pass the jsonData to it
+                // otherwise we just use the report text as is
+                if (reportText && reportText.includes('{{')) {
+                    const template = Handlebars.compile(reportText);
+                    reportText = template(jsonData);
+                }
+
+                console.log(`\t\tReport Text: ${reportText}`);
+                statementReport.report_text = reportText;
             }
         } else {
             console.log(`\tProcessing expression with ID: ${statement.id}`);
@@ -72,7 +84,17 @@ export class Evaluator {
                     const reportTextObj = statement.report_text[result ? 'true' : 'false'];
                     if ( typeof reportTextObj === 'object') {
                         const repLang = 'en'; // default to English
-                        const reportText = reportTextObj[repLang];
+                        let reportText = reportTextObj[repLang];
+
+                        // see if the report text contains a template
+                        // if it does, we compile it with Handlebars
+                        // and pass the jsonData to it
+                        // otherwise we just use the report text as is
+                        if (reportText && reportText.includes('{{')) {
+                            const template = Handlebars.compile(reportText);
+                            reportText = template(jsonData);
+                        }
+
                         console.log(`\t\tReport Text: ${reportText}`);
                         statementReport.report_text = reportText;
                     } else {

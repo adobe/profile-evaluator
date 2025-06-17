@@ -1,0 +1,50 @@
+# Example Trust Profile for testing handlebars/template rendering
+---
+
+metadata:
+  name: Template Test Profile
+  issuer: JPEG Trust Committee
+  date: 2025-06-17T22:44:49.717Z
+  version: 1.0.0
+  language: en
+
+sample_common:
+  description: This is a profile for testing purposes
+
+---
+# Section 1
+
+- 
+  id: generalInfo
+  description: Section 1 - General Information
+  title: General Information
+  report_text: This section provides information about '{{sample_common.description}}'
+
+-   # check for content modification 
+  # description provides additional context that does not go into the report
+  id: content
+  description: content is unmodified
+  expression: >
+    manifests[0].claim.content_status == "assertion.dataHash.match"
+  report_text:
+    "true":
+      en: This content has not been modified
+      es: Translation in Spanish
+      zh: Translation in Simplified Chinese
+    "false":
+      en: This content has been modified
+
+---
+# Section 3 - Compliance
+
+- # check compliance
+  id: jpt.profile_compliance
+  description: is the asset compliant with this profile?
+  expression: >
+    @.profile.content
+  report_text:
+    "true":
+      en: This media asset is compliant with '({{metadata.name}}, {{metadata.version}})'.
+    "false": 
+      en: This media asset is not compliant with '({{metadata.name}}, {{metadata.version}})'.
+

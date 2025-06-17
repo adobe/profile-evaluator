@@ -59,6 +59,20 @@
 				"-p", "${workspaceFolder}/tests/signature_profile.yml",
 				"${workspaceFolder}/tests/s01-standard-manifest-with-actions-2ed.json"
 			]
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Profile-Test",
+			"skipFiles": [
+				"<node_internals>/**"
+			],
+			"program": "${workspaceFolder}/src/index.js",
+			"args": [
+				"-o", "${workspaceFolder}/output",
+				"-p", "${workspaceFolder}/tests/template_profile.yml",
+				"${workspaceFolder}/tests/s01-standard-manifest-with-actions-2ed.json"
+			]
 		}
 	]
 }
