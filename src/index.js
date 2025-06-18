@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import process from 'process';
+import YAML from 'yaml';
 import { Evaluator } from './evaluator.js';
 
 // Simple command line parsing
@@ -13,6 +14,8 @@ function parseArgs(argv) {
             args.profile = argv[++i];
         } else if (arg === '-o' || arg === '--output') {
             args.output = argv[++i];
+        } else if (arg === '-y' || arg === '--yaml') {
+            args.yamlReport = true;
         } else if (!args.jsonFile) {
             args.jsonFile = arg;
         } else {
@@ -50,8 +53,13 @@ async function main() {
                 fs.mkdirSync(outputDir, { recursive: true });
             }
             const inputFileName = path.basename(jsonFilePath, path.extname(jsonFilePath));
-            const outputPath = path.join(outputDir, `${inputFileName}_report.json`);
-            fs.writeFileSync(outputPath, JSON.stringify(result, null, 2));
+            const ext = args.yamlReport ? 'yml' : 'json';
+            const outputPath = path.join(outputDir, `${inputFileName}_report.${ext}`);
+            if ( args.yamlReport) {
+                fs.writeFileSync(outputPath, YAML.stringify(result));
+            } else {
+                fs.writeFileSync(outputPath, JSON.stringify(result, null, 2));
+            }
             console.log(`Evaluation result written to ${outputPath}`);
         } else {
             console.log('Evaluation Result:', result);

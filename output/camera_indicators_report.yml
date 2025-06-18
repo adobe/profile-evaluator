@@ -1,0 +1,22 @@
+metadata:
+  name: Experimental Camera Profile
+  issuer: JPEG Trust Committee
+  date: 2023-09-28T13:19:36.705Z
+  version: 1.0.0
+  language: en
+sections:
+  - - id: generalInfo
+      title: Section 1 - General Information
+      report_text: This section provides information about general stuff
+    - id: content
+      title: content is unmodified
+      value: true
+      report_text: This content has not been modified
+  - - id: gps
+      title: GPS location approximate to China's
+      value: true
+      report_text: The GPS information shows that the image was taken inside of China
+    - id: city
+      title: name of the city contains "China"
+      value: true
+      report_text: The city is in China

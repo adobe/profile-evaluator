@@ -1,0 +1,22 @@
+metadata:
+  name: Experimental Generative AI Profile
+  issuer: JPEG Trust Committee
+  date: 2023-10-31T00:16:40.346Z
+  version: 1.0.0
+  language: en
+sections:
+  - - id: generalInfo
+      title: Section 1 - General Information
+      report_text: This section provides information about general stuff
+    - id: content
+      title: content is unmodified
+      value: true
+  - - id: aigc
+      title: Is AIGC?
+      value: true
+    - id: declaration_only
+      title: is there a declaration and no manifests present?
+      value: true
+  - - id: jpt.profile_compliance
+      title: is the asset compliant with this profile?
+      value: true
