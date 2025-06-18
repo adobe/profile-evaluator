@@ -44,7 +44,7 @@ profile_metadata:
   expression: >
     contains(declaration.assertions.'c2pa.actions'.actions[0].digitalSourceType, 
               "trainedAlgorithmicMedia")
-  result_text:
+  report_text:
     "true":
       en: This media asset was produced by generative AI
       de: Translation in German
@@ -56,7 +56,7 @@ profile_metadata:
   id: declaration_only
   description: is there a declaration and no manifests present?
   expression:  contains(keys(@), "declaration") && !contains(keys(@), "manifest")
-  result_text:
+  report_text:
     "true":
       en: No modifications took place after it was created
     "false":
@@ -70,7 +70,7 @@ profile_metadata:
   description: is the asset compliant with this profile?
   expression: >
     @.profile.aigc && @.profile.declaration_only
-  result_text:
+  report_text:
     "true":
       en: This media asset is compliant with this profile.
     "false": 

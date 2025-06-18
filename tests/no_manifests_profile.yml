@@ -24,7 +24,7 @@ profile_metadata:
   id: manifests
   description: does the asset contain any manifests
   expression: hasProperty(@, "manifest") || hasProperty(@, "declaration")
-  result_text:
+  report_text:
     "true":
       en: This media asset has one or more trust manifests
       de: Translation in German
@@ -37,7 +37,7 @@ profile_metadata:
   description: is the asset compliant with this profile?
   expression: >
     @.profile.manifests
-  result_text:
+  report_text:
     "true":
       en: This media asset is compliant with this profile.
     "false": 

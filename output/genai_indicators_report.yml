@@ -14,9 +14,12 @@ sections:
   - - id: aigc
       title: Is AIGC?
       value: true
+      report_text: This media asset was produced by generative AI
     - id: declaration_only
       title: is there a declaration and no manifests present?
       value: true
+      report_text: No modifications took place after it was created
   - - id: jpt.profile_compliance
       title: is the asset compliant with this profile?
       value: true
+      report_text: This media asset is compliant with this profile.
