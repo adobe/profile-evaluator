@@ -37,6 +37,12 @@ profile_metadata:
 ---
 # Section 2 - Is produced by Generative AI (AIGC)?
 
+- 
+  id: genAI
+  description: Section 2 - Is Generative AI?
+  title: Generative AI Usage
+  report_text: This section provides information about whether or not the media asset was produced by generative AI.
+
 -   # Is Generative AI?
     # Checks for 'trainedAlgorithmicMedia' which includes both regular and composited flavors.
   id: aigc
@@ -64,6 +70,12 @@ profile_metadata:
 
 ---
 # Section 3 - Compliance
+
+- 
+  id: compliance
+  description: Section 3 - Compliance
+  title: Compliance
+  report_text: This section provides the compliance status of the media asset with respect to this profile.
 
 - # check compliance
   id: jpt.profile_compliance

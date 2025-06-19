@@ -38,8 +38,24 @@ sample_common:
     "false":
       en: This content has been modified
 
+-   # See if the asset has been modified after creation
+  id: declaration_only
+  description: is there a declaration and no manifests present?
+  expression:  contains(keys(@), "declaration") && !contains(keys(@), "manifest")
+  report_text:
+    "true":
+      en: No modifications took place after it was created
+    "false":
+      en: This media asset was modified after creation, but with full provenance
+
 ---
 # Section 2 - GPS & Location information
+
+- 
+  id: location
+  description: Section 2 - GPS & Location information
+  title: Location Information
+  report_text: This section provides information about where the image was taken
 
 -   # check the GPS location
   id: gps

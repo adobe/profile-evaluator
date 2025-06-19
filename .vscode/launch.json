@@ -109,6 +109,21 @@
 		{
 			"type": "node",
 			"request": "launch",
+			"name": "NoManifest-Test-HTML",
+			"skipFiles": [
+				"<node_internals>/**"
+			],
+			"program": "${workspaceFolder}/src/index.js",
+			"args": [
+				"-o", "${workspaceFolder}/output",
+				"-p", "${workspaceFolder}/tests/no_manifests_profile.yml",
+				"--html", "${workspaceFolder}/tests/report_template.html",
+				"${workspaceFolder}/tests/no_manifests_indicators.json"
+			]
+		},
+		{
+			"type": "node",
+			"request": "launch",
 			"name": "Signature-Test",
 			"skipFiles": [
 				"<node_internals>/**"

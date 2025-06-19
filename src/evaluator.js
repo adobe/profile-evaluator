@@ -31,10 +31,19 @@ export class Evaluator {
         //      and we can evaluate it
         if (statement.title) {
             console.log(`\tProcessing: ${statement.title} with ID: ${statement.id}`);
-            if (statement.description) {
-                console.log(`\t\tDescription: ${statement.description}`);
-                statementReport.title = statement.description;
+
+            if (statement.title) {
+                console.log(`\t\tDescription: ${statement.title}`);
+                statementReport.title = statement.title;
             }
+
+            // spec says;
+            //  "A human readable description of the statement that will not be taken over in associated Trust Reports"
+            // if (statement.description) {
+            //     console.log(`\t\tDescription: ${statement.description}`);
+            //     statementReport.title = statement.description;
+            // }
+
             if (statement.report_text) {
                 let reportText = statement.report_text;
 
@@ -60,10 +69,12 @@ export class Evaluator {
                 // return statementReport;
             }
 
-            if (statement.description) {
-                console.log(`\t\tDescription: ${statement.description}`);
-                statementReport.title = statement.description;
-            }
+            // spec says;
+            //  "A human readable description of the statement that will not be taken over in associated Trust Reports"
+            // if (statement.description) {
+            //     console.log(`\t\tDescription: ${statement.description}`);
+            //     statementReport.title = statement.description;
+            // }
 
             // Here we would evaluate the expression against the JSON data
             const result = evaluateFormula(statement.expression, jsonData);

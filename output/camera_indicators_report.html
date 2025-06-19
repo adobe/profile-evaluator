@@ -20,7 +20,7 @@
     .float-yellow { background: #ffc107; color: black; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
     .float-red { background: #f44336; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
     .summary-tagged .tag { font-size: 0.9em; color: #666; margin-left: 6px; }
-    .id-line { font-size: 0.8em; color: #888; display: none; padding-top: 0.2em; }
+    .id-line { font-size: 0.8em; color: #888; padding-top: 0.2em; }
     .entry.show-id .id-line { display: block; }
     .chevron { cursor: pointer; color: #888; margin-right: 6px; user-select: none; }
     .donut { width: 120px; height: 120px; display: inline-block; vertical-align: middle; }
@@ -40,16 +40,38 @@
 	</div>
 
 
-	<div class="section">
-				<h3>Section 1 - General Information</h3>
+		<div class="section">
+			<h3>General Information</h3>
 				<div class="section-description">This section provides information about general stuff</div>
-				<h3>content is unmodified</h3>
-				<div class="section-description">This content has not been modified</div>
-				<h3>GPS location approximate to China&#x27;s</h3>
-				<div class="section-description">The GPS information shows that the image was taken inside of China</div>
-				<h3>name of the city contains &quot;China&quot;</h3>
-				<div class="section-description">The city is in China</div>
-	</div>
+			<h3></h3>
+				<div class="entry">
+					<span class="chevron">▶</span>
+					This content has not been modified
+           			<div class="id-line"><strong>ID:</strong> content | <strong>Value:</strong> true</div>
+				</div>
+			<h3></h3>
+				<div class="entry">
+					<span class="chevron">▶</span>
+					No modifications took place after it was created
+           			<div class="id-line"><strong>ID:</strong> declaration_only | <strong>Value:</strong> true</div>
+				</div>
+		</div>
+		<div class="section">
+			<h3>Location Information</h3>
+				<div class="section-description">This section provides information about where the image was taken</div>
+			<h3></h3>
+				<div class="entry">
+					<span class="chevron">▶</span>
+					The GPS information shows that the image was taken inside of China
+           			<div class="id-line"><strong>ID:</strong> gps | <strong>Value:</strong> true</div>
+				</div>
+			<h3></h3>
+				<div class="entry">
+					<span class="chevron">▶</span>
+					The city is in China
+           			<div class="id-line"><strong>ID:</strong> city | <strong>Value:</strong> true</div>
+				</div>
+		</div>
 
   </div>
 </body>

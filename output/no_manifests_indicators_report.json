@@ -10,18 +10,18 @@
     [
       {
         "id": "generalInfo",
-        "title": "Section 1 - General Information",
+        "title": "General Information",
         "report_text": "This section provides information about general stuff"
       },
       {
         "id": "manifests",
-        "title": "does the asset contain any manifests",
-        "value": false
+        "value": false,
+        "report_text": "No trust manifests found in this media asset"
       },
       {
         "id": "jpt.profile_compliance",
-        "title": "is the asset compliant with this profile?",
-        "value": false
+        "value": false,
+        "report_text": "This media asset is not compliant with this profile."
       }
     ]
   ]
