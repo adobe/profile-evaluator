@@ -11,6 +11,7 @@ sections:
     - id: content
       title: content is unmodified
       value: true
+      report_text: This content has not been modified
   - - id: aigc
       title: Is AIGC?
       value: true

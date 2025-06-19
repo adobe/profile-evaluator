@@ -26,7 +26,7 @@ profile_metadata:
   description: content is unmodified
   expression: >
       declaration.claim.content_status == "assertion.dataHash.match"
-  result_text:
+  report_text:
     "true":
       en: This content has not been modified
       es: Translation in Spanish

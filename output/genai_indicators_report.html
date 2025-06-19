@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Trust Report</title>
+  <style>
+    body { margin: 0; font-family: sans-serif; display: flex; height: 100vh; }
+    #preview { width: 90%; padding: 1em; overflow-y: auto; background: #f8f9fa; }
+    .metadata { background: #fff; border: 2px solid #ccc; padding: 1em; margin-bottom: 1em; border-radius: 8px; position: relative; }
+    .summary { background: #fff9c4; border: 2px solid #ccc; padding: 1em; margin-bottom: 1em; border-radius: 8px; position: relative; }
+    .summary .donut-wrapper { position: absolute; top: 50%; right: 1em; transform: translateY(-50%); }
+    .section { background: #fff; padding: 1em; margin-bottom: 1em; border-left: 4px solid #007bff; border-radius: 4px; }
+    .section-description { color: #555; margin-top: -0.5em; margin-bottom: 1em; }
+    .entry { margin-bottom: 1em; position: relative; }
+    .value-true { color: green; font-weight: bold; }
+    .value-false { color: red; font-weight: bold; }
+    .label { display: inline-block; background: gold; color: black; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+    .float-green { background: #8bc34a; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+    .float-yellow { background: #ffc107; color: black; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+    .float-red { background: #f44336; color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+    .summary-tagged .tag { font-size: 0.9em; color: #666; margin-left: 6px; }
+    .id-line { font-size: 0.8em; color: #888; display: none; padding-top: 0.2em; }
+    .entry.show-id .id-line { display: block; }
+    .chevron { cursor: pointer; color: #888; margin-right: 6px; user-select: none; }
+    .donut { width: 120px; height: 120px; display: inline-block; vertical-align: middle; }
+    .donut text { font-size: 18px; font-weight: bold; fill: black; }
+  </style>
+</head>
+<body>
+  <div id="preview">
+	<div class="metadata">
+		<img src="https://jpeg.org/images/jpegtrust-logo.svg" alt="JPEG Trust Logo" style="height: 80px; position: absolute; top: 1em; right: 1em;" />
+		<h2>Experimental Generative AI Profile</h2>
+		<p><strong>Issuer:</strong> JPEG Trust Committee</p>
+		<p><strong>Date:</strong> 2023-10-31T00:16:40.346Z</p>
+		<p><strong>Version:</strong> 1.0.0</p>
+		<p><strong>Language:</strong> en</p>
+		<p><strong>Asset:</strong> image.jpeg</p>
+	</div>
+
+				<div class="summary">
+					<h3>Summary 🏷️</h3>
+        			<p>
+						<strong>Compliance:</strong>
+						<span class="value-true">✅ Passed</span>
+					</p>
+				</div>
+
+		<div class="section">
+			<h3>Section 1 - General Information</h3>
+				<div class="section-description">This section provides information about general stuff</div>
+			<h3>content is unmodified</h3>
+				<div class="entry">
+					<span class="chevron">▶</span>
+					This content has not been modified
+				</div>
+		</div>
+		<div class="section">
+			<h3>Is AIGC?</h3>
+				<div class="entry">
+					<span class="chevron">▶</span>
+					This media asset was produced by generative AI
+				</div>
+			<h3>is there a declaration and no manifests present?</h3>
+				<div class="entry">
+					<span class="chevron">▶</span>
+					No modifications took place after it was created
+				</div>
+		</div>
+		<div class="section">
+			<h3>is the asset compliant with this profile?</h3>
+				<div class="entry">
+					<span class="chevron">▶</span>
+					This media asset is compliant with this profile.
+				</div>
+		</div>
+
+  </div>
+</body>
+</html>

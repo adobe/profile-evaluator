@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import process from 'process';
 import YAML from 'yaml';
+import Handlebars from 'handlebars';
 import { Evaluator } from './evaluator.js';
 
 // Simple command line parsing
@@ -16,6 +17,8 @@ function parseArgs(argv) {
             args.output = argv[++i];
         } else if (arg === '-y' || arg === '--yaml') {
             args.yamlReport = true;
+        } else if (arg === '--html') {
+            args.htmlReportPath = argv[++i];
         } else if (!args.jsonFile) {
             args.jsonFile = arg;
         } else {
@@ -44,6 +47,11 @@ async function main() {
     try {
         await evaluator.loadProfile(profilePath);
 
+        // register Handlebars helpers
+        Handlebars.registerHelper('eq', function(arg1, arg2, options) {
+            return (arg1 === arg2) ? options.fn(this) : options.inverse(this);
+        });
+
         console.log(`Loading Trust Indicator Set from: ${jsonFilePath}`);
         const jsonData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'));
         const result = evaluator.evaluate(jsonData);
@@ -53,14 +61,27 @@ async function main() {
                 fs.mkdirSync(outputDir, { recursive: true });
             }
             const inputFileName = path.basename(jsonFilePath, path.extname(jsonFilePath));
-            const ext = args.yamlReport ? 'yml' : 'json';
-            const outputPath = path.join(outputDir, `${inputFileName}_report.${ext}`);
-            if ( args.yamlReport) {
-                fs.writeFileSync(outputPath, YAML.stringify(result));
+
+            if (args.htmlReportPath) {
+                const htmlReport = fs.readFileSync(args.htmlReportPath, 'utf-8');
+                const htmlOutputPath = path.join(outputDir, `${inputFileName}_report.html`);
+
+                // process the HTML template with Handlebars
+                const template = Handlebars.compile(htmlReport);
+                const outReport = template(result);
+                fs.writeFileSync(htmlOutputPath, outReport);
+                console.log(`HTML report written to ${htmlOutputPath}`);
+            } else if (args.yamlReport) {
+                const ext = 'yml';
+                const outputPath = path.join(outputDir, `${inputFileName}_report.${ext}`);
+                fs.writeFileSync(outputPath, YAML.stringify(result, null, {'collectionStyle': 'block'}));
+                console.log(`YAML result written to ${outputPath}`);
             } else {
+                const ext = 'json';
+                const outputPath = path.join(outputDir, `${inputFileName}_report.${ext}`);
                 fs.writeFileSync(outputPath, JSON.stringify(result, null, 2));
+                console.log(`JSON result written to ${outputPath}`);
             }
-            console.log(`Evaluation result written to ${outputPath}`);
         } else {
             console.log('Evaluation Result:', result);
         }

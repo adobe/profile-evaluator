@@ -36,6 +36,21 @@
 		{
 			"type": "node",
 			"request": "launch",
+			"name": "Camera-Test-HTML",
+			"skipFiles": [
+				"<node_internals>/**"
+			],
+			"program": "${workspaceFolder}/src/index.js",
+			"args": [
+				"-o", "${workspaceFolder}/output",
+				"-p", "${workspaceFolder}/tests/camera_profile.yml",
+				"--html", "${workspaceFolder}/tests/report_template.html",
+				"${workspaceFolder}/tests/camera_indicators.json"
+			]
+		},
+		{
+			"type": "node",
+			"request": "launch",
 			"name": "GenAI-Test",
 			"skipFiles": [
 				"<node_internals>/**"
@@ -59,6 +74,21 @@
 				"-o", "${workspaceFolder}/output",
 				"-p", "${workspaceFolder}/tests/genai_profile.yml",
 				"-y",
+				"${workspaceFolder}/tests/genai_indicators.json"
+			]
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "GenAI-Test-HTML",
+			"skipFiles": [
+				"<node_internals>/**"
+			],
+			"program": "${workspaceFolder}/src/index.js",
+			"args": [
+				"-o", "${workspaceFolder}/output",
+				"-p", "${workspaceFolder}/tests/genai_profile.yml",
+				"--html", "${workspaceFolder}/tests/report_template.html",
 				"${workspaceFolder}/tests/genai_indicators.json"
 			]
 		},
