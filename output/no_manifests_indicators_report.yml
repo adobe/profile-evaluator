@@ -1,0 +1,16 @@
+metadata:
+  name: Experimental No Manifests Profile
+  issuer: JPEG Trust Committee
+  date: 2023-11-02T01:03:16.443Z
+  version: 1.0.0
+  language: en
+sections:
+  - - id: generalInfo
+      title: General Information
+      report_text: This section provides information about general stuff
+    - id: manifests
+      value: false
+      report_text: No trust manifests found in this media asset
+    - id: jpt.profile_compliance
+      value: false
+      report_text: This media asset is not compliant with this profile.
