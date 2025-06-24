@@ -22,7 +22,7 @@ function parseArgs(argv) {
         } else if (!args.jsonFile) {
             args.jsonFile = arg;
         } else {
-            console.error(`Unknown argument: ${arg}`);
+            console.error(`❌ Unknown argument: ${arg}`);
             process.exit(1);
         }
         i++;
@@ -33,7 +33,7 @@ function parseArgs(argv) {
 const args = parseArgs(process.argv);
 
 if (!args.profile || !args.jsonFile) {
-    console.error('Usage: node index.js -p <path_to_jpeg_trust_profile> [-o <output_directory>] <path_to_json_file>');
+    console.error('📋 Usage: node index.js -p <path_to_jpeg_trust_profile> [-o <output_directory>] <path_to_json_file>');
     process.exit(1);
 }
 
@@ -52,7 +52,7 @@ async function main() {
             return (arg1 === arg2) ? options.fn(this) : options.inverse(this);
         });
 
-        console.log(`Loading Trust Indicator Set from: ${jsonFilePath}`);
+        console.log(`🤝 Loading Trust Indicator Set from: ${jsonFilePath}`);
         const jsonData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'));
         const result = evaluator.evaluate(jsonData);
 
@@ -70,23 +70,23 @@ async function main() {
                 const template = Handlebars.compile(htmlReport);
                 const outReport = template(result);
                 fs.writeFileSync(htmlOutputPath, outReport);
-                console.log(`HTML report written to ${htmlOutputPath}`);
+                console.log(`📝 HTML report written to ${htmlOutputPath}`);
             } else if (args.yamlReport) {
                 const ext = 'yml';
                 const outputPath = path.join(outputDir, `${inputFileName}_report.${ext}`);
                 fs.writeFileSync(outputPath, YAML.stringify(result, null, {'collectionStyle': 'block'}));
-                console.log(`YAML result written to ${outputPath}`);
+                console.log(`📝 YAML result written to ${outputPath}`);
             } else {
                 const ext = 'json';
                 const outputPath = path.join(outputDir, `${inputFileName}_report.${ext}`);
                 fs.writeFileSync(outputPath, JSON.stringify(result, null, 2));
-                console.log(`JSON result written to ${outputPath}`);
+                console.log(`📝 JSON result written to ${outputPath}`);
             }
         } else {
-            console.log('Evaluation Result:', result);
+            console.log('📈 Evaluation Result:', result);
         }
     } catch (error) {
-        console.error('Error:', error.message);
+        console.error('❌ Error:', error.message);
     }
 }
 

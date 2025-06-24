@@ -10,7 +10,7 @@ export class Evaluator {
     }
 
     loadProfile(profilePath) {
-        console.log(`Loading Trust Profile from: ${profilePath}`);
+        console.log(`📄 Loading Trust Profile from: ${profilePath}`);
 
         const fullPath = path.resolve(profilePath);
         const profileData = fs.readFileSync(fullPath, 'utf-8');
@@ -120,7 +120,7 @@ export class Evaluator {
 
     evaluate(jsonData) {
         if (!this.profile) {
-            throw new Error('Trust Profile not loaded. Please load a profile before evaluation.');
+            throw new Error('❌ Trust Profile not loaded. Please load a profile before evaluation.');
         }
 
         // register Handlebars helpers
@@ -131,7 +131,7 @@ export class Evaluator {
 
         const trustReport = {};
 
-        console.log('Evaluating JSON data against the Trust Profile...');
+        // console.log('🔍 Evaluating JSON data against the Trust Profile...');
 
         // start with the first document in the profile
         const doc0 = this.profile[0].toJSON();
@@ -140,7 +140,7 @@ export class Evaluator {
         // this allows the profile to access them later (e.g., in expressions or templates)
         for (const [key, value] of Object.entries(doc0)) {
             jsonData[key] = value;
-            console.log(`Copying "${key}" to the trust indicators.`);
+            // console.log(`Copying "${key}" to the trust indicators.`);
         }
 
         // extract the required `metadata` field
@@ -149,7 +149,7 @@ export class Evaluator {
         const metadata = doc0.metadata;
         trustReport.metadata = metadata; // Store metadata in the report
         const profileInfo = `${metadata.name} (${metadata.version})`;
-        console.log(`Evaluating "${profileInfo}" from "${metadata.issuer}" dated ${metadata.date}.`);
+        console.log(`🔍 Evaluating "${profileInfo}" from "${metadata.issuer}" dated ${metadata.date}.`);
 
         // -1 one for the metadata document
         console.log(`Profile contains ${this.profile.length-1} sections with rules.`);
