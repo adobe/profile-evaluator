@@ -14,8 +14,8 @@
 			"program": "${workspaceFolder}/src/index.js",
 			"args": [
 				"-o", "${workspaceFolder}/output",
-				"-p", "${workspaceFolder}/tests/camera_profile.yml",
-				"${workspaceFolder}/tests/camera_indicators.json"
+				"-p", "${workspaceFolder}/testfiles/camera_profile.yml",
+				"${workspaceFolder}/testfiles/camera_indicators.json"
 			]
 		},
 		{
@@ -28,9 +28,9 @@
 			"program": "${workspaceFolder}/src/index.js",
 			"args": [
 				"-o", "${workspaceFolder}/output",
-				"-p", "${workspaceFolder}/tests/camera_profile.yml",
+				"-p", "${workspaceFolder}/testfiles/camera_profile.yml",
 				"-y",
-				"${workspaceFolder}/tests/camera_indicators.json"
+				"${workspaceFolder}/testfiles/camera_indicators.json"
 			]
 		},
 		{
@@ -43,9 +43,9 @@
 			"program": "${workspaceFolder}/src/index.js",
 			"args": [
 				"-o", "${workspaceFolder}/output",
-				"-p", "${workspaceFolder}/tests/camera_profile.yml",
-				"--html", "${workspaceFolder}/tests/report_template.html",
-				"${workspaceFolder}/tests/camera_indicators.json"
+				"-p", "${workspaceFolder}/testfiles/camera_profile.yml",
+				"--html", "${workspaceFolder}/testfiles/report_template.html",
+				"${workspaceFolder}/testfiles/camera_indicators.json"
 			]
 		},
 		{
@@ -58,8 +58,8 @@
 			"program": "${workspaceFolder}/src/index.js",
 			"args": [
 				"-o", "${workspaceFolder}/output",
-				"-p", "${workspaceFolder}/tests/genai_profile.yml",
-				"${workspaceFolder}/tests/genai_indicators.json"
+				"-p", "${workspaceFolder}/testfiles/genai_profile.yml",
+				"${workspaceFolder}/testfiles/genai_indicators.json"
 			]
 		},
 		{
@@ -72,9 +72,9 @@
 			"program": "${workspaceFolder}/src/index.js",
 			"args": [
 				"-o", "${workspaceFolder}/output",
-				"-p", "${workspaceFolder}/tests/genai_profile.yml",
+				"-p", "${workspaceFolder}/testfiles/genai_profile.yml",
 				"-y",
-				"${workspaceFolder}/tests/genai_indicators.json"
+				"${workspaceFolder}/testfiles/genai_indicators.json"
 			]
 		},
 		{
@@ -87,9 +87,9 @@
 			"program": "${workspaceFolder}/src/index.js",
 			"args": [
 				"-o", "${workspaceFolder}/output",
-				"-p", "${workspaceFolder}/tests/genai_profile.yml",
-				"--html", "${workspaceFolder}/tests/report_template.html",
-				"${workspaceFolder}/tests/genai_indicators.json"
+				"-p", "${workspaceFolder}/testfiles/genai_profile.yml",
+				"--html", "${workspaceFolder}/testfiles/report_template.html",
+				"${workspaceFolder}/testfiles/genai_indicators.json"
 			]
 		},
 		{
@@ -102,8 +102,8 @@
 			"program": "${workspaceFolder}/src/index.js",
 			"args": [
 				"-o", "${workspaceFolder}/output",
-				"-p", "${workspaceFolder}/tests/no_manifests_profile.yml",
-				"${workspaceFolder}/tests/no_manifests_indicators.json"
+				"-p", "${workspaceFolder}/testfiles/no_manifests_profile.yml",
+				"${workspaceFolder}/testfiles/no_manifests_indicators.json"
 			]
 		},
 		{
@@ -116,9 +116,9 @@
 			"program": "${workspaceFolder}/src/index.js",
 			"args": [
 				"-o", "${workspaceFolder}/output",
-				"-p", "${workspaceFolder}/tests/no_manifests_profile.yml",
-				"--html", "${workspaceFolder}/tests/report_template.html",
-				"${workspaceFolder}/tests/no_manifests_indicators.json"
+				"-p", "${workspaceFolder}/testfiles/no_manifests_profile.yml",
+				"--html", "${workspaceFolder}/testfiles/report_template.html",
+				"${workspaceFolder}/testfiles/no_manifests_indicators.json"
 			]
 		},
 		{
@@ -131,8 +131,8 @@
 			"program": "${workspaceFolder}/src/index.js",
 			"args": [
 				"-o", "${workspaceFolder}/output",
-				"-p", "${workspaceFolder}/tests/signature_profile.yml",
-				"${workspaceFolder}/tests/s01-standard-manifest-with-actions-2ed.json"
+				"-p", "${workspaceFolder}/testfiles/signature_profile.yml",
+				"${workspaceFolder}/testfiles/s01-standard-manifest-with-actions-2ed.json"
 			]
 		},
 		{
@@ -145,8 +145,8 @@
 			"program": "${workspaceFolder}/src/index.js",
 			"args": [
 				"-o", "${workspaceFolder}/output",
-				"-p", "${workspaceFolder}/tests/template_profile.yml",
-				"${workspaceFolder}/tests/s01-standard-manifest-with-actions-2ed.json"
+				"-p", "${workspaceFolder}/testfiles/template_profile.yml",
+				"${workspaceFolder}/testfiles/s01-standard-manifest-with-actions-2ed.json"
 			]
 		}
 	]
