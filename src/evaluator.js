@@ -156,6 +156,7 @@ export class Evaluator {
             if (Array.isArray(section)) {
                 const sectionReport = [];
 
+                // eslint-disable-next-line no-unused-vars
                 section.forEach((rule, _idx) => {
                     const oneSectRep = this.processOneStatement(rule, jsonData);
                     sectionReport.push(oneSectRep);
