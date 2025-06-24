@@ -123,6 +123,12 @@ export class Evaluator {
             throw new Error('Trust Profile not loaded. Please load a profile before evaluation.');
         }
 
+        // register Handlebars helpers
+        Handlebars.registerHelper('expr', function(arg1, options) {
+            const result = evaluateFormula(arg1, jsonData);
+            return result;
+        });
+
         const trustReport = {};
 
         console.log('Evaluating JSON data against the Trust Profile...');
@@ -168,6 +174,8 @@ export class Evaluator {
                 this.processOneStatement(section, jsonData);
             }
         }
+
+        Handlebars.unregisterHelper("formula");
 
         // After processing all sections, we can summarize the results
         return trustReport;

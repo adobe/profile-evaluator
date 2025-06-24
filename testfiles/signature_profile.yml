@@ -37,7 +37,7 @@ profile_metadata:
   expression: toDate(manifests[0].signature.validity.not_after) > now()
   report_text:
     "true":
-      en: The certificate is currently valid
+      en: The `not_after` date is after right now
     "false":
       en: The certificate is no longer valid
       fr: Translation in French
@@ -55,10 +55,11 @@ profile_metadata:
   id: test_cert
   description: see if this was signed by a test certificate
   expression: >
-    manifests[0].signature.issuer.OU="FOR TESTING_ONLY" || manifests[0].signature.issuer.O="C2PA Test Intermediate Root CA"
+    manifests[0].signature.issuer.OU="FOR TESTING_ONLY" || 
+    manifests[0].signature.issuer.O="C2PA Test Intermediate Root CA"
   report_text:
     "true":
-      en: The issuer is trusted
+      en: The issuer is a test certificate
       fr: Translation in French
       zh: Translation in Simplified Chinese
     "false":
@@ -73,11 +74,11 @@ profile_metadata:
     || (manifests[0].signature.issuer.CN="ЦСК НБУ" && manifests[0].signature.issuer.C="UA")
   report_text:
     "true":
-      en: The issuer is trusted
+      en: The issuer ({{expr "manifests[0].signature.issuer.CN"}}) is trusted
       fr: Translation in French
       zh: Translation in Simplified Chinese
     "false":
-      en: The issuer is not trusted
+      en: The issuer ({{expr "manifests[0].signature.issuer.CN"}}) is not trusted
 
 
 ---
