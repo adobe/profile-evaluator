@@ -1,45 +1,31 @@
 import fs from 'fs';
 import path from 'path';
-import process from 'process';
 import YAML from 'yaml';
 import Handlebars from 'handlebars';
+import { Command } from 'commander';
 import { Evaluator } from './evaluator.js';
 
-// Simple command line parsing
-function parseArgs(argv) {
-    const args = {};
-    let i = 2;
-    while (i < argv.length) {
-        const arg = argv[i];
-        if (arg === '-p' || arg === '--profile') {
-            args.profile = argv[++i];
-        } else if (arg === '-o' || arg === '--output') {
-            args.output = argv[++i];
-        } else if (arg === '-y' || arg === '--yaml') {
-            args.yamlReport = true;
-        } else if (arg === '--html') {
-            args.htmlReportPath = argv[++i];
-        } else if (!args.jsonFile) {
-            args.jsonFile = arg;
-        } else {
-            console.error(`❌ Unknown argument: ${arg}`);
-            process.exit(1);
-        }
-        i++;
-    }
-    return args;
-}
+// Command line parsing with Commander.js
+const program = new Command();
 
-const args = parseArgs(process.argv);
+program
+    .name('jpeg-trust-evaluator')
+    .description('A command line tool to evaluate JPEG Trust Indicator Sets data against JPEG Trust Profiles.')
+    .version('1.0.0')
+    .argument('<jsonFile>', 'path to the JSON file to evaluate')
+    .requiredOption('-p, --profile <path>', 'path to JPEG Trust Profile')
+    .option('-o, --output <directory>', 'output directory for reports')
+    .option('-y, --yaml', 'output report in YAML format')
+    .option('--html <path>', 'path to HTML template for HTML report output');
 
-if (!args.profile || !args.jsonFile) {
-    console.error('📋 Usage: node index.js -p <path_to_jpeg_trust_profile> [-o <output_directory>] <path_to_json_file>');
-    process.exit(1);
-}
+program.parse();
 
-const profilePath = args.profile;
-const jsonFilePath = args.jsonFile;
-const outputDir = args.output;
+const options = program.opts();
+const args = program.args;
+
+const profilePath = options.profile;
+const jsonFilePath = args[0];
+const outputDir = options.output;
 
 const evaluator = new Evaluator();
 
@@ -62,8 +48,8 @@ async function main() {
             }
             const inputFileName = path.basename(jsonFilePath, path.extname(jsonFilePath));
 
-            if (args.htmlReportPath) {
-                const htmlReport = fs.readFileSync(args.htmlReportPath, 'utf-8');
+            if (options.html) {
+                const htmlReport = fs.readFileSync(options.html, 'utf-8');
                 const htmlOutputPath = path.join(outputDir, `${inputFileName}_report.html`);
 
                 // process the HTML template with Handlebars
@@ -71,7 +57,7 @@ async function main() {
                 const outReport = template(result);
                 fs.writeFileSync(htmlOutputPath, outReport);
                 console.log(`📝 HTML report written to ${htmlOutputPath}`);
-            } else if (args.yamlReport) {
+            } else if (options.yaml) {
                 const ext = 'yml';
                 const outputPath = path.join(outputDir, `${inputFileName}_report.${ext}`);
                 fs.writeFileSync(outputPath, YAML.stringify(result, null, {'collectionStyle': 'block'}));

@@ -124,6 +124,7 @@ export class Evaluator {
         }
 
         // register Handlebars helpers
+        // eslint-disable-next-line no-unused-vars
         Handlebars.registerHelper('expr', function(arg1, options) {
             const result = evaluateFormula(arg1, jsonData);
             return result;
@@ -175,7 +176,7 @@ export class Evaluator {
             }
         }
 
-        Handlebars.unregisterHelper("formula");
+        Handlebars.unregisterHelper('formula');
 
         // After processing all sections, we can summarize the results
         return trustReport;
