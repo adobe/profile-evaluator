@@ -70,10 +70,98 @@ node src/index.js [options] <jsonFile>
    node src/index.js -p testfiles/camera_profile.yml -o output --html testfiles/report_template.html testfiles/camera_indicators.json
    ```
 
+## Development
+
+### Scripts
+
+```bash
+# Run the CLI
+npm start
+
+# Run tests
+npm test
+
+# Run tests with coverage
+npm run test:coverage
+
+# Run tests in watch mode
+npm run test:watch
+
+# Lint code
+npm run lint
+
+# Fix linting issues
+npm run lint:fix
+```
+
+### Testing
+
+The project includes comprehensive tests using Jest:
+
+- **Unit Tests**: Test individual utility functions
+- **Integration Tests**: Test the complete CLI workflow
+- **Error Handling Tests**: Verify graceful error handling
+- **C2PA Tests**: Verify processing of the Content Credentials & JPEG Trust Manifests
+
+```bash
+# Run all tests
+npm test
+
+# Run tests with coverage report
+npm run test:coverage
+
+# Run tests in watch mode for development
+npm run test:watch
+```
+
+### Code Quality
+
+The project uses ESLint for code quality and consistency:
+
+```bash
+# Check for linting issues
+npm run lint
+
+# Automatically fix linting issues
+npm run lint:fix
+```
+
+### ESLint Configuration
+
+The project uses modern ESLint configuration with the following features:
+
+- **Modern JavaScript**: ES2020 support with async/await
+- **Node.js Environment**: Configured for Node.js development
+- **Strict Rules**: Enforces consistent code style and best practices
+- **Jest Support**: Configured for Jest testing environment
+
+
 ## Contributing
 
 Contributions are welcome! Please open an issue or submit a pull request for any enhancements or bug fixes.
 
+### Submitting a Pull Request
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes
+4. Run tests (`npm test`)
+5. Run linting (`npm run lint`)
+6. Commit your changes (`git commit -m 'Add amazing feature'`)
+7. Push to the branch (`git push origin feature/amazing-feature`)
+8. Open a Pull Request
+
+
 ## License
 
 This project is licensed under the MIT License. See the LICENSE file for more details.
+
+## Changelog
+
+### v1.0.0
+- Initial release
+- Comprehensive test suite
+- ESLint integration
+- Jest testing framework
+- Pretty printing support
+- Error handling and validation
