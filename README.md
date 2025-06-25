@@ -32,19 +32,43 @@ This project is a command line tool that evaluates a JSON file according to the 
 To run the tool, use the following command:
 
 ```
-node src/index.js <path_to_jpeg_trust_profile> <path_to_json_file>
+node src/index.js [options] <jsonFile>
 ```
 
-Replace `<path_to_jpeg_trust_profile>` with the path to your JPEG Trust Profile file and `<path_to_json_file>` with the path to your JSON file.
+### Required Arguments
+- `<jsonFile>` - Path to the JSON file containing JPEG Trust Indicator Sets data to evaluate
+
+### Required Options
+- `-p, --profile <path>` - Path to the JPEG Trust Profile file (JSON or YAML format)
+
+### Optional Options
+- `-o, --output <directory>` - Output directory for reports (if not specified, results are printed to console)
+- `-y, --yaml` - Output report in YAML format (default is JSON)
+- `--html <path>` - Path to HTML template file for generating HTML reports
+- `-h, --help` - Display help information
+- `-V, --version` - Display version number
 
 ## Examples
 
-1. Basic evaluation:
+1. **Basic evaluation** (output to console):
    ```
-   node src/index.js profile.json data.json
+   node src/index.js -p testfiles/camera_profile.yml testfiles/camera_indicators.json
    ```
 
-2. Check the output for evaluation results.
+2. **Generate JSON report** in output directory:
+   ```
+   node src/index.js -p testfiles/genai_profile.yml -o output testfiles/genai_indicators.json
+   ```
+
+3. **Generate YAML report**:
+   ```
+   node src/index.js -p testfiles/no_manifests_profile.yml -o output --yaml testfiles/no_manifests_indicators.json
+   ```
+
+4. **Generate HTML report** using a template:
+   ```
+   node src/index.js -p testfiles/camera_profile.yml -o output --html testfiles/report_template.html testfiles/camera_indicators.json
+   ```
 
 ## Contributing
 
