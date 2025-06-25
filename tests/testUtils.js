@@ -40,6 +40,34 @@ class TestUtils {
         expect(fs.existsSync(filePath)).toBe(true);
     }
 
+    static validateData(data) {
+        expect(typeof data).toBe('object');
+        expect(data).not.toBeNull();
+        
+        // Check basic structure
+        expect(Object.keys(data).length).toBeGreaterThan(0);
+        expect(data).toHaveProperty('metadata');
+        expect(data.metadata).toHaveProperty('name');
+        expect(data).toHaveProperty('sections');
+
+        // Validate sections structure (array of arrays)
+        expect(Array.isArray(data.sections)).toBe(true);
+        data.sections.forEach((sectionGroup, groupIndex) => {
+            expect(Array.isArray(sectionGroup)).toBe(true);
+            sectionGroup.forEach((section, sectionIndex) => {
+                expect(typeof section).toBe('object');
+                expect(section).not.toBeNull();
+                expect(section).toHaveProperty('id');
+                expect(section).toHaveProperty('report_text');
+                expect(typeof section.id).toBe('string');
+                expect(typeof section.report_text).toBe('string');
+                
+                // Check that section has either 'value' or 'title' property
+                expect(section.hasOwnProperty('value') || section.hasOwnProperty('title')).toBe(true);
+            });
+        });
+    }
+
     /**
      * Validate JSON output structure
      * @param {string} filePath - Path to the JSON file
@@ -49,15 +77,8 @@ class TestUtils {
         this.validateFileExists(filePath);
         
         const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-        expect(typeof data).toBe('object');
-        expect(data).not.toBeNull();
-        
-        // Check basic structure
-        expect(Object.keys(data).length).toBeGreaterThan(0);
-        expect(data).toHaveProperty('metadata');
-        expect(data.metadata).toHaveProperty('name');
-        expect(data).toHaveProperty('sections');
-        
+        this.validateData(data);
+
         return data;
     }
 
@@ -70,15 +91,8 @@ class TestUtils {
         this.validateFileExists(filePath);
         
         const yamlData = yaml.parse(fs.readFileSync(filePath, 'utf-8'));
-        expect(typeof yamlData).toBe('object');
-        expect(yamlData).not.toBeNull();
-        
-        // Check basic structure
-        expect(Object.keys(yamlData).length).toBeGreaterThan(0);
-        expect(yamlData).toHaveProperty('metadata');
-        expect(yamlData.metadata).toHaveProperty('name');
-        expect(yamlData).toHaveProperty('sections');
-        
+        this.validateData(yamlData);
+
         return yamlData;
     }
 
