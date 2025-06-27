@@ -11,6 +11,7 @@ metadata:
 expressions:
   _isUnmodified: '@.declaration.claim.content_status == "assertion.dataHash.match"'
   _isAIGC: contains(@.declaration.assertions.'c2pa.actions'.actions[0].digitalSourceType, "trainedAlgorithmicMedia")
+  _dateOfWeek: 'value($days, weekday(now(), 3))'
 
 globals:
     "$days": [ "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" ]
@@ -22,7 +23,7 @@ globals:
   id: generalInfo
   description: Section 1 - General Information
   title: General Information
-  report_text: This section provides information about general stuff
+  report_text: Report run on {{expr "_dateOfWeek()"}}
 
 -   # check for content modification 
   # description provides additional context that does not go into the report

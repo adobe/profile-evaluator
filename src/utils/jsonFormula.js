@@ -19,11 +19,11 @@ class FormulaRunner {
         }
     }
 
-    registerFunctions(functionsObject) {
+    registerFunctions(functionsObject, globals = {}) {
         try {
             for (const [name, code] of Object.entries(functionsObject)) {
                 const regFormula = 'register("' + name + '", &' + code + ')';
-                this.run( regFormula, {}, {}); // Run the registration formula with empty data and globals  
+                this.run( regFormula, {}, globals); // Run the registration formula with empty data and globals  
             }
         } catch (error) {
             console.error('Error in FormulaRunner.registerFunctions:', error);

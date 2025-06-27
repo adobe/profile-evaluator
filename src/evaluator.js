@@ -125,10 +125,14 @@ export class Evaluator {
             throw new Error('❌ Trust Profile not loaded. Please load a profile before evaluation.');
         }
 
+        // need to do this to get access to them inside Handlebars
+        const formRunner = this.formRunner;
+        const formulaGlobals = this.formulaGlobals;
+
         // register Handlebars helpers
         // eslint-disable-next-line no-unused-vars
         Handlebars.registerHelper('expr', function(arg1, options) {
-            const result = evaluateFormula(arg1, jsonData);
+            const result = formRunner.run(arg1, jsonData, formulaGlobals);
             return result;
         });
 
@@ -154,6 +158,18 @@ export class Evaluator {
         const profileInfo = `${metadata.name} (${metadata.version})`;
         console.log(`🔍 Evaluating "${profileInfo}" from "${metadata.issuer}" dated ${metadata.date}.`);
 
+        // load the globals from the profile
+        // and register them as json-formula globals
+        // always load these first, since a expression might depend on them
+        if (doc0.globals) {
+            console.log('🔍 Registering globals from the profile:');
+            for (const [name, value] of Object.entries(doc0.globals)) {
+                console.log(`\t- ${name}: ${value}`);
+                // register the global as a variable
+                this.formulaGlobals[name] = value;
+            }
+        }
+
         // load the expressions from the profile
         // and register them as json-formula functions
         if (doc0.expressions) {
@@ -162,7 +178,7 @@ export class Evaluator {
                 console.log(`\t- ${name}: ${expression}`);
                 // register the expression as a function
             }
-            this.formRunner.registerFunctions(doc0.expressions);
+            this.formRunner.registerFunctions(doc0.expressions, doc0.globals);
         }
 
         // -1 one for the metadata document
