@@ -148,6 +148,21 @@
 				"-p", "${workspaceFolder}/testfiles/template_profile.yml",
 				"${workspaceFolder}/testfiles/s01-standard-manifest-with-actions-2ed.json"
 			]
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "ExpressionTest",
+			"skipFiles": [
+				"<node_internals>/**"
+			],
+			"program": "${workspaceFolder}/src/index.js",
+			"args": [
+				"-o", "${workspaceFolder}/output",
+				"-p", "${workspaceFolder}/testfiles/expression_profile.yml",
+				"-y",
+				"${workspaceFolder}/testfiles/genai_indicators.json"
+			]
 		}
 	]
 }

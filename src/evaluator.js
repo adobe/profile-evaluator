@@ -2,11 +2,13 @@ import fs from 'fs';
 import path from 'path';
 import YAML from 'yaml';
 import Handlebars from 'handlebars';
-import { evaluateFormula } from './utils/jsonFormula.js';
+import { evaluateFormula, evaluateFormulaViaSearch, FormulaRunner } from './utils/jsonFormula.js';
 
 export class Evaluator {
     constructor() {
         this.profile = null;
+        this.formRunner = new FormulaRunner();
+        this.formulaGlobals = {};
     }
 
     loadProfile(profilePath) {
@@ -77,7 +79,7 @@ export class Evaluator {
             // }
 
             // Here we would evaluate the expression against the JSON data
-            const result = evaluateFormula(statement.expression, jsonData);
+            const result = this.formRunner.run(statement.expression, jsonData, this.formulaGlobals);
             console.log('\t\tResult:', result);
             statementReport.value = result;
 
@@ -151,6 +153,17 @@ export class Evaluator {
         trustReport.metadata = metadata; // Store metadata in the report
         const profileInfo = `${metadata.name} (${metadata.version})`;
         console.log(`🔍 Evaluating "${profileInfo}" from "${metadata.issuer}" dated ${metadata.date}.`);
+
+        // load the expressions from the profile
+        // and register them as json-formula functions
+        if (doc0.expressions) {
+            console.log('🔍 Registering expressions from the profile:');
+            for (const [name, expression] of Object.entries(doc0.expressions)) {
+                console.log(`\t- ${name}: ${expression}`);
+                // register the expression as a function
+            }
+            this.formRunner.registerFunctions(doc0.expressions);
+        }
 
         // -1 one for the metadata document
         console.log(`Profile contains ${this.profile.length-1} sections with rules.`);
