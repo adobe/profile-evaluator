@@ -21,14 +21,14 @@ import { Evaluator } from './evaluator.js';
 const program = new Command();
 
 program
-    .name('jpeg-trust-evaluator')
-    .description('A command line tool to evaluate JPEG Trust Indicator Sets data against JPEG Trust Profiles.')
-    .version('1.0.0')
-    .argument('<jsonFile>', 'path to the JSON file to evaluate')
-    .requiredOption('-p, --profile <path>', 'path to JPEG Trust Profile')
-    .option('-o, --output <directory>', 'output directory for reports')
-    .option('-y, --yaml', 'output report in YAML format')
-    .option('--html <path>', 'path to HTML template for HTML report output');
+  .name('jpeg-trust-evaluator')
+  .description('A command line tool to evaluate JPEG Trust Indicator Sets data against JPEG Trust Profiles.')
+  .version('1.0.0')
+  .argument('<jsonFile>', 'path to the JSON file to evaluate')
+  .requiredOption('-p, --profile <path>', 'path to JPEG Trust Profile')
+  .option('-o, --output <directory>', 'output directory for reports')
+  .option('-y, --yaml', 'output report in YAML format')
+  .option('--html <path>', 'path to HTML template for HTML report output');
 
 program.parse();
 
@@ -42,50 +42,50 @@ const outputDir = options.output;
 const evaluator = new Evaluator();
 
 async function main() {
-    try {
-        await evaluator.loadProfile(profilePath);
+  try {
+    await evaluator.loadProfile(profilePath);
 
-        // register Handlebars helpers
-        Handlebars.registerHelper('eq', function(arg1, arg2, options) {
-            return (arg1 === arg2) ? options.fn(this) : options.inverse(this);
-        });
+    // register Handlebars helpers
+    Handlebars.registerHelper('eq', function (arg1, arg2, options) {
+      return (arg1 === arg2) ? options.fn(this) : options.inverse(this);
+    });
 
-        console.log(`🤝 Loading Trust Indicator Set from: ${jsonFilePath}`);
-        const jsonData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'));
-        const result = evaluator.evaluate(jsonData);
+    console.log(`🤝 Loading Trust Indicator Set from: ${jsonFilePath}`);
+    const jsonData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'));
+    const result = evaluator.evaluate(jsonData);
 
-        if (outputDir) {
-            if (!fs.existsSync(outputDir)) {
-                fs.mkdirSync(outputDir, { recursive: true });
-            }
-            const inputFileName = path.basename(jsonFilePath, path.extname(jsonFilePath));
+    if (outputDir) {
+      if (!fs.existsSync(outputDir)) {
+        fs.mkdirSync(outputDir, { recursive: true });
+      }
+      const inputFileName = path.basename(jsonFilePath, path.extname(jsonFilePath));
 
-            if (options.html) {
-                const htmlReport = fs.readFileSync(options.html, 'utf-8');
-                const htmlOutputPath = path.join(outputDir, `${inputFileName}_report.html`);
+      if (options.html) {
+        const htmlReport = fs.readFileSync(options.html, 'utf-8');
+        const htmlOutputPath = path.join(outputDir, `${inputFileName}_report.html`);
 
-                // process the HTML template with Handlebars
-                const template = Handlebars.compile(htmlReport);
-                const outReport = template(result);
-                fs.writeFileSync(htmlOutputPath, outReport);
-                console.log(`📝 HTML report written to ${htmlOutputPath}`);
-            } else if (options.yaml) {
-                const ext = 'yml';
-                const outputPath = path.join(outputDir, `${inputFileName}_report.${ext}`);
-                fs.writeFileSync(outputPath, YAML.stringify(result, null, {'collectionStyle': 'block'}));
-                console.log(`📝 YAML result written to ${outputPath}`);
-            } else {
-                const ext = 'json';
-                const outputPath = path.join(outputDir, `${inputFileName}_report.${ext}`);
-                fs.writeFileSync(outputPath, JSON.stringify(result, null, 2));
-                console.log(`📝 JSON result written to ${outputPath}`);
-            }
-        } else {
-            console.log('📈 Evaluation Result:', result);
-        }
-    } catch (error) {
-        console.error('❌ Error:', error.message);
+        // process the HTML template with Handlebars
+        const template = Handlebars.compile(htmlReport);
+        const outReport = template(result);
+        fs.writeFileSync(htmlOutputPath, outReport);
+        console.log(`📝 HTML report written to ${htmlOutputPath}`);
+      } else if (options.yaml) {
+        const ext = 'yml';
+        const outputPath = path.join(outputDir, `${inputFileName}_report.${ext}`);
+        fs.writeFileSync(outputPath, YAML.stringify(result, null, { 'collectionStyle': 'block' }));
+        console.log(`📝 YAML result written to ${outputPath}`);
+      } else {
+        const ext = 'json';
+        const outputPath = path.join(outputDir, `${inputFileName}_report.${ext}`);
+        fs.writeFileSync(outputPath, JSON.stringify(result, null, 2));
+        console.log(`📝 JSON result written to ${outputPath}`);
+      }
+    } else {
+      console.log('📈 Evaluation Result:', result);
     }
+  } catch (error) {
+    console.error('❌ Error:', error.message);
+  }
 }
 
 main();
