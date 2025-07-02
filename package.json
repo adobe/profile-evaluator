@@ -6,8 +6,10 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
+    "test": "jest",
     "eslint": "eslint src",
-    "test": "jest"
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix"
   },
   "dependencies": {
     "@adobe/json-formula": "^2.0.0-beta.1",
