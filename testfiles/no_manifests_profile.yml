@@ -27,7 +27,7 @@ metadata:
       en: No trust manifests found in this media asset
 
 - # check compliance
-  id: jpt.profile_compliance
+  id: jpt:profile_compliance
   description: is the asset compliant with this profile?
   expression: >
     @.profile.manifests

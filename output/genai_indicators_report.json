@@ -1,5 +1,5 @@
 {
-  "metadata": {
+  "profile_metadata": {
     "name": "Experimental Generative AI Profile",
     "issuer": "JPEG Trust Committee",
     "date": "2023-10-31T00:16:40.346Z",
@@ -43,9 +43,9 @@
         "report_text": "This section provides the compliance status of the media asset with respect to this profile."
       },
       {
-        "id": "jpt.profile_compliance",
+        "id": "jpt:profile_compliance",
         "value": true,
-        "report_text": "This media asset is compliant with this profile."
+        "report_text": "Compliance Status: true"
       }
     ]
   ]

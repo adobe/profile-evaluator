@@ -70,12 +70,12 @@ metadata:
   report_text: This section provides the compliance status of the media asset with respect to this profile.
 
 - # check compliance
-  id: jpt.profile_compliance
+  id: jpt:profile_compliance
   description: is the asset compliant with this profile?
   expression: >
     @.profile.aigc && @.profile.declaration_only
   report_text:
     "true":
-      en: This media asset is compliant with this profile.
+      en: "Compliance Status: {{profile.jpt:profile_compliance}}"
     "false":
       en: This media asset is not compliant with this profile.

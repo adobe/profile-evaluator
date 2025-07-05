@@ -1,12 +1,18 @@
 {
-  "metadata": {
+  "profile_metadata": {
     "name": "Experimental Camera Profile",
     "issuer": "JPEG Trust Committee",
-    "date": "2023-09-28T13:19:36.705Z",
-    "version": "1.0.0",
+    "date": "2025-07-05T10:20:25.844Z",
+    "version": "1.1.0",
     "language": "en"
   },
   "sections": [
+    [
+      {
+        "id": "metadata-output",
+        "report_text": "This is a sample camera profile for testing purposes - 1234567890"
+      }
+    ],
     [
       {
         "id": "generalInfo",

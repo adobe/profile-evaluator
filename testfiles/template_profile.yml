@@ -36,7 +36,7 @@ metadata:
 # Section 3 - Compliance
 
 - # check compliance
-  id: jpt.profile_compliance
+  id: jpt:profile_compliance
   description: is the asset compliant with this profile?
   expression: >
     @.profile.content

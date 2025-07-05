@@ -78,7 +78,7 @@ metadata:
 # Section 3 - Compliance
 
 - # check compliance
-  id: jpt.profile_compliance
+  id: jpt:profile_compliance
   description: is the asset signed with a trusted certificate?
   expression: >
     profile.not_before && profile.not_after &&
