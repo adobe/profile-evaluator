@@ -1,49 +1,29 @@
 {
   "metadata": {
-    "name": "Experimental Signature Validation Profile",
+    "name": "Template Test Profile",
     "issuer": "JPEG Trust Committee",
-    "date": "2023-09-28T13:19:36.705Z",
+    "date": "2025-06-17T22:44:49.717Z",
     "version": "1.0.0",
     "language": "en"
   },
   "sections": [
     [
       {
-        "title": "Validity checking based on dates",
-        "report_text": "This section checks the validity dates"
+        "id": "generalInfo",
+        "title": "General Information",
+        "report_text": "This section provides information about 'This is a profile for testing purposes'"
       },
       {
-        "id": "not_before",
-        "value": true,
-        "report_text": "The `not_before` date is prior to right now"
-      },
-      {
-        "id": "not_after",
-        "value": true,
-        "report_text": "The `not_after` date is after right now"
-      }
-    ],
-    [
-      {
-        "title": "Make sure the issuer is on our Trust List",
-        "report_text": "This section checks for valid issuers"
-      },
-      {
-        "id": "test_cert",
-        "value": true,
-        "report_text": "The issuer is a test certificate"
-      },
-      {
-        "id": "issuer",
+        "id": "content",
         "value": false,
-        "report_text": "The issuer (Intermediate CA) is not trusted"
+        "report_text": "This content has been modified"
       }
     ],
     [
       {
         "id": "jpt.profile_compliance",
         "value": false,
-        "report_text": "This media asset is not signed with a trusted certificate."
+        "report_text": "This media asset is not compliant with '(Template Test Profile, 1.0.0)'."
       }
     ]
   ]

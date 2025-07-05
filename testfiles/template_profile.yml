@@ -1,6 +1,5 @@
 # Example Trust Profile for testing handlebars/template rendering
 ---
-
 metadata:
   name: Template Test Profile
   issuer: JPEG Trust Committee
@@ -8,19 +7,18 @@ metadata:
   version: 1.0.0
   language: en
 
-sample_common:
+"sample:common":
   description: This is a profile for testing purposes
 
 ---
 # Section 1
 
-- 
-  id: generalInfo
+- id: generalInfo
   description: Section 1 - General Information
   title: General Information
-  report_text: This section provides information about '{{sample_common.description}}'
+  report_text: This section provides information about '{{sample:common.description}}'
 
--   # check for content modification 
+- # check for content modification
   # description provides additional context that does not go into the report
   id: content
   description: content is unmodified
@@ -45,6 +43,5 @@ sample_common:
   report_text:
     "true":
       en: This media asset is compliant with '({{metadata.name}}, {{metadata.version}})'.
-    "false": 
+    "false":
       en: This media asset is not compliant with '({{metadata.name}}, {{metadata.version}})'.
-

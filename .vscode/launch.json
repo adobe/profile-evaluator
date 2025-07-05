@@ -1,168 +1,193 @@
 {
-	// Use IntelliSense to learn about possible attributes.
-	// Hover to view descriptions of existing attributes.
-	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-	"version": "0.2.0",
-	"configurations": [
-		{
-			"type": "node",
-			"request": "launch",
-			"name": "Camera-Test",
-			"skipFiles": [
-				"<node_internals>/**"
-			],
-			"program": "${workspaceFolder}/src/index.js",
-			"args": [
-				"-o", "${workspaceFolder}/output",
-				"-p", "${workspaceFolder}/testfiles/camera_profile.yml",
-				"${workspaceFolder}/testfiles/camera_indicators.json"
-			]
-		},
-		{
-			"type": "node",
-			"request": "launch",
-			"name": "Camera-Test-YAML",
-			"skipFiles": [
-				"<node_internals>/**"
-			],
-			"program": "${workspaceFolder}/src/index.js",
-			"args": [
-				"-o", "${workspaceFolder}/output",
-				"-p", "${workspaceFolder}/testfiles/camera_profile.yml",
-				"-y",
-				"${workspaceFolder}/testfiles/camera_indicators.json"
-			]
-		},
-		{
-			"type": "node",
-			"request": "launch",
-			"name": "Camera-Test-HTML",
-			"skipFiles": [
-				"<node_internals>/**"
-			],
-			"program": "${workspaceFolder}/src/index.js",
-			"args": [
-				"-o", "${workspaceFolder}/output",
-				"-p", "${workspaceFolder}/testfiles/camera_profile.yml",
-				"--html", "${workspaceFolder}/testfiles/report_template.html",
-				"${workspaceFolder}/testfiles/camera_indicators.json"
-			]
-		},
-		{
-			"type": "node",
-			"request": "launch",
-			"name": "GenAI-Test",
-			"skipFiles": [
-				"<node_internals>/**"
-			],
-			"program": "${workspaceFolder}/src/index.js",
-			"args": [
-				"-o", "${workspaceFolder}/output",
-				"-p", "${workspaceFolder}/testfiles/genai_profile.yml",
-				"${workspaceFolder}/testfiles/genai_indicators.json"
-			]
-		},
-		{
-			"type": "node",
-			"request": "launch",
-			"name": "GenAI-Test-YAML",
-			"skipFiles": [
-				"<node_internals>/**"
-			],
-			"program": "${workspaceFolder}/src/index.js",
-			"args": [
-				"-o", "${workspaceFolder}/output",
-				"-p", "${workspaceFolder}/testfiles/genai_profile.yml",
-				"-y",
-				"${workspaceFolder}/testfiles/genai_indicators.json"
-			]
-		},
-		{
-			"type": "node",
-			"request": "launch",
-			"name": "GenAI-Test-HTML",
-			"skipFiles": [
-				"<node_internals>/**"
-			],
-			"program": "${workspaceFolder}/src/index.js",
-			"args": [
-				"-o", "${workspaceFolder}/output",
-				"-p", "${workspaceFolder}/testfiles/genai_profile.yml",
-				"--html", "${workspaceFolder}/testfiles/report_template.html",
-				"${workspaceFolder}/testfiles/genai_indicators.json"
-			]
-		},
-		{
-			"type": "node",
-			"request": "launch",
-			"name": "NoManifest-Test",
-			"skipFiles": [
-				"<node_internals>/**"
-			],
-			"program": "${workspaceFolder}/src/index.js",
-			"args": [
-				"-o", "${workspaceFolder}/output",
-				"-p", "${workspaceFolder}/testfiles/no_manifests_profile.yml",
-				"${workspaceFolder}/testfiles/no_manifests_indicators.json"
-			]
-		},
-		{
-			"type": "node",
-			"request": "launch",
-			"name": "NoManifest-Test-HTML",
-			"skipFiles": [
-				"<node_internals>/**"
-			],
-			"program": "${workspaceFolder}/src/index.js",
-			"args": [
-				"-o", "${workspaceFolder}/output",
-				"-p", "${workspaceFolder}/testfiles/no_manifests_profile.yml",
-				"--html", "${workspaceFolder}/testfiles/report_template.html",
-				"${workspaceFolder}/testfiles/no_manifests_indicators.json"
-			]
-		},
-		{
-			"type": "node",
-			"request": "launch",
-			"name": "Signature-Test",
-			"skipFiles": [
-				"<node_internals>/**"
-			],
-			"program": "${workspaceFolder}/src/index.js",
-			"args": [
-				"-o", "${workspaceFolder}/output",
-				"-p", "${workspaceFolder}/testfiles/signature_profile.yml",
-				"${workspaceFolder}/testfiles/s01-standard-manifest-with-actions-2ed.json"
-			]
-		},
-		{
-			"type": "node",
-			"request": "launch",
-			"name": "Profile-Test",
-			"skipFiles": [
-				"<node_internals>/**"
-			],
-			"program": "${workspaceFolder}/src/index.js",
-			"args": [
-				"-o", "${workspaceFolder}/output",
-				"-p", "${workspaceFolder}/testfiles/template_profile.yml",
-				"${workspaceFolder}/testfiles/s01-standard-manifest-with-actions-2ed.json"
-			]
-		},
-		{
-			"type": "node",
-			"request": "launch",
-			"name": "ExpressionTest",
-			"skipFiles": [
-				"<node_internals>/**"
-			],
-			"program": "${workspaceFolder}/src/index.js",
-			"args": [
-				"-o", "${workspaceFolder}/output",
-				"-p", "${workspaceFolder}/testfiles/expression_profile.yml",
-				"-y",
-				"${workspaceFolder}/testfiles/genai_indicators.json"
-			]
-		}
-	]
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Camera-Test",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}/src/index.js",
+      "args": [
+        "-o",
+        "${workspaceFolder}/output",
+        "-p",
+        "${workspaceFolder}/testfiles/camera_profile.yml",
+        "${workspaceFolder}/testfiles/camera_indicators.json"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Camera-Test-YAML",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}/src/index.js",
+      "args": [
+        "-o",
+        "${workspaceFolder}/output",
+        "-p",
+        "${workspaceFolder}/testfiles/camera_profile.yml",
+        "-y",
+        "${workspaceFolder}/testfiles/camera_indicators.json"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Camera-Test-HTML",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}/src/index.js",
+      "args": [
+        "-o",
+        "${workspaceFolder}/output",
+        "-p",
+        "${workspaceFolder}/testfiles/camera_profile.yml",
+        "--html",
+        "${workspaceFolder}/testfiles/report_template.html",
+        "${workspaceFolder}/testfiles/camera_indicators.json"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "GenAI-Test",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}/src/index.js",
+      "args": [
+        "-o",
+        "${workspaceFolder}/output",
+        "-p",
+        "${workspaceFolder}/testfiles/genai_profile.yml",
+        "${workspaceFolder}/testfiles/genai_indicators.json"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "GenAI-Test-YAML",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}/src/index.js",
+      "args": [
+        "-o",
+        "${workspaceFolder}/output",
+        "-p",
+        "${workspaceFolder}/testfiles/genai_profile.yml",
+        "-y",
+        "${workspaceFolder}/testfiles/genai_indicators.json"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "GenAI-Test-HTML",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}/src/index.js",
+      "args": [
+        "-o",
+        "${workspaceFolder}/output",
+        "-p",
+        "${workspaceFolder}/testfiles/genai_profile.yml",
+        "--html",
+        "${workspaceFolder}/testfiles/report_template.html",
+        "${workspaceFolder}/testfiles/genai_indicators.json"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "NoManifest-Test",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}/src/index.js",
+      "args": [
+        "-o",
+        "${workspaceFolder}/output",
+        "-p",
+        "${workspaceFolder}/testfiles/no_manifests_profile.yml",
+        "${workspaceFolder}/testfiles/no_manifests_indicators.json"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "NoManifest-Test-HTML",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}/src/index.js",
+      "args": [
+        "-o",
+        "${workspaceFolder}/output",
+        "-p",
+        "${workspaceFolder}/testfiles/no_manifests_profile.yml",
+        "--html",
+        "${workspaceFolder}/testfiles/report_template.html",
+        "${workspaceFolder}/testfiles/no_manifests_indicators.json"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Signature-Test",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}/src/index.js",
+      "args": [
+        "-o",
+        "${workspaceFolder}/output",
+        "-p",
+        "${workspaceFolder}/testfiles/signature_profile.yml",
+        "${workspaceFolder}/testfiles/s01-standard-manifest-with-actions-2ed.json"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Template-Test",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}/src/index.js",
+      "args": [
+        "-o",
+        "${workspaceFolder}/output",
+        "-p",
+        "${workspaceFolder}/testfiles/template_profile.yml",
+        "${workspaceFolder}/testfiles/s01-standard-manifest-with-actions-2ed.json"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "ExpressionTest",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}/src/index.js",
+      "args": [
+        "-o",
+        "${workspaceFolder}/output",
+        "-p",
+        "${workspaceFolder}/testfiles/expression_profile.yml",
+        "-y",
+        "${workspaceFolder}/testfiles/genai_indicators.json"
+      ]
+    }
+  ]
 }

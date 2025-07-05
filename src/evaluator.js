@@ -170,12 +170,12 @@ export class Evaluator {
     const profileInfo = `${metadata.name} (${metadata.version})`;
     console.log(`🔍 Evaluating "${profileInfo}" from "${metadata.issuer}" dated ${metadata.date}.`);
 
-    // load the globals from the profile
+    // load the global variables from the profile
     // and register them as json-formula globals
     // always load these first, since a expression might depend on them
-    if (doc0.globals) {
-      console.log('🔍 Registering globals from the profile:');
-      for (const [name, value] of Object.entries(doc0.globals)) {
+    if (doc0.variables) {
+      console.log('🔍 Registering variables from the profile:');
+      for (const [name, value] of Object.entries(doc0.variables)) {
         console.log(`\t- ${name}: ${value}`);
         // register the global as a variable
         this.formulaGlobals[name] = value;
@@ -190,7 +190,7 @@ export class Evaluator {
         console.log(`\t- ${name}: ${expression}`);
         // register the expression as a function
       }
-      this.formRunner.registerFunctions(doc0.expressions, doc0.globals);
+      this.formRunner.registerFunctions(doc0.expressions, doc0.variables);
     }
 
     // -1 one for the metadata document

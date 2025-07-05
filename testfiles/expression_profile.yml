@@ -1,6 +1,5 @@
 # Example Trust Profile for experimenting with expression registration
 ---
-
 metadata:
   name: Experimental Expression Registration Profile
   issuer: JPEG Trust Committee
@@ -11,21 +10,29 @@ metadata:
 expressions:
   _isUnmodified: '@.declaration.claim.content_status == "assertion.dataHash.match"'
   _isAIGC: contains(@.declaration.assertions.'c2pa.actions'.actions[0].digitalSourceType, "trainedAlgorithmicMedia")
-  _dateOfWeek: 'value($days, weekday(now(), 3))'
+  _dateOfWeek: "value($days, weekday(now(), 3))"
 
-globals:
-    "$days": [ "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" ]
+variables:
+  "$days":
+    [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday",
+    ]
 
 ---
 # Section 1
 
-- 
-  id: generalInfo
+- id: generalInfo
   description: Section 1 - General Information
   title: General Information
   report_text: Report run on {{expr "_dateOfWeek()"}}
 
--   # check for content modification 
+- # check for content modification
   # description provides additional context that does not go into the report
   id: content
   description: content is unmodified
@@ -41,14 +48,13 @@ globals:
 ---
 # Section 2 - Is produced by Generative AI (AIGC)?
 
-- 
-  id: genAI
+- id: genAI
   description: Section 2 - Is Generative AI?
   title: Generative AI Usage
   report_text: This section provides information about whether or not the media asset was produced by generative AI.
 
--   # Is Generative AI?
-    # Checks for 'trainedAlgorithmicMedia' which includes both regular and composited flavors.
+- # Is Generative AI?
+  # Checks for 'trainedAlgorithmicMedia' which includes both regular and composited flavors.
   id: aigc
   description: Is AIGC?
   expression: _isAIGC(@)
@@ -60,4 +66,3 @@ globals:
       zh: Translation in Simplified Chinese
     "false":
       en: This media asset was not produced by generative AI
-
