@@ -9,7 +9,8 @@ metadata:
 ---
 # Section 1
 
-- description: Section 1 - Date checks
+- id: section1
+  description: Section 1 - Date checks
   title: Validity checking based on dates
   report_text: This section checks the validity dates
 
@@ -40,7 +41,8 @@ metadata:
 ---
 # Section 2
 
-- description: Section 2 - Check the CA/issuer
+- id: section2
+  description: Section 2 - Check the CA/issuer
   title: Make sure the issuer is on our Trust List
   report_text: This section checks for valid issuers
 

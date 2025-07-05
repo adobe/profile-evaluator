@@ -15,6 +15,7 @@ import path from 'path';
 import YAML from 'yaml';
 import Handlebars from 'handlebars';
 import { FormulaRunner } from './utils/jsonFormula.js';
+import logger from './utils/logger.js';
 
 export class Evaluator {
   constructor() {
@@ -32,29 +33,34 @@ export class Evaluator {
   }
 
   processOneStatement(statement, jsonData) {
-    // there are two types of statements: sections & expression
-    //  Sections are informative only
+    // there are two types of statements: information & expression
+    //  information are informative only
     //  Expressions contain the rules that need to be evaluated against the JSON data
 
     const statementReport = {};
     statementReport.id = statement.id;
+    if (!statementReport.id) {
+      throw new Error(`❌ Statement is missing an ID: ${JSON.stringify(statement)}`);
+    }
 
-    // If the statement is a section (determined by required `title`)
-    //      we can log its title and description
+    // If the statement is an information statement
+    //      then it does NOT have an expression
+    //      and it CAN have a title
+    //      we can log its title (if present) and description
     // otherwise it is an expression
     //      and we can evaluate it
-    if (statement.title) {
-      console.log(`\tProcessing: ${statement.title} with ID: ${statement.id}`);
+    if (!statement.expression) {
+      logger.log(`\tProcessing information with ID: ${statement.id}`);
 
       if (statement.title) {
-        console.log(`\t\tDescription: ${statement.title}`);
+        logger.log(`\t\tDescription: ${statement.title}`);
         statementReport.title = statement.title;
       }
 
       // spec says;
       //  "A human readable description of the statement that will not be taken over in associated Trust Reports"
       // if (statement.description) {
-      //     console.log(`\t\tDescription: ${statement.description}`);
+      //     logger.log(`\t\tDescription: ${statement.description}`);
       //     statementReport.title = statement.description;
       // }
 
@@ -70,14 +76,16 @@ export class Evaluator {
           reportText = template(jsonData);
         }
 
-        console.log(`\t\tReport Text: ${reportText}`);
+        logger.log(`\t\tReport Text: ${reportText}`);
         statementReport.report_text = reportText;
+      } else {
+        throw new Error(`❌ Statement is missing report_text: ${JSON.stringify(statement)}`);
       }
     } else {
-      console.log(`\tProcessing expression with ID: ${statement.id}`);
+      logger.log(`\tProcessing expression with ID: ${statement.id}`);
 
       if (statement.id.startsWith('jpt.')) {
-        console.log(`\t\tSpecial "predefined statement": ${statement.id}`);
+        logger.log(`\t\tSpecial "predefined statement": ${statement.id}`);
         // BOGUS: aborting for now
         // TODO
         // return statementReport;
@@ -86,13 +94,13 @@ export class Evaluator {
       // spec says;
       //  "A human readable description of the statement that will not be taken over in associated Trust Reports"
       // if (statement.description) {
-      //     console.log(`\t\tDescription: ${statement.description}`);
+      //     logger.log(`\t\tDescription: ${statement.description}`);
       //     statementReport.title = statement.description;
       // }
 
       // Here we would evaluate the expression against the JSON data
       const result = this.formRunner.run(statement.expression, jsonData, this.formulaGlobals);
-      console.log('\t\tResult:', result);
+      logger.log('\t\tResult:', result);
       statementReport.value = result;
 
       // store the value in a special entry called "profile" in the original JSON
@@ -120,12 +128,14 @@ export class Evaluator {
               reportText = template(jsonData);
             }
 
-            console.log(`\t\tReport Text: ${reportText}`);
+            logger.log(`\t\tReport Text: ${reportText}`);
             statementReport.report_text = reportText;
           } else {
-            console.log('\t\tNo report text found!');
+            logger.log('\t\tNo report text found!');
           }
         }
+      } else {
+        throw new Error(`❌ Statement is missing report_text: ${JSON.stringify(statement)}`);
       }
     }
 
@@ -150,7 +160,7 @@ export class Evaluator {
 
     const trustReport = {};
 
-    // console.log('🔍 Evaluating JSON data against the Trust Profile...');
+    // logger.log('🔍 Evaluating JSON data against the Trust Profile...');
 
     // start with the first document in the profile
     const doc0 = this.profile[0].toJSON();
@@ -159,7 +169,7 @@ export class Evaluator {
     // this allows the profile to access them later (e.g., in expressions or templates)
     for (const [key, value] of Object.entries(doc0)) {
       jsonData[key] = value;
-      // console.log(`Copying "${key}" to the trust indicators.`);
+      // logger.log(`Copying "${key}" to the trust indicators.`);
     }
 
     // extract the required `metadata` field
@@ -168,15 +178,15 @@ export class Evaluator {
     const metadata = doc0.metadata;
     trustReport.metadata = metadata; // Store metadata in the report
     const profileInfo = `${metadata.name} (${metadata.version})`;
-    console.log(`🔍 Evaluating "${profileInfo}" from "${metadata.issuer}" dated ${metadata.date}.`);
+    logger.log(`🔍 Evaluating "${profileInfo}" from "${metadata.issuer}" dated ${metadata.date}.`);
 
     // load the global variables from the profile
     // and register them as json-formula globals
     // always load these first, since a expression might depend on them
     if (doc0.variables) {
-      console.log('🔍 Registering variables from the profile:');
+      logger.log('🔍 Registering variables from the profile:');
       for (const [name, value] of Object.entries(doc0.variables)) {
-        console.log(`\t- ${name}: ${value}`);
+        logger.log(`\t- ${name}: ${value}`);
         // register the global as a variable
         this.formulaGlobals[name] = value;
       }
@@ -185,16 +195,16 @@ export class Evaluator {
     // load the expressions from the profile
     // and register them as json-formula functions
     if (doc0.expressions) {
-      console.log('🔍 Registering expressions from the profile:');
+      logger.log('🔍 Registering expressions from the profile:');
       for (const [name, expression] of Object.entries(doc0.expressions)) {
-        console.log(`\t- ${name}: ${expression}`);
+        logger.log(`\t- ${name}: ${expression}`);
         // register the expression as a function
       }
       this.formRunner.registerFunctions(doc0.expressions, doc0.variables);
     }
 
     // -1 one for the metadata document
-    console.log(`Profile contains ${this.profile.length - 1} sections with rules.`);
+    logger.log(`Profile contains ${this.profile.length - 1} sections with rules.`);
 
     trustReport.sections = [];   // init an array of sections
 
