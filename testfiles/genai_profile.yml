@@ -19,7 +19,7 @@ metadata:
   id: content
   description: content is unmodified
   expression: >
-    declaration.claim.content_status == "assertion.dataHash.match"
+    declaration.'claim.v2'.content_status == "assertion.dataHash.match"
   report_text:
     "true":
       en: This content has not been modified
@@ -41,7 +41,7 @@ metadata:
   id: aigc
   description: Is AIGC?
   expression: >
-    contains(declaration.assertions.'c2pa.actions'.actions[0].digitalSourceType, 
+    contains(declaration.assertions.'c2pa.actions.v2'.actions[0].digitalSourceType, 
               "trainedAlgorithmicMedia")
   report_text:
     "true":

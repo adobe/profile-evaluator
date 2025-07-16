@@ -31,7 +31,7 @@ metadata:
   id: content
   description: content is unmodified
   expression: >
-    manifests[0].claim.content_status == "assertion.dataHash.match"
+    manifests[0].'claim.v2'.content_status == "assertion.dataHash.match"
   report_text:
     "true":
       en: This content has not been modified
@@ -62,10 +62,10 @@ metadata:
   id: gps
   description: GPS location approximate to China's
   expression: >
-    (manifests[0].assertions.'stds.exif'.'exif:GPSLatitude' > 20) && 
-      (manifests[0].assertions.'stds.exif'.'exif:GPSLatitude' < 50) && 
-      (manifests[0].assertions.'stds.exif'.'exif:GPSLongitude' > 80) && 
-      (manifests[0].assertions.'stds.exif'.'exif:GPSLongitude' < 120)
+    (manifests[0].assertions.'cawg.metadata'.'exif:GPSLatitude' > 20) && 
+      (manifests[0].assertions.'cawg.metadata'.'exif:GPSLatitude' < 50) && 
+      (manifests[0].assertions.'cawg.metadata'.'exif:GPSLongitude' > 80) && 
+      (manifests[0].assertions.'cawg.metadata'.'exif:GPSLongitude' < 120)
   report_text:
     "true":
       en: The GPS information shows that the image was taken inside of China
@@ -78,7 +78,7 @@ metadata:
   id: city
   description: name of the city contains "China"
   expression: >
-    contains(manifests[0].assertions.'stds.iptc'
+    contains(manifests[0].assertions.'cawg.metadata'
                                     .'Iptc4xmpExt:LocationCreated'
                                     .'Iptc4xmpExt:City'
             , "China")

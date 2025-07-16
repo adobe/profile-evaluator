@@ -8,7 +8,7 @@ metadata:
   language: en
 
 expressions:
-  _isUnmodified: '@.declaration.claim.content_status == "assertion.dataHash.match"'
+  _isUnmodified: '@.declaration.''claim.v2''.content_status == "assertion.dataHash.match"'
   _isAIGC: contains(@.declaration.assertions.'c2pa.actions'.actions[0].digitalSourceType, "trainedAlgorithmicMedia")
   _dateOfWeek: "value($days, weekday(now(), 3))"
 

@@ -23,7 +23,7 @@ metadata:
   id: content
   description: content is unmodified
   expression: >
-    manifests[0].claim.content_status == "assertion.dataHash.match"
+    manifests[0].'claim.v2'.content_status == "assertion.dataHash.match"
   report_text:
     "true":
       en: This content has not been modified
