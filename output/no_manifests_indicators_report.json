@@ -16,7 +16,7 @@
       {
         "id": "manifests",
         "value": false,
-        "report_text": "No trust manifests found in this media asset"
+        "report_text": "No Trust Manifests found in this media asset"
       },
       {
         "id": "jpt.profile_compliance",

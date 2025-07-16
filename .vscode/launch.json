@@ -125,6 +125,23 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "NoManifest-Test-YAML",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}/src/index.js",
+      "args": [
+        "-o",
+        "${workspaceFolder}/output",
+        "-p",
+        "${workspaceFolder}/testfiles/no_manifests_profile.yml",
+        "-y",
+        "${workspaceFolder}/testfiles/no_manifests_indicators.json"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "NoManifest-Test-HTML",
       "skipFiles": [
         "<node_internals>/**"

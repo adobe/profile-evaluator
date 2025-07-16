@@ -4,7 +4,7 @@ metadata:
   name: Experimental No Manifests Profile
   issuer: JPEG Trust Committee
   date: 2023-11-02T01:03:16.443Z
-  version: 1.0.0
+  version: 2.0.0
   language: en
 ---
 # Section 1
@@ -20,11 +20,11 @@ metadata:
   expression: hasProperty(@, "manifest") || hasProperty(@, "declaration")
   report_text:
     "true":
-      en: This media asset has one or more trust manifests
+      en: This media asset has one or more Trust Manifests
       de: Translation in German
       zh: Translation in Simplified Chinese
     "false":
-      en: No trust manifests found in this media asset
+      en: No Trust Manifests found in this media asset
 
 - # check compliance
   id: jpt:profile_compliance

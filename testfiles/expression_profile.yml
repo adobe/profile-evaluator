@@ -4,7 +4,7 @@ metadata:
   name: Experimental Expression Registration Profile
   issuer: JPEG Trust Committee
   date: 2025-06-26T21:00:46.638Z
-  version: 1.0.0
+  version: 2.0.0
   language: en
 
 expressions:

@@ -1,8 +1,8 @@
-metadata:
+profile_metadata:
   name: Experimental Generative AI Profile
   issuer: JPEG Trust Committee
   date: 2023-10-31T00:16:40.346Z
-  version: 1.0.0
+  version: 2.0.0
   language: en
 sections:
   - - id: generalInfo
@@ -25,6 +25,6 @@ sections:
       title: Compliance
       report_text: This section provides the compliance status of the media asset with
         respect to this profile.
-    - id: jpt.profile_compliance
+    - id: jpt:profile_compliance
       value: true
-      report_text: This media asset is compliant with this profile.
+      report_text: "Compliance Status: true"
