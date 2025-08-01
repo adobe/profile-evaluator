@@ -192,6 +192,47 @@ class TestUtils {
     }
     return undefined;
   }
+
+  /**
+   * Run the CLI with flexible arguments for eval mode
+   * @param {string[]} args - Array of CLI arguments
+   * @returns {Object} Result object with exitCode, stdout, and stderr
+   */
+  static runCLIEval(args) {
+    // Validate that args is an array
+    if (!Array.isArray(args)) {
+      throw new Error(`runCLIEval expects an array of arguments, received: ${typeof args} - ${JSON.stringify(args)}`);
+    }
+
+    // Properly escape arguments for shell execution
+    const escapedArgs = args.map(arg => {
+      // If the argument contains spaces, quotes, or special characters, wrap it in double quotes
+      // and escape any existing double quotes
+      if (arg.includes(' ') || arg.includes("'") || arg.includes('"') || arg.includes('|') || arg.includes('&')) {
+        return `"${arg.replace(/"/g, '\\"')}"`;
+      }
+      return arg;
+    });
+
+    const command = `node src/index.js ${escapedArgs.join(' ')}`;
+    try {
+      const stdout = execSync(command, {
+        encoding: 'utf8',
+        stdio: ['inherit', 'pipe', 'pipe']
+      });
+      return {
+        exitCode: 0,
+        stdout: stdout,
+        stderr: ''
+      };
+    } catch (error) {
+      return {
+        exitCode: error.status || 1,
+        stdout: error.stdout || '',
+        stderr: error.stderr || error.message || ''
+      };
+    }
+  }
 }
 
 module.exports = TestUtils;

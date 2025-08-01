@@ -43,6 +43,10 @@ node src/index.js [options] <jsonFile>
 ### Required Options
 - `-p, --profile <path>` - Path to the Trust Profile file (YAML format)
 
+**OR**
+
+- `-e, --eval <expression>` - JSON formula expression to evaluate against the data (cannot be used with --profile)
+
 ### Optional Options
 - `-o, --output <directory>` - Output directory for reports (if not specified, results are printed to console)
 - `-y, --yaml` - Output report in YAML format (default)
@@ -72,6 +76,53 @@ node src/index.js [options] <jsonFile>
    ```
    node src/index.js -p testfiles/camera_profile.yml -o output --html testfiles/report_template.html testfiles/camera_indicators.json
    ```
+
+5. **Evaluate a simple expression** against Trust Indicator Set data:
+   ```
+   node src/index.js --eval "declaration.'claim.v2'.alg" testfiles/camera_indicators.json
+   ```
+
+6. **Check if a property exists**:
+   ```
+   node src/index.js --eval "has(declaration.assertions)" testfiles/camera_indicators.json
+   ```
+
+## Evaluation Mode
+
+The `--eval` option allows you to run JSON formula expressions directly against Trust Indicator Set data without requiring a Trust Profile. This is useful for:
+
+- **Quick data exploration**: Extract specific values from Trust Indicator Sets
+- **Property validation**: Check if certain fields exist in the data
+- **Data transformation**: Apply expressions to compute derived values
+- **Debugging**: Test expressions before including them in Trust Profiles
+
+### Expression Syntax
+
+The tool supports JSON formula expressions with the following features:
+
+- **Property access**: Use dot notation (e.g., `data.field`)
+- **Nested properties**: Use quotes for special characters (e.g., `"claim.v2"`)
+- **Array access**: Use bracket notation (e.g., `array[0]`)
+- **Functions**: Built-in functions like `has()`, `length()`, etc.
+- **Operators**: Standard comparison and logical operators
+
+### Evaluation Examples
+
+```bash
+# Extract a simple property
+node src/index.js --eval "declaration" testfiles/camera_indicators.json
+
+# Access nested properties with special characters
+node src/index.js --eval "declaration.'claim.v2'.alg" testfiles/camera_indicators.json
+
+# Check if a property exists
+node src/index.js --eval "has(declaration.assertions)" testfiles/camera_indicators.json
+
+# Get array length
+node src/index.js --eval "length(declaration.assertions)" testfiles/camera_indicators.json
+```
+
+**Note**: The `--eval` and `--profile` options are mutually exclusive - you cannot use both in the same command.
 
 ## Development
 
@@ -162,6 +213,9 @@ This project is licensed under the Apache 2.0 License. See the LICENSE file for 
 
 ### v1.1
 - Changed default output format to YAML
+- Added `--eval` option for evaluating JSON formula expressions directly
+  (and associated tests!)
+- Improved error handling for missing profile or JSON file
 - Started work on 21617-2 support
 
 ### v1.0.0

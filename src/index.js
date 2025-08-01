@@ -16,6 +16,7 @@ import YAML from 'yaml';
 import Handlebars from 'handlebars';
 import { Command } from 'commander';
 import { Evaluator } from './evaluator.js';
+import { FormulaRunner } from './utils/jsonFormula.js';
 
 // Command line parsing with Commander.js
 const program = new Command();
@@ -25,7 +26,8 @@ program
   .description('A command line tool to evaluate Trust Indicator Sets data against Trust Profiles.')
   .version('1.1.0')
   .argument('<jsonFile>', 'path to the Trust Indicator Set to evaluate')
-  .requiredOption('-p, --profile <path>', 'path to Trust Profile')
+  .option('-p, --profile <path>', 'path to Trust Profile')
+  .option('-e, --eval <expression>', 'JSON formula expression to evaluate against the data')
   .option('-o, --output <directory>', 'output directory for reports')
   .option('-y, --yaml', 'output report in YAML format, default')
   .option('-j, --json', 'output report in JSON format')
@@ -37,18 +39,44 @@ const options = program.opts();
 const args = program.args;
 
 const profilePath = options.profile;
+const evalExpression = options.eval;
 const jsonFilePath = args[0];
 const outputDir = options.output;
+
+// Validate that either profile or eval is provided, but not both
+if (!profilePath && !evalExpression) {
+  console.error('❌ Error: Either --profile or --eval option must be provided');
+  process.exit(1);
+}
+
+if (profilePath && evalExpression) {
+  console.error('❌ Error: Cannot use both --profile and --eval options together');
+  process.exit(1);
+}
 
 const evaluator = new Evaluator();
 
 async function main() {
   try {
-    await evaluator.loadProfile(profilePath);
-
     console.log(`🤝 Loading Trust Indicator Set from: ${jsonFilePath}`);
     const jsonData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'));
-    const result = evaluator.evaluate(jsonData);
+
+    let result;
+
+    if (evalExpression) {
+      // Use FormulaRunner to evaluate the expression against the data
+      console.log(`🔍 Evaluating expression: ${evalExpression}`);
+      const formulaRunner = new FormulaRunner();
+      result = formulaRunner.run(evalExpression, jsonData);
+
+      // Output result to stdout
+      console.log(JSON.stringify(result, null, 2));
+      return;
+    } else {
+      // Use the existing profile evaluation logic
+      await evaluator.loadProfile(profilePath);
+      result = evaluator.evaluate(jsonData);
+    }
 
     if (outputDir) {
       if (!fs.existsSync(outputDir)) {
@@ -81,6 +109,7 @@ async function main() {
     }
   } catch (error) {
     console.error('❌ Error:', error.message);
+    process.exit(1);
   }
 }
 

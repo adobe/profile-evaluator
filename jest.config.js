@@ -5,6 +5,9 @@
 
 /** @type {import('jest').Config} */
 const config = {
+  // Configure Jest for ES modules with CommonJS tests
+  testEnvironment: 'node',
+
   // All imported modules in your tests should be mocked automatically
   // automock: false,
 
