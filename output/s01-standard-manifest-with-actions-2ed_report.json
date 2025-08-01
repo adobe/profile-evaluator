@@ -21,7 +21,7 @@
     ],
     [
       {
-        "id": "jpt.profile_compliance",
+        "id": "jpt:profile_compliance",
         "value": false,
         "report_text": "This media asset is not compliant with '(Template Test Profile, 1.0.0)'."
       }
