@@ -159,6 +159,39 @@ class TestUtils {
     // Validate output
     return this.validateYAMLOutput(paths.yamlOutput);
   }
+
+  /**
+   * Common method for validating specific content checks based on test type
+   * @param {Object} data - The parsed JSON/YAML data
+   * @param {function} validationFunction - Function to run specific validation checks
+   */
+  static validateSpecificChecks(data, validationFunction) {
+    // Validate that sections exist and have the expected structure
+    expect(Array.isArray(data.sections)).toBe(true);
+    expect(data.sections.length).toBeGreaterThan(0);
+
+    // Run the specific validation function if provided
+    if (validationFunction && typeof validationFunction === 'function') {
+      validationFunction(data);
+    }
+  }
+
+  /**
+   * Helper method to find a section by ID in the nested sections structure
+   * @param {Object} data - The parsed JSON/YAML data
+   * @param {string} id - The ID to search for
+   * @returns {Object|undefined} The section with the matching ID
+   */
+  static findSectionById(data, id) {
+    for (const sectionGroup of data.sections) {
+      for (const section of sectionGroup) {
+        if (section.id === id) {
+          return section;
+        }
+      }
+    }
+    return undefined;
+  }
 }
 
 module.exports = TestUtils;

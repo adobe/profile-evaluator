@@ -17,7 +17,7 @@ metadata:
 - # check for `not_before`
   id: not_before
   description: check the current date is after `not_before`
-  expression: toDate(manifests[0].signature.validity.not_before) < now()
+  expression: toDate(manifests[0].claim_signature.validity.not_before) < now()
   report_text:
     "true":
       en: The `not_before` date is prior to right now
@@ -29,7 +29,7 @@ metadata:
 - # check for `not_after`
   id: not_after
   description: check the current date is before `not_after`
-  expression: toDate(manifests[0].signature.validity.not_after) > now()
+  expression: toDate(manifests[0].claim_signature.validity.not_after) > now()
   report_text:
     "true":
       en: The `not_after` date is after right now
@@ -50,8 +50,8 @@ metadata:
   id: test_cert
   description: see if this was signed by a test certificate
   expression: >
-    manifests[0].signature.issuer.OU="FOR TESTING_ONLY" || 
-    manifests[0].signature.issuer.O="C2PA Test Intermediate Root CA"
+    manifests[0].claim_signature.issuer.OU="FOR TESTING_ONLY" || 
+    manifests[0].claim_signature.issuer.O="C2PA Test Intermediate Root CA"
   report_text:
     "true":
       en: The issuer is a test certificate
@@ -64,15 +64,15 @@ metadata:
   id: issuer
   description: see if the issuer is on our trust list
   expression: >
-    (manifests[0].signature.issuer.CN="Alice's Trust Services" && manifests[0].signature.issuer.C="US") 
-    || (manifests[0].signature.issuer.CN="ЦСК НБУ" && manifests[0].signature.issuer.C="UA")
+    (manifests[0].claim_signature.issuer.CN="Alice's Trust Services" && manifests[0].claim_signature.issuer.C="US") 
+    || (manifests[0].claim_signature.issuer.CN="ЦСК НБУ" && manifests[0].claim_signature.issuer.C="UA")
   report_text:
     "true":
-      en: The issuer ({{expr "manifests[0].signature.issuer.CN"}}) is trusted
+      en: The issuer ({{expr "manifests[0].claim_signature.issuer.CN"}}) is trusted
       fr: Translation in French
       zh: Translation in Simplified Chinese
     "false":
-      en: The issuer ({{expr "manifests[0].signature.issuer.CN"}}) is not trusted
+      en: The issuer ({{expr "manifests[0].claim_signature.issuer.CN"}}) is not trusted
 
 ---
 # Section 3 - Compliance
