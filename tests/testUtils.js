@@ -39,8 +39,10 @@ class TestUtils {
    * @param {boolean} isYaml - Whether to use --yaml flag
    */
   static runCLI(profilePath, outputDir, indicatorsPath, isYaml = false) {
-    const yamlFlag = isYaml ? '--yaml' : '';
-    const command = `node src/index.js -p "${profilePath}" -o "${outputDir}" ${yamlFlag} "${indicatorsPath}"`.trim();
+    // default as of 1.1 is YAML
+    const jsonFlag = isYaml ? '' : '--json';
+    const formatFlag = isYaml ? '' : jsonFlag;
+    const command = `node src/index.js -p "${profilePath}" -o "${outputDir}" ${formatFlag} "${indicatorsPath}"`.trim();
     execSync(command, { stdio: 'inherit' });
   }
 

@@ -21,13 +21,14 @@ import { Evaluator } from './evaluator.js';
 const program = new Command();
 
 program
-  .name('jpeg-trust-evaluator')
-  .description('A command line tool to evaluate JPEG Trust Indicator Sets data against JPEG Trust Profiles.')
-  .version('1.0.0')
-  .argument('<jsonFile>', 'path to the JSON file to evaluate')
-  .requiredOption('-p, --profile <path>', 'path to JPEG Trust Profile')
+  .name('profile-evaluator')
+  .description('A command line tool to evaluate Trust Indicator Sets data against Trust Profiles.')
+  .version('1.1.0')
+  .argument('<jsonFile>', 'path to the Trust Indicator Set to evaluate')
+  .requiredOption('-p, --profile <path>', 'path to Trust Profile')
   .option('-o, --output <directory>', 'output directory for reports')
-  .option('-y, --yaml', 'output report in YAML format')
+  .option('-y, --yaml', 'output report in YAML format, default')
+  .option('-j, --json', 'output report in JSON format')
   .option('--html <path>', 'path to HTML template for HTML report output');
 
 program.parse();
@@ -69,16 +70,16 @@ async function main() {
         const outReport = template(result);
         fs.writeFileSync(htmlOutputPath, outReport);
         console.log(`📝 HTML report written to ${htmlOutputPath}`);
-      } else if (options.yaml) {
-        const ext = 'yml';
-        const outputPath = path.join(outputDir, `${inputFileName}_report.${ext}`);
-        fs.writeFileSync(outputPath, YAML.stringify(result, null, { 'collectionStyle': 'block' }));
-        console.log(`📝 YAML result written to ${outputPath}`);
-      } else {
+      } else if (options.json) {
         const ext = 'json';
         const outputPath = path.join(outputDir, `${inputFileName}_report.${ext}`);
         fs.writeFileSync(outputPath, JSON.stringify(result, null, 2));
         console.log(`📝 JSON result written to ${outputPath}`);
+      } else {
+        const ext = 'yml';
+        const outputPath = path.join(outputDir, `${inputFileName}_report.${ext}`);
+        fs.writeFileSync(outputPath, YAML.stringify(result, null, { 'collectionStyle': 'block' }));
+        console.log(`📝 YAML result written to ${outputPath}`);
       }
     } else {
       console.log('📈 Evaluation Result:', result);
