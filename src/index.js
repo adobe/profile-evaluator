@@ -46,11 +46,6 @@ async function main() {
   try {
     await evaluator.loadProfile(profilePath);
 
-    // register Handlebars helpers
-    Handlebars.registerHelper('eq', function (arg1, arg2, options) {
-      return (arg1 === arg2) ? options.fn(this) : options.inverse(this);
-    });
-
     console.log(`🤝 Loading Trust Indicator Set from: ${jsonFilePath}`);
     const jsonData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'));
     const result = evaluator.evaluate(jsonData);

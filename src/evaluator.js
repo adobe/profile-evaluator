@@ -158,6 +158,11 @@ export class Evaluator {
       return result;
     });
 
+    // we don't use this - it was used for debugging
+    // Handlebars.registerHelper('eq', function (arg1, arg2, options) {
+    //   return (arg1 === arg2) ? options.fn(this) : options.inverse(this);
+    // });
+
     const trustReport = {};
 
     // logger.log('🔍 Evaluating JSON data against the Trust Profile...');
