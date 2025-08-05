@@ -40,4 +40,5 @@ metadata:
 
 - block:
     name: "test_scaler"
-    value: "{{ expr `2*2` }}"
+    value: |
+      {{ expr "2*2" }}

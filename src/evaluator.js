@@ -35,12 +35,25 @@ export class Evaluator {
   processOneDataBlock(dataBlock, jsonData) {
     function processOneItem(item, jsonData) {
       let outValue = item;
-      if (typeof item === 'string' && item.startsWith('{{') && item.endsWith('}}')) {
-        // If the value is a Handlebars template, compile it
-        // and pass the jsonData to it
-        const template = Handlebars.compile(item, { noEscape: true });
-        outValue = template(jsonData);
+      if (typeof item === 'string') {
+        item = item.trim();
+        if (item.startsWith('{{') && item.endsWith('}}')) {
+          // If the value is a Handlebars template, compile it
+          // and pass the jsonData to it
+          const template = Handlebars.compile(item, { noEscape: true });
+          outValue = template(jsonData);
+        }
       }
+
+      // Try to convert outValue to a boolean or number if possible
+      if (typeof outValue === 'string') {
+        const lower = outValue.toLowerCase();
+        if (lower === 'true') return true;
+        if (lower === 'false') return false;
+        const num = Number(outValue);
+        if (!isNaN(num) && outValue.trim() !== '') return num;
+      }
+
       return outValue;
     }
 
