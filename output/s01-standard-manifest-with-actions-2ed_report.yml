@@ -12,6 +12,8 @@ statements:
       report_text: Array - [{"length":7520,"start":2}]
     - id: missing helper
       report_text: "Foo - '🔴 Missing: foo()'"
+    - id: test_conditional_expression
+      report_text: Status -  Match
 test_map:
   alg: sha256
   hash: na6lb3F/uIdiAhZtZp4Oa2aNCj1UvcHVxx/p5ISE2AA=
