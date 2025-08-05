@@ -32,6 +32,31 @@ export class Evaluator {
     this.profile = YAML.parseAllDocuments(profileData);
   }
 
+  processOneDataBlock(dataBlock, jsonData) {
+    // This function processes a single data block
+    if (typeof dataBlock === 'object' && dataBlock !== null && dataBlock.dict) {
+      const input = dataBlock.dict;
+      const output = {};
+      output[input.name] = {};
+
+      logger.log(`\tProcessing data block with name: ${input.name}`);
+
+      for (const [key, value] of Object.entries(input)) {
+        if (key !== 'name') {
+          let outValue = value;
+          if (typeof value === 'string' && value.startsWith('{{') && value.endsWith('}}')) {
+            // If the value is a Handlebars template, compile it
+            // and pass the jsonData to it
+            const template = Handlebars.compile(value);
+            outValue = template(jsonData);
+          }
+          output[input.name][key] = outValue;
+        }
+      }
+
+      return output;
+    }
+  }
   processOneStatement(statement, jsonData) {
     // there are two types of statements: information & expression
     //  information are informative only
@@ -155,8 +180,26 @@ export class Evaluator {
     // eslint-disable-next-line no-unused-vars
     Handlebars.registerHelper('expr', function (arg1, options) {
       const result = formRunner.run(arg1, jsonData, formulaGlobals);
-      return result;
+      if (typeof result === 'object' && result !== null) {
+        return new Handlebars.SafeString(JSON.stringify(result));
+      } else {
+        return result;
+      }
     });
+
+    // register a custom function to convert a JSON object to a string
+    // we use the Handlebars SafeString to avoid escaping
+    Handlebars.registerHelper('str', function (arg1, options) {
+      const result = JSON.stringify(arg1);
+      return new Handlebars.SafeString(result);
+    });
+
+    // this is a special helper that gets called when a helper is missing or key is not defined
+    Handlebars.registerHelper('helperMissing', function ( /* dynamic arguments */) {
+      var options = arguments[arguments.length - 1];
+      var args = Array.prototype.slice.call(arguments, 0, arguments.length - 1)
+      return new Handlebars.SafeString("🔴 Missing: " + options.name + "(" + args + ")")
+    })
 
     // we don't use this - it was used for debugging
     // Handlebars.registerHelper('eq', function (arg1, arg2, options) {
@@ -211,7 +254,7 @@ export class Evaluator {
     // -1 one for the metadata document
     logger.log(`Profile contains ${this.profile.length - 1} sections with rules.`);
 
-    trustReport.sections = [];   // init an array of sections
+    trustReport.statements = [];   // init an array of statements
 
     for (let i = 1; i < this.profile.length; i++) {
       const section = this.profile[i].toJSON();
@@ -221,20 +264,35 @@ export class Evaluator {
 
         // eslint-disable-next-line no-unused-vars
         section.forEach((rule, _idx) => {
-          const oneSectRep = this.processOneStatement(rule, jsonData);
-          sectionReport.push(oneSectRep);
+          if (!rule.id) {
+            const oneDataBlock = this.processOneDataBlock(rule, jsonData);
+            // Up-level each key in oneDataBlock to trustReport
+            if (oneDataBlock && typeof oneDataBlock === 'object') {
+              for (const [key, value] of Object.entries(oneDataBlock)) {
+                trustReport[key] = value;
+              }
+            }
+          } else {
+            const oneSectRep = this.processOneStatement(rule, jsonData);
+            sectionReport.push(oneSectRep);
+          }
         });
 
-        trustReport.sections.push(sectionReport);
+        if (sectionReport.length > 0) {
+          trustReport.statements.push(sectionReport);
+        }
       } else {
         // If the section is not an array, it might be a single rule or a complex structure
         this.processOneStatement(section, jsonData);
       }
     }
 
-    Handlebars.unregisterHelper('formula');
+    // unregister Handlebars helpers
+    Handlebars.unregisterHelper('expr');
+    Handlebars.unregisterHelper('str');
+    Handlebars.unregisterHelper('helperMissing');
 
-    // After processing all sections, we can summarize the results
+    // After processing all statements, we can summarize the results
     return trustReport;
   }
 }

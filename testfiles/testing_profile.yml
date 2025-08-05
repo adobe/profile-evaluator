@@ -1,0 +1,30 @@
+# Example Trust Profile for testing handlebars/template rendering
+---
+metadata:
+  name: Testing Profile
+  issuer: JPEG Trust Committee
+  date: 2025-06-17T22:44:49.717Z
+  version: 2.0.0
+  language: en
+---
+# Section 1: test statements
+
+- id: non-scalers
+  description: object
+  report_text: Object - {{str asset_info}}
+
+- id: non-scalers
+  description: array
+  report_text: Array - {{expr "manifests[0].assertions.'c2pa.hash.data'.exclusions"}}
+
+- id: missing helper
+  description: missing
+  report_text: Foo - '{{foo}}'
+
+---
+# Section 2: test blocks
+
+- dict:
+    name: "asset_info"
+    alg: "{{ asset_info.alg }}"
+    hash: "{{ asset_info.hash }}"

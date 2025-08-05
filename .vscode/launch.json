@@ -176,7 +176,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Template-Test",
+      "name": "Testing-Test",
       "skipFiles": [
         "<node_internals>/**"
       ],
@@ -185,7 +185,7 @@
         "-o",
         "${workspaceFolder}/output",
         "-p",
-        "${workspaceFolder}/testfiles/template_profile.yml",
+        "${workspaceFolder}/testfiles/testing_profile.yml",
         "${workspaceFolder}/testfiles/s01-standard-manifest-with-actions-2ed.json"
       ]
     },
