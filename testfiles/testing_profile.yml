@@ -42,3 +42,13 @@ metadata:
     name: "test_scaler"
     value: |
       {{ expr "2*2" }}
+
+- block:
+    name: "test_array_return"
+    value: |
+      {{ expr "manifests[0].assertions.'c2pa.hash.data'.exclusions" }}
+
+- block:
+    name: "test_map_return"
+    value: |
+      {{ expr "manifests[0].claim.assertion_status" }}

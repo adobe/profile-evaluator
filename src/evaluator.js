@@ -53,6 +53,15 @@ export class Evaluator {
         const num = Number(outValue);
         if (!isNaN(num) && outValue.trim() !== '') return num;
       }
+      // Try to parse as JSON object or array
+      try {
+        const parsed = JSON.parse(outValue);
+        if (typeof parsed === 'object' && parsed !== null) {
+          return parsed;
+        }
+      } catch (e) {
+        // Not valid JSON, ignore
+      }
 
       return outValue;
     }

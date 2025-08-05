@@ -21,3 +21,9 @@ test_array:
   - na6lb3F/uIdiAhZtZp4Oa2aNCj1UvcHVxx/p5ISE2AA=
   - 123456
 test_scaler: 4
+test_array_return:
+  - length: 7520
+    start: 2
+test_map_return:
+  c2pa.hash.data: assertion.hashedURI.match
+  c2pa.actions.v2: assertion.hashedURI.match
