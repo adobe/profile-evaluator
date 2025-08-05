@@ -33,30 +33,47 @@ export class Evaluator {
   }
 
   processOneDataBlock(dataBlock, jsonData) {
-    // This function processes a single data block
-    if (typeof dataBlock === 'object' && dataBlock !== null && dataBlock.dict) {
-      const input = dataBlock.dict;
-      const output = {};
-      output[input.name] = {};
-
-      logger.log(`\tProcessing data block with name: ${input.name}`);
-
-      for (const [key, value] of Object.entries(input)) {
-        if (key !== 'name') {
-          let outValue = value;
-          if (typeof value === 'string' && value.startsWith('{{') && value.endsWith('}}')) {
-            // If the value is a Handlebars template, compile it
-            // and pass the jsonData to it
-            const template = Handlebars.compile(value);
-            outValue = template(jsonData);
-          }
-          output[input.name][key] = outValue;
-        }
+    function processOneItem(item, jsonData) {
+      let outValue = item;
+      if (typeof item === 'string' && item.startsWith('{{') && item.endsWith('}}')) {
+        // If the value is a Handlebars template, compile it
+        // and pass the jsonData to it
+        const template = Handlebars.compile(item, { noEscape: true });
+        outValue = template(jsonData);
       }
+      return outValue;
+    }
 
-      return output;
+    // This function processes a single data block
+    if (typeof dataBlock === 'object' && dataBlock !== null) {
+      const output = {};
+      if (dataBlock.block) {
+        const input = dataBlock.block;
+        logger.log(`\tProcessing data block with name: ${input.name}`);
+
+        if (Array.isArray(input.value)) {
+          output[input.name] = input.value.map(item => {
+            return processOneItem(item, jsonData);
+          });
+        } else if (typeof input.value === 'object' && input.value !== null) {
+          output[input.name] = {};
+          for (const [key, value] of Object.entries(input.value)) {
+            if (key !== 'name') {
+              let outValue = processOneItem(value, jsonData);
+              output[input.name][key] = outValue;
+            }
+          }
+        } else {
+          output[input.name] = {};
+          let outValue = processOneItem(input.value, jsonData);
+          output[input.name] = outValue;
+        }
+
+        return output;
+      }
     }
   }
+
   processOneStatement(statement, jsonData) {
     // there are two types of statements: information & expression
     //  information are informative only

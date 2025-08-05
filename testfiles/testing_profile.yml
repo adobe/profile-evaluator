@@ -24,7 +24,20 @@ metadata:
 ---
 # Section 2: test blocks
 
-- dict:
-    name: "asset_info"
-    alg: "{{ asset_info.alg }}"
-    hash: "{{ asset_info.hash }}"
+- block:
+    name: "test_map"
+    value:
+      alg: "{{ asset_info.alg }}"
+      hash: "{{ asset_info.hash }}"
+      noTemplate: true
+
+- block:
+    name: "test_array"
+    value:
+      - "{{ asset_info.alg }}"
+      - "{{ asset_info.hash }}"
+      - 123456
+
+- block:
+    name: "test_scaler"
+    value: "{{ expr `2*2` }}"
