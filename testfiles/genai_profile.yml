@@ -76,6 +76,7 @@ metadata:
     @.profile.aigc && @.profile.declaration_only
   report_text:
     "true":
-      en: "Compliance Status: {{profile.jpt:profile_compliance}}"
+      en: |
+        Compliance Status: {{profile.jpt:profile_compliance}}
     "false":
       en: This media asset is not compliant with this profile.

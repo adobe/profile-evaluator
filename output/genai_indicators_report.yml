@@ -27,4 +27,5 @@ statements:
         respect to this profile.
     - id: jpt:profile_compliance
       value: true
-      report_text: "Compliance Status: true"
+      report_text: |
+        Compliance Status: true

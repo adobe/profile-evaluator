@@ -45,7 +45,7 @@
       {
         "id": "jpt:profile_compliance",
         "value": true,
-        "report_text": "Compliance Status: true"
+        "report_text": "Compliance Status: true\n"
       }
     ]
   ]
