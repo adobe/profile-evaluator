@@ -176,7 +176,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Testing-Test",
+      "name": "BlocksTest",
       "skipFiles": [
         "<node_internals>/**"
       ],
@@ -185,8 +185,8 @@
         "-o",
         "${workspaceFolder}/output",
         "-p",
-        "${workspaceFolder}/testfiles/testing_profile.yml",
-        "${workspaceFolder}/testfiles/s01-standard-manifest-with-actions-2ed.json"
+        "${workspaceFolder}/testfiles/blocks_profile.yml",
+        "${workspaceFolder}/testfiles/blocks_indicators.json"
       ]
     },
     {
@@ -203,7 +203,7 @@
         "-p",
         "${workspaceFolder}/testfiles/expression_profile.yml",
         "-y",
-        "${workspaceFolder}/testfiles/genai_indicators.json"
+        "${workspaceFolder}/testfiles/expression_indicators.json"
       ]
     }
   ]
