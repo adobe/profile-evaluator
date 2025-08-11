@@ -15,7 +15,7 @@ expressions:
 
 - id: non-scalers
   description: object
-  report_text: Object - {{str asset_info}}
+  report_text: Object - {{expr "asset_info"}}
 
 - id: non-scalers
   description: array
