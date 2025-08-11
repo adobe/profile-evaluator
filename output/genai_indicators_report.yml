@@ -4,7 +4,7 @@ profile_metadata:
   date: 2023-10-31T00:16:40.346Z
   version: 2.0.0
   language: en
-sections:
+statements:
   - - id: generalInfo
       title: General Information
       report_text: This section provides information about general stuff

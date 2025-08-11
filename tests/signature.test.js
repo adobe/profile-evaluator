@@ -19,7 +19,7 @@ describe('CLI Integration: Signature Indicators', () => {
    */
   function validateSignatureSpecificChecks(data) {
     // Test validity date checks (section1)
-    const section1 = data.sections[0];
+    const section1 = data.statements[0];
     const notBeforeCheck = section1.find(item => item.id === 'not_before');
     const notAfterCheck = section1.find(item => item.id === 'not_after');
 
@@ -32,7 +32,7 @@ describe('CLI Integration: Signature Indicators', () => {
     expect(notAfterCheck.report_text).toContain('not_after');
 
     // Test issuer trust validation (section2)
-    const section2 = data.sections[1];
+    const section2 = data.statements[1];
     const testCertCheck = section2.find(item => item.id === 'test_cert');
     const issuerCheck = section2.find(item => item.id === 'issuer');
 
@@ -45,7 +45,7 @@ describe('CLI Integration: Signature Indicators', () => {
     expect(issuerCheck.report_text).toContain('not trusted');
 
     // Test overall profile compliance (section3)
-    const section3 = data.sections[2];
+    const section3 = data.statements[2];
     const complianceCheck = section3.find(item => item.id === 'jpt:profile_compliance');
 
     expect(complianceCheck).toBeDefined();

@@ -62,11 +62,11 @@ class TestUtils {
     expect(Object.keys(data).length).toBeGreaterThan(0);
     expect(data).toHaveProperty('profile_metadata');
     expect(data.profile_metadata).toHaveProperty('name');
-    expect(data).toHaveProperty('sections');
+    expect(data).toHaveProperty('statements');
 
-    // Validate sections structure (array of arrays)
-    expect(Array.isArray(data.sections)).toBe(true);
-    data.sections.forEach((sectionGroup, groupIndex) => {
+    // Validate statement structure (array of arrays)
+    expect(Array.isArray(data.statements)).toBe(true);
+    data.statements.forEach((sectionGroup, groupIndex) => {
       expect(Array.isArray(sectionGroup)).toBe(true);
       sectionGroup.forEach((section, sectionIndex) => {
         expect(typeof section).toBe('object');
@@ -166,9 +166,9 @@ class TestUtils {
    * @param {function} validationFunction - Function to run specific validation checks
    */
   static validateSpecificChecks(data, validationFunction) {
-    // Validate that sections exist and have the expected structure
-    expect(Array.isArray(data.sections)).toBe(true);
-    expect(data.sections.length).toBeGreaterThan(0);
+    // Validate that statements exist and have the expected structure
+    expect(Array.isArray(data.statements)).toBe(true);
+    expect(data.statements.length).toBeGreaterThan(0);
 
     // Run the specific validation function if provided
     if (validationFunction && typeof validationFunction === 'function') {
@@ -177,13 +177,13 @@ class TestUtils {
   }
 
   /**
-   * Helper method to find a section by ID in the nested sections structure
+   * Helper method to find a section by ID in the nested statements structure
    * @param {Object} data - The parsed JSON/YAML data
    * @param {string} id - The ID to search for
    * @returns {Object|undefined} The section with the matching ID
    */
   static findSectionById(data, id) {
-    for (const sectionGroup of data.sections) {
+    for (const sectionGroup of data.statements) {
       for (const section of sectionGroup) {
         if (section.id === id) {
           return section;

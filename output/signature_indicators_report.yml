@@ -4,7 +4,7 @@ profile_metadata:
   date: 2023-09-28T13:19:36.705Z
   version: 2.0.0
   language: en
-sections:
+statements:
   - - id: section1
       title: Validity checking based on dates
       report_text: This section checks the validity dates
