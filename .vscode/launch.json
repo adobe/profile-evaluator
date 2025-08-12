@@ -205,6 +205,23 @@
         "-y",
         "${workspaceFolder}/testfiles/expression_indicators.json"
       ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "IncludeTest",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}/src/index.js",
+      "args": [
+        "-o",
+        "${workspaceFolder}/output",
+        "-p",
+        "${workspaceFolder}/testfiles/includes_profile.yml",
+        "-y",
+        "${workspaceFolder}/testfiles/includes_indicators.json"
+      ]
     }
   ]
 }

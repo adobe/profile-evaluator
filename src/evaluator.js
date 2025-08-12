@@ -206,7 +206,7 @@ export class Evaluator {
     return statementReport;
   }
 
-  evaluate(jsonData) {
+  evaluate(jsonData, profilePath) {
     if (!this.profile) {
       throw new Error('❌ Trust Profile not loaded. Please load a profile before evaluation.');
     }
@@ -252,8 +252,52 @@ export class Evaluator {
     // start with the first document in the profile
     const doc0 = this.profile[0].toJSON();
 
+    // Check for 'include' field in doc0
+    if (Array.isArray(doc0.include)) {
+      for (const includePath of doc0.include) {
+        // Resolve path relative to the profile file if not absolute
+        const resolvedPath = path.isAbsolute(includePath)
+          ? includePath
+          : path.resolve(path.dirname(profilePath), includePath);
+
+        if (fs.existsSync(resolvedPath)) {
+          try {
+            const includeData = fs.readFileSync(resolvedPath, 'utf-8');
+            const includeDocs = YAML.parseAllDocuments(includeData);
+            // Merge the first included document with doc0, combining fields with the same key
+            if (includeDocs.length > 0) {
+              const includeDoc0 = includeDocs[0].toJSON();
+              for (const [key, value] of Object.entries(includeDoc0)) {
+                if (doc0.hasOwnProperty(key)) {
+                  // If both are objects, merge their properties
+                  if (typeof doc0[key] === 'object' && typeof value === 'object' && doc0[key] !== null && value !== null) {
+                    doc0[key] = { ...doc0[key], ...value };
+                  } else {
+                    // Otherwise, overwrite with the included value
+                    doc0[key] = value;
+                  }
+                } else {
+                  doc0[key] = value;
+                }
+              }
+              // Add remaining included documents (if any) to this.profile
+              if (includeDocs.length > 1) {
+                this.profile.push(...includeDocs.slice(1));
+              }
+            }
+            logger.log(`🔗 Included profile loaded from: ${resolvedPath}`);
+          } catch (err) {
+            logger.log(`❌ Failed to load included profile: ${resolvedPath} (${err.message})`);
+          }
+        } else {
+          logger.log(`❌ Included profile not found: ${resolvedPath}`);
+        }
+      }
+    }
+
     // add all fields from the first document to the jsonData
     // this allows the profile to access them later (e.g., in expressions or templates)
+    // do this AFTER we merge in includes!
     for (const [key, value] of Object.entries(doc0)) {
       jsonData[key] = value;
       // logger.log(`Copying "${key}" to the trust indicators.`);

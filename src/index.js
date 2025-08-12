@@ -75,7 +75,7 @@ async function main() {
     } else {
       // Use the existing profile evaluation logic
       await evaluator.loadProfile(profilePath);
-      result = evaluator.evaluate(jsonData);
+      result = evaluator.evaluate(jsonData, profilePath);
     }
 
     if (outputDir) {
