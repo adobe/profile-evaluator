@@ -7,30 +7,17 @@ metadata:
   version: 2.0.0
   language: en
 
+myExample:
+  description: "This is a test example"
+  myDate: "{{ metadata.date }}"
+  myNumber: |
+    {{ expr "5*5"}}
+
 expressions:
   _hashStatus: if(manifests[0].claim.content_status=="assertion.dataHash.mismatch", "Mismatch", "Match")
 
 ---
-# Section 1: test statements
-
-- id: non-scalers
-  description: object
-  report_text: Object - {{expr "asset_info"}}
-
-- id: non-scalers
-  description: array
-  report_text: Array - {{expr "manifests[0].assertions.'c2pa.hash.data'.exclusions"}}
-
-- id: missing helper
-  description: missing
-  report_text: Foo - '{{foo}}'
-
-- id: test_conditional_expression
-  description: Does the data hash match?
-  report_text: Status -  {{ expr "_hashStatus()" }}
-
----
-# Section 2: test blocks
+# Section 1: test blocks
 
 - block:
     name: "test_map"
@@ -60,3 +47,54 @@ expressions:
     name: "test_map_return"
     value: |
       {{ expr "manifests[0].claim.assertion_status" }}
+
+---
+# Section 2: test statements
+
+- id: non-scalers
+  description: object
+  report_text: Object - {{expr "asset_info"}}
+
+- id: non-scalers
+  description: array
+  report_text: Array - {{expr "manifests[0].assertions.'c2pa.hash.data'.exclusions"}}
+
+- id: missing helper
+  description: missing
+  report_text: Foo - '{{foo}}'
+
+- id: test_expression
+  description: test conditional expression
+  expression: 5*5
+  report_text: something goes here...
+
+---
+- id: test_conditional_expression
+  description: Does the data hash match?
+  report_text: Status -  {{ expr "_hashStatus()" }}
+
+- block:
+    name: "test_expression"
+    value: |
+      {{ expr "@.profile.test_expression" }}
+
+- block:
+    name: "asset_info"
+    value:
+      alg: "{{ asset_info.alg }}"
+      hash: "{{ asset_info.hash }}"
+      myNumber: 100
+
+- block:
+    name: "asset_info_2"
+    value:
+      alg: |
+        {{ expr "@.asset_info.alg" }}
+      hash: |
+        {{ expr "@.asset_info.hash" }}
+      myNumber: |
+        {{ expr "@.profile.asset_info.myNumber" }}
+
+- id: reputation
+  description: Sabrina's section
+  report_text: Reputation - {{ expr "sabrinas_section.reputation" }}

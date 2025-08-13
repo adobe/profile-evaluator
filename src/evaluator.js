@@ -337,7 +337,7 @@ export class Evaluator {
     // -1 one for the metadata document
     logger.log(`Profile contains ${this.profile.length - 1} sections with rules.`);
 
-    trustReport.statements = [];   // init an array of statements
+    let theStatements = [];   // init an array of statements
 
     for (let i = 1; i < this.profile.length; i++) {
       const section = this.profile[i].toJSON();
@@ -353,6 +353,14 @@ export class Evaluator {
             if (oneDataBlock && typeof oneDataBlock === 'object') {
               for (const [key, value] of Object.entries(oneDataBlock)) {
                 trustReport[key] = value;
+
+                // store the value in a special entry called "profile" in the original JSON
+                // so that it can be found later
+                if (!jsonData.profile) {
+                  jsonData.profile = {};
+                }
+                jsonData.profile[key] = value;
+
               }
             }
           } else {
@@ -362,13 +370,16 @@ export class Evaluator {
         });
 
         if (sectionReport.length > 0) {
-          trustReport.statements.push(sectionReport);
+          theStatements.push(sectionReport);
         }
       } else {
         // If the section is not an array, it might be a single rule or a complex structure
         this.processOneStatement(section, jsonData);
       }
     }
+
+    // statements added to trustReport
+    trustReport.statements = theStatements;
 
     // unregister Handlebars helpers
     Handlebars.unregisterHelper('expr');
