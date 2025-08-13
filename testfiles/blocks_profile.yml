@@ -69,6 +69,8 @@ expressions:
   report_text: something goes here...
 
 ---
+# Section 3: mixed blocks and statements
+
 - id: test_conditional_expression
   description: Does the data hash match?
   report_text: Status -  {{ expr "_hashStatus()" }}
@@ -98,3 +100,8 @@ expressions:
 - id: reputation
   description: Sabrina's section
   report_text: Reputation - {{ expr "sabrinas_section.reputation" }}
+
+- block:
+    name: "myExample"
+    value: |
+      {{expr "@.myExample"}}

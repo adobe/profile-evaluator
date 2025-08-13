@@ -57,6 +57,19 @@ export class Evaluator {
       try {
         const parsed = JSON.parse(outValue);
         if (typeof parsed === 'object' && parsed !== null) {
+          // If any child of parsed is a string, process it through processOneItem to handle expressions
+          if (Array.isArray(parsed)) {
+            return parsed.map(child =>
+              typeof child === 'string' ? processOneItem(child, jsonData) : child
+            );
+          } else if (typeof parsed === 'object' && parsed !== null) {
+            for (const key in parsed) {
+              if (typeof parsed[key] === 'string') {
+                parsed[key] = processOneItem(parsed[key], jsonData);
+              }
+            }
+            return parsed;
+          }
           return parsed;
         }
       } catch (e) {
