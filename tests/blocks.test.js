@@ -18,11 +18,14 @@ describe('CLI Integration: Blocks Indicators', () => {
    * @param {Object} data - The parsed JSON/YAML data
    */
   function validateBlocksSpecificChecks(data) {
-    // Validate that there is only one section group in statements
-    expect(data.statements.length).toBe(1);
+    // Validate that there are now two section groups in statements
+    expect(data.statements.length).toBe(2);
 
-    const sectionGroup = data.statements[0];
-    expect(sectionGroup.length).toBe(4);
+    const firstSectionGroup = data.statements[0];
+    expect(firstSectionGroup.length).toBe(4);
+
+    const secondSectionGroup = data.statements[1];
+    expect(secondSectionGroup.length).toBe(2);
 
     // Find and validate the first non-scalers section (object test)
     const objectSection = TestUtils.findSectionById(data, 'non-scalers');
@@ -34,10 +37,20 @@ describe('CLI Integration: Blocks Indicators', () => {
     expect(missingHelperSection).toBeDefined();
     expect(missingHelperSection.report_text).toBe("Foo - '🔴 Missing: foo()'");
 
+    // Find and validate the test_expression section (note: has value instead of report_text)
+    const testExpressionSection = TestUtils.findSectionById(data, 'test_expression');
+    expect(testExpressionSection).toBeDefined();
+    expect(testExpressionSection.value).toBe(25);
+
     // Find and validate the conditional expression section
     const conditionalSection = TestUtils.findSectionById(data, 'test_conditional_expression');
     expect(conditionalSection).toBeDefined();
     expect(conditionalSection.report_text).toBe('Status -  Match');
+
+    // Find and validate the reputation section
+    const reputationSection = TestUtils.findSectionById(data, 'reputation');
+    expect(reputationSection).toBeDefined();
+    expect(reputationSection.report_text).toBe('Reputation - good');
 
     // Validate profile metadata
     expect(data.profile_metadata).toBeDefined();
@@ -45,14 +58,16 @@ describe('CLI Integration: Blocks Indicators', () => {
     expect(data.profile_metadata.issuer).toBe('JPEG Trust Committee');
     expect(data.profile_metadata.version).toBe('2.0.0');
 
-    // Validate additional test data sections
+    // Validate original test data blocks
     expect(data.test_map).toBeDefined();
     expect(data.test_map.alg).toBe('sha256');
+    expect(data.test_map.hash).toBe('na6lb3F/uIdiAhZtZp4Oa2aNCj1UvcHVxx/p5ISE2AA=');
     expect(data.test_map.noTemplate).toBe(true);
 
     expect(data.test_array).toBeDefined();
     expect(Array.isArray(data.test_array)).toBe(true);
     expect(data.test_array).toContain('sha256');
+    expect(data.test_array).toContain('na6lb3F/uIdiAhZtZp4Oa2aNCj1UvcHVxx/p5ISE2AA=');
     expect(data.test_array).toContain(123456);
 
     expect(data.test_scaler).toBe(4);
@@ -65,6 +80,29 @@ describe('CLI Integration: Blocks Indicators', () => {
     expect(data.test_map_return).toBeDefined();
     expect(data.test_map_return['c2pa.hash.data']).toBe('assertion.hashedURI.match');
     expect(data.test_map_return['c2pa.actions.v2']).toBe('assertion.hashedURI.match');
+
+    // Validate new blocks that have been added
+
+    // Test expression block (computed value)
+    expect(data.test_expression).toBe(25);
+
+    // Asset info block
+    expect(data.asset_info).toBeDefined();
+    expect(data.asset_info.alg).toBe('sha256');
+    expect(data.asset_info.hash).toBe('na6lb3F/uIdiAhZtZp4Oa2aNCj1UvcHVxx/p5ISE2AA=');
+    expect(data.asset_info.myNumber).toBe(100);
+
+    // Asset info 2 block (references other blocks)
+    expect(data.asset_info_2).toBeDefined();
+    expect(data.asset_info_2.alg).toBe('sha256');
+    expect(data.asset_info_2.hash).toBe('na6lb3F/uIdiAhZtZp4Oa2aNCj1UvcHVxx/p5ISE2AA=');
+    expect(data.asset_info_2.myNumber).toBe(100);
+
+    // MyExample block (references profile metadata)
+    expect(data.myExample).toBeDefined();
+    expect(data.myExample.description).toBe('This is a test example');
+    expect(data.myExample.myDate).toBe('2025-06-17T22:44:49.717Z');
+    expect(data.myExample.myNumber).toBe(25);
   }
 
   it('runs the CLI and produces valid JSON output', () => {
@@ -79,5 +117,92 @@ describe('CLI Integration: Blocks Indicators', () => {
 
     // Run blocks-specific validation checks
     TestUtils.validateSpecificChecks(yamlData, validateBlocksSpecificChecks);
+  });
+
+  // Additional specific tests for new blocks
+
+  it('validates test_expression block returns computed value', () => {
+    const data = TestUtils.runJSONTest('blocks');
+
+    // test_expression should be computed from profile.test_expression (5*5 = 25)
+    expect(data.test_expression).toBe(25);
+  });
+
+  it('validates asset_info block structure and values', () => {
+    const data = TestUtils.runJSONTest('blocks');
+
+    // asset_info block should contain algorithm, hash, and a custom number
+    expect(data.asset_info).toBeDefined();
+    expect(typeof data.asset_info).toBe('object');
+    expect(data.asset_info.alg).toBe('sha256');
+    expect(data.asset_info.hash).toBe('na6lb3F/uIdiAhZtZp4Oa2aNCj1UvcHVxx/p5ISE2AA=');
+    expect(data.asset_info.myNumber).toBe(100);
+  });
+
+  it('validates asset_info_2 block references other blocks correctly', () => {
+    const data = TestUtils.runJSONTest('blocks');
+
+    // asset_info_2 should reference values from asset_info block
+    expect(data.asset_info_2).toBeDefined();
+    expect(typeof data.asset_info_2).toBe('object');
+    expect(data.asset_info_2.alg).toBe(data.asset_info.alg);
+    expect(data.asset_info_2.hash).toBe(data.asset_info.hash);
+    expect(data.asset_info_2.myNumber).toBe(data.asset_info.myNumber);
+  });
+
+  it('validates myExample block uses profile metadata correctly', () => {
+    const data = TestUtils.runJSONTest('blocks');
+
+    // myExample should include templated values from profile metadata
+    expect(data.myExample).toBeDefined();
+    expect(typeof data.myExample).toBe('object');
+    expect(data.myExample.description).toBe('This is a test example');
+    expect(data.myExample.myDate).toBe(data.profile_metadata.date);
+    expect(data.myExample.myNumber).toBe(25); // Computed from 5*5 expression
+  });
+
+  it('validates reputation statement is processed correctly', () => {
+    const data = TestUtils.runJSONTest('blocks');
+
+    // Find the reputation section in statements
+    const reputationSection = TestUtils.findSectionById(data, 'reputation');
+    expect(reputationSection).toBeDefined();
+    expect(reputationSection.report_text).toBe('Reputation - good');
+  });
+
+  it('validates all blocks are present in output', () => {
+    const data = TestUtils.runJSONTest('blocks');
+
+    // Verify all expected blocks are present
+    const expectedBlocks = [
+      'test_map',
+      'test_array',
+      'test_scaler',
+      'test_array_return',
+      'test_map_return',
+      'test_expression',
+      'asset_info',
+      'asset_info_2',
+      'myExample'
+    ];
+
+    expectedBlocks.forEach(blockName => {
+      expect(data).toHaveProperty(blockName);
+    });
+  });
+
+  it('validates block value types are correct', () => {
+    const data = TestUtils.runJSONTest('blocks');
+
+    // Validate data types of each block
+    expect(typeof data.test_map).toBe('object');
+    expect(Array.isArray(data.test_array)).toBe(true);
+    expect(typeof data.test_scaler).toBe('number');
+    expect(Array.isArray(data.test_array_return)).toBe(true);
+    expect(typeof data.test_map_return).toBe('object');
+    expect(typeof data.test_expression).toBe('number');
+    expect(typeof data.asset_info).toBe('object');
+    expect(typeof data.asset_info_2).toBe('object');
+    expect(typeof data.myExample).toBe('object');
   });
 });

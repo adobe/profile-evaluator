@@ -72,9 +72,20 @@ class TestUtils {
         expect(typeof section).toBe('object');
         expect(section).not.toBeNull();
         expect(section).toHaveProperty('id');
-        expect(section).toHaveProperty('report_text');
+
+        // Section should have either 'report_text' or 'value' property
+        expect(section.hasOwnProperty('report_text') || section.hasOwnProperty('value')).toBe(true);
+
         expect(typeof section.id).toBe('string');
-        expect(typeof section.report_text).toBe('string');
+
+        if (section.hasOwnProperty('report_text')) {
+          expect(typeof section.report_text).toBe('string');
+        }
+
+        if (section.hasOwnProperty('value')) {
+          // Value can be of any type (string, number, object, etc.)
+          expect(section.value).toBeDefined();
+        }
 
         // Check that section has either 'value' or 'title' property
         // expect(section.hasOwnProperty('value') || section.hasOwnProperty('title')).toBe(true);
