@@ -7,7 +7,7 @@ metadata:
   version: 2.0.0
   language: en
 
-myExample:
+my::Example:
   description: "This is a test example"
   myDate: "{{ metadata.date }}"
   myNumber: |
@@ -16,6 +16,12 @@ myExample:
 expressions:
   _hashStatus: if(manifests[0].claim.content_status=="assertion.dataHash.mismatch", "Mismatch", "Match")
 
+---
+# Output the metadata
+- block:
+    name: "profile_metadata"
+    value: |
+      {{ expr "@.metadata" }}
 ---
 # Section 1: test blocks
 
@@ -104,4 +110,4 @@ expressions:
 - block:
     name: "myExample"
     value: |
-      {{expr "@.myExample"}}
+      {{expr "@.'my::Example'"}}

@@ -317,10 +317,11 @@ export class Evaluator {
     }
 
     // extract the required `metadata` field
+    //   THIS IS NOT LONGER AUTOMATICALLY DONE!!
     //      name, version, issuer, date and are required fields
     // and add it to the report, as required by the spec
     const metadata = doc0.metadata;
-    trustReport.profile_metadata = metadata; // Store metadata in the report
+    // trustReport.profile_metadata = metadata; // Store metadata in the report
     const profileInfo = `${metadata.name} (${metadata.version})`;
     logger.log(`🔍 Evaluating "${profileInfo}" from "${metadata.issuer}" dated ${metadata.date}.`);
 

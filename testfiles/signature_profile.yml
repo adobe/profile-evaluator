@@ -81,8 +81,8 @@ metadata:
   id: jpt:profile_compliance
   description: is the asset signed with a trusted certificate?
   expression: >
-    profile.not_before && profile.not_after &&
-    !profile.test_cert && profile.issuer
+    @.profile.not_before && @.profile.not_after &&
+    !@.profile.test_cert && @.profile.issuer
   report_text:
     "true":
       en: This media asset is signed with a trusted certificate.
