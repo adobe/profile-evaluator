@@ -7,7 +7,7 @@ metadata:
   version: 2.0.0
   language: en
 
-my::Example:
+my:Example:
   description: "This is a test example"
   myDate: "{{ metadata.date }}"
   myNumber: |
@@ -110,4 +110,4 @@ expressions:
 - block:
     name: "myExample"
     value: |
-      {{expr "@.'my::Example'"}}
+      {{expr "@.'my:Example'"}}
