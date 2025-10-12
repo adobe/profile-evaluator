@@ -39,8 +39,10 @@ class TestUtils {
    * @param {boolean} isYaml - Whether to use --yaml flag
    */
   static runCLI(profilePath, outputDir, indicatorsPath, isYaml = false) {
-    const yamlFlag = isYaml ? '--yaml' : '';
-    const command = `node src/index.js -p "${profilePath}" -o "${outputDir}" ${yamlFlag} "${indicatorsPath}"`.trim();
+    // default as of 1.1 is YAML
+    const jsonFlag = isYaml ? '' : '--json';
+    const formatFlag = isYaml ? '' : jsonFlag;
+    const command = `node src/index.js -p "${profilePath}" -o "${outputDir}" ${formatFlag} "${indicatorsPath}"`.trim();
     execSync(command, { stdio: 'inherit' });
   }
 
@@ -60,19 +62,30 @@ class TestUtils {
     expect(Object.keys(data).length).toBeGreaterThan(0);
     expect(data).toHaveProperty('profile_metadata');
     expect(data.profile_metadata).toHaveProperty('name');
-    expect(data).toHaveProperty('sections');
+    expect(data).toHaveProperty('statements');
 
-    // Validate sections structure (array of arrays)
-    expect(Array.isArray(data.sections)).toBe(true);
-    data.sections.forEach((sectionGroup, groupIndex) => {
+    // Validate statement structure (array of arrays)
+    expect(Array.isArray(data.statements)).toBe(true);
+    data.statements.forEach((sectionGroup, groupIndex) => {
       expect(Array.isArray(sectionGroup)).toBe(true);
       sectionGroup.forEach((section, sectionIndex) => {
         expect(typeof section).toBe('object');
         expect(section).not.toBeNull();
         expect(section).toHaveProperty('id');
-        expect(section).toHaveProperty('report_text');
+
+        // Section should have either 'report_text' or 'value' property
+        expect(section.hasOwnProperty('report_text') || section.hasOwnProperty('value')).toBe(true);
+
         expect(typeof section.id).toBe('string');
-        expect(typeof section.report_text).toBe('string');
+
+        if (section.hasOwnProperty('report_text')) {
+          expect(typeof section.report_text).toBe('string');
+        }
+
+        if (section.hasOwnProperty('value')) {
+          // Value can be of any type (string, number, object, etc.)
+          expect(section.value).toBeDefined();
+        }
 
         // Check that section has either 'value' or 'title' property
         // expect(section.hasOwnProperty('value') || section.hasOwnProperty('title')).toBe(true);
@@ -156,6 +169,80 @@ class TestUtils {
 
     // Validate output
     return this.validateYAMLOutput(paths.yamlOutput);
+  }
+
+  /**
+   * Common method for validating specific content checks based on test type
+   * @param {Object} data - The parsed JSON/YAML data
+   * @param {function} validationFunction - Function to run specific validation checks
+   */
+  static validateSpecificChecks(data, validationFunction) {
+    // Validate that statements exist and have the expected structure
+    expect(Array.isArray(data.statements)).toBe(true);
+    expect(data.statements.length).toBeGreaterThan(0);
+
+    // Run the specific validation function if provided
+    if (validationFunction && typeof validationFunction === 'function') {
+      validationFunction(data);
+    }
+  }
+
+  /**
+   * Helper method to find a section by ID in the nested statements structure
+   * @param {Object} data - The parsed JSON/YAML data
+   * @param {string} id - The ID to search for
+   * @returns {Object|undefined} The section with the matching ID
+   */
+  static findSectionById(data, id) {
+    for (const sectionGroup of data.statements) {
+      for (const section of sectionGroup) {
+        if (section.id === id) {
+          return section;
+        }
+      }
+    }
+    return undefined;
+  }
+
+  /**
+   * Run the CLI with flexible arguments for eval mode
+   * @param {string[]} args - Array of CLI arguments
+   * @returns {Object} Result object with exitCode, stdout, and stderr
+   */
+  static runCLIEval(args) {
+    // Validate that args is an array
+    if (!Array.isArray(args)) {
+      throw new Error(`runCLIEval expects an array of arguments, received: ${typeof args} - ${JSON.stringify(args)}`);
+    }
+
+    // Properly escape arguments for shell execution
+    const escapedArgs = args.map(arg => {
+      // If the argument contains spaces, quotes, or special characters, wrap it in double quotes
+      // and escape any existing double quotes
+      if (arg.includes(' ') || arg.includes("'") || arg.includes('"') || arg.includes('|') || arg.includes('&')) {
+        return `"${arg.replace(/"/g, '\\"')}"`;
+      }
+      return arg;
+    });
+
+    const command = `node src/index.js ${escapedArgs.join(' ')}`;
+    try {
+      const stdout = execSync(command, {
+        encoding: 'utf8',
+        stdio: ['inherit', 'pipe', 'pipe']
+      });
+      return {
+        exitCode: 0,
+        stdout: stdout,
+        stderr: ''
+      };
+    } catch (error) {
+      return {
+        exitCode: error.status || 1,
+        stdout: error.stdout || '',
+        stderr: error.stderr || error.message || ''
+      };
+    }
   }
 }
 

@@ -1,6 +1,8 @@
 # JPEG Trust Evaluator
 
-This project is a command line tool that evaluates a JSON file according to the rules defined in a JPEG Trust Profile. It utilizes json-formula rules to assess the validity and compliance of the JSON data.
+This project is a command line tool that evaluates a JSON file containing a Trust Indicator Set according to the (YAML-based) Trust Profile, based on the details from the JPEG Trust (ISO 21617-1:2025) standard.
+
+This tool also serves to validate forthcoming work in the 2nd Edition of JPEG Trust Part 1 as well as JPEG Trust Part 2 (ISO 21617-2).
 
 ## Table of Contents
 
@@ -14,12 +16,12 @@ This project is a command line tool that evaluates a JSON file according to the 
 
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/jpeg-trust-evaluator.git
+   git clone https://github.com/adobe/profile-evaluator.git
    ```
 
 2. Navigate to the project directory:
    ```
-   cd jpeg-trust-evaluator
+   cd profile-evaluator
    ```
 
 3. Install the dependencies:
@@ -36,14 +38,19 @@ node src/index.js [options] <jsonFile>
 ```
 
 ### Required Arguments
-- `<jsonFile>` - Path to the JSON file containing JPEG Trust Indicator Sets data to evaluate
+- `<jsonFile>` - Path to the JSON file containing Trust Indicator Set to evaluate
 
 ### Required Options
-- `-p, --profile <path>` - Path to the JPEG Trust Profile file (JSON or YAML format)
+- `-p, --profile <path>` - Path to the Trust Profile file (YAML format)
+
+**OR**
+
+- `-e, --eval <expression>` - JSON formula expression to evaluate against the data (cannot be used with --profile)
 
 ### Optional Options
 - `-o, --output <directory>` - Output directory for reports (if not specified, results are printed to console)
-- `-y, --yaml` - Output report in YAML format (default is JSON)
+- `-y, --yaml` - Output report in YAML format (default)
+- `-j, --json` - Output report in YAML format
 - `--html <path>` - Path to HTML template file for generating HTML reports
 - `-h, --help` - Display help information
 - `-V, --version` - Display version number
@@ -55,20 +62,67 @@ node src/index.js [options] <jsonFile>
    node src/index.js -p testfiles/camera_profile.yml testfiles/camera_indicators.json
    ```
 
-2. **Generate JSON report** in output directory:
+2. **Generate YAML report** in output directory:
    ```
    node src/index.js -p testfiles/genai_profile.yml -o output testfiles/genai_indicators.json
    ```
 
-3. **Generate YAML report**:
+3. **Generate JSON report**:
    ```
-   node src/index.js -p testfiles/no_manifests_profile.yml -o output --yaml testfiles/no_manifests_indicators.json
+   node src/index.js -p testfiles/no_manifests_profile.yml -o output --json testfiles/no_manifests_indicators.json
    ```
 
 4. **Generate HTML report** using a template:
    ```
    node src/index.js -p testfiles/camera_profile.yml -o output --html testfiles/report_template.html testfiles/camera_indicators.json
    ```
+
+5. **Evaluate a simple expression** against Trust Indicator Set data:
+   ```
+   node src/index.js --eval "declaration.'claim.v2'.alg" testfiles/camera_indicators.json
+   ```
+
+6. **Check if a property exists**:
+   ```
+   node src/index.js --eval "has(declaration.assertions)" testfiles/camera_indicators.json
+   ```
+
+## Evaluation Mode
+
+The `--eval` option allows you to run JSON formula expressions directly against Trust Indicator Set data without requiring a Trust Profile. This is useful for:
+
+- **Quick data exploration**: Extract specific values from Trust Indicator Sets
+- **Property validation**: Check if certain fields exist in the data
+- **Data transformation**: Apply expressions to compute derived values
+- **Debugging**: Test expressions before including them in Trust Profiles
+
+### Expression Syntax
+
+The tool supports JSON formula expressions with the following features:
+
+- **Property access**: Use dot notation (e.g., `data.field`)
+- **Nested properties**: Use quotes for special characters (e.g., `"claim.v2"`)
+- **Array access**: Use bracket notation (e.g., `array[0]`)
+- **Functions**: Built-in functions like `has()`, `length()`, etc.
+- **Operators**: Standard comparison and logical operators
+
+### Evaluation Examples
+
+```bash
+# Extract a simple property
+node src/index.js --eval "declaration" testfiles/camera_indicators.json
+
+# Access nested properties with special characters
+node src/index.js --eval "declaration.'claim.v2'.alg" testfiles/camera_indicators.json
+
+# Check if a property exists
+node src/index.js --eval "has(declaration.assertions)" testfiles/camera_indicators.json
+
+# Get array length
+node src/index.js --eval "length(declaration.assertions)" testfiles/camera_indicators.json
+```
+
+**Note**: The `--eval` and `--profile` options are mutually exclusive - you cannot use both in the same command.
 
 ## Development
 
@@ -98,10 +152,9 @@ npm run lint:fix
 
 The project includes comprehensive tests using Jest:
 
-- **Unit Tests**: Test individual utility functions
+- **Unit Tests**: Test individual features and functions
 - **Integration Tests**: Test the complete CLI workflow
 - **Error Handling Tests**: Verify graceful error handling
-- **C2PA Tests**: Verify processing of the Content Credentials & JPEG Trust Manifests
 
 ```bash
 # Run all tests
@@ -157,6 +210,13 @@ Contributions are welcome! Please open an issue or submit a pull request for any
 This project is licensed under the Apache 2.0 License. See the LICENSE file for more details.
 
 ## Changelog
+
+### v1.1
+- Changed default output format to YAML
+- Added `--eval` option for evaluating JSON formula expressions directly
+  (and associated tests!)
+- Improved error handling for missing profile or JSON file
+- Started work on 21617-2 support
 
 ### v1.0.0
 - Initial release

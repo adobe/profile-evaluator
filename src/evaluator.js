@@ -32,6 +32,83 @@ export class Evaluator {
     this.profile = YAML.parseAllDocuments(profileData);
   }
 
+  processOneDataBlock(dataBlock, jsonData) {
+    function processOneItem(item, jsonData) {
+      let outValue = item;
+      if (typeof item === 'string') {
+        item = item.trim();
+        if (item.startsWith('{{') && item.endsWith('}}')) {
+          // If the value is a Handlebars template, compile it
+          // and pass the jsonData to it
+          const template = Handlebars.compile(item, { noEscape: true });
+          outValue = template(jsonData);
+        }
+      }
+
+      // Try to convert outValue to a boolean or number if possible
+      if (typeof outValue === 'string') {
+        const lower = outValue.toLowerCase();
+        if (lower === 'true') return true;
+        if (lower === 'false') return false;
+        const num = Number(outValue);
+        if (!isNaN(num) && outValue.trim() !== '') return num;
+      }
+      // Try to parse as JSON object or array
+      try {
+        const parsed = JSON.parse(outValue);
+        if (typeof parsed === 'object' && parsed !== null) {
+          // If any child of parsed is a string, process it through processOneItem to handle expressions
+          if (Array.isArray(parsed)) {
+            return parsed.map(child =>
+              typeof child === 'string' ? processOneItem(child, jsonData) : child
+            );
+          } else if (typeof parsed === 'object' && parsed !== null) {
+            for (const key in parsed) {
+              if (typeof parsed[key] === 'string') {
+                parsed[key] = processOneItem(parsed[key], jsonData);
+              }
+            }
+            return parsed;
+          }
+          return parsed;
+        }
+      } catch (e) {
+        // Not valid JSON, ignore
+      }
+
+      return outValue;
+    }
+
+    // This function processes a single data block
+    if (typeof dataBlock === 'object' && dataBlock !== null) {
+      const output = {};
+      if (dataBlock.block) {
+        const input = dataBlock.block;
+        logger.log(`\tProcessing data block with name: ${input.name}`);
+
+        if (Array.isArray(input.value)) {
+          output[input.name] = input.value.map(item => {
+            return processOneItem(item, jsonData);
+          });
+        } else if (typeof input.value === 'object' && input.value !== null) {
+          output[input.name] = {};
+          for (const [key, value] of Object.entries(input.value)) {
+            if (key !== 'name') {
+              let outValue = processOneItem(value, jsonData);
+              output[input.name][key] = outValue;
+            }
+          }
+        } else {
+          output[input.name] = {};
+          let outValue = processOneItem(input.value, jsonData);
+          output[input.name] = outValue;
+        }
+
+        return output;
+      }
+    }
+  }
+
   processOneStatement(statement, jsonData) {
     // there are two types of statements: information & expression
     //  information are informative only
@@ -142,7 +219,7 @@ export class Evaluator {
     return statementReport;
   }
 
-  evaluate(jsonData) {
+  evaluate(jsonData, profilePath) {
     if (!this.profile) {
       throw new Error('❌ Trust Profile not loaded. Please load a profile before evaluation.');
     }
@@ -155,8 +232,32 @@ export class Evaluator {
     // eslint-disable-next-line no-unused-vars
     Handlebars.registerHelper('expr', function (arg1, options) {
       const result = formRunner.run(arg1, jsonData, formulaGlobals);
-      return result;
+      if (typeof result === 'object' && result !== null) {
+        return new Handlebars.SafeString(JSON.stringify(result));
+      } else {
+        return result;
+      }
     });
+
+    // register a custom function to convert a JSON object to a string
+    // we use the Handlebars SafeString to avoid escaping
+    // eslint-disable-next-line no-unused-vars
+    Handlebars.registerHelper('str', function (arg1, options) {
+      const result = JSON.stringify(arg1);
+      return new Handlebars.SafeString(result);
+    });
+
+    // this is a special helper that gets called when a helper is missing or key is not defined
+    Handlebars.registerHelper('helperMissing', function ( /* dynamic arguments */) {
+      var options = arguments[arguments.length - 1];
+      var args = Array.prototype.slice.call(arguments, 0, arguments.length - 1);
+      return new Handlebars.SafeString('🔴 Missing: ' + options.name + '(' + args + ')');
+    });
+
+    // we don't use this - it was used for debugging
+    // Handlebars.registerHelper('eq', function (arg1, arg2, options) {
+    //   return (arg1 === arg2) ? options.fn(this) : options.inverse(this);
+    // });
 
     const trustReport = {};
 
@@ -165,18 +266,63 @@ export class Evaluator {
     // start with the first document in the profile
     const doc0 = this.profile[0].toJSON();
 
+    // Check for 'include' field in doc0
+    if (Array.isArray(doc0.include)) {
+      for (const includePath of doc0.include) {
+        // Resolve path relative to the profile file if not absolute
+        const resolvedPath = path.isAbsolute(includePath)
+          ? includePath
+          : path.resolve(path.dirname(profilePath), includePath);
+
+        if (fs.existsSync(resolvedPath)) {
+          try {
+            const includeData = fs.readFileSync(resolvedPath, 'utf-8');
+            const includeDocs = YAML.parseAllDocuments(includeData);
+            // Merge the first included document with doc0, combining fields with the same key
+            if (includeDocs.length > 0) {
+              const includeDoc0 = includeDocs[0].toJSON();
+              for (const [key, value] of Object.entries(includeDoc0)) {
+                if (Object.prototype.hasOwnProperty.call(doc0, key)) {
+                  // If both are objects, merge their properties
+                  if (typeof doc0[key] === 'object' && typeof value === 'object' && doc0[key] !== null && value !== null) {
+                    doc0[key] = { ...doc0[key], ...value };
+                  } else {
+                    // Otherwise, overwrite with the included value
+                    doc0[key] = value;
+                  }
+                } else {
+                  doc0[key] = value;
+                }
+              }
+              // Add remaining included documents (if any) to this.profile
+              if (includeDocs.length > 1) {
+                this.profile.push(...includeDocs.slice(1));
+              }
+            }
+            logger.log(`🔗 Included profile loaded from: ${resolvedPath}`);
+          } catch (err) {
+            logger.log(`❌ Failed to load included profile: ${resolvedPath} (${err.message})`);
+          }
+        } else {
+          logger.log(`❌ Included profile not found: ${resolvedPath}`);
+        }
+      }
+    }
+
     // add all fields from the first document to the jsonData
     // this allows the profile to access them later (e.g., in expressions or templates)
+    // do this AFTER we merge in includes!
     for (const [key, value] of Object.entries(doc0)) {
       jsonData[key] = value;
       // logger.log(`Copying "${key}" to the trust indicators.`);
     }
 
     // extract the required `metadata` field
+    //   THIS IS NOT LONGER AUTOMATICALLY DONE!!
     //      name, version, issuer, date and are required fields
     // and add it to the report, as required by the spec
     const metadata = doc0.metadata;
-    trustReport.profile_metadata = metadata; // Store metadata in the report
+    // trustReport.profile_metadata = metadata; // Store metadata in the report
     const profileInfo = `${metadata.name} (${metadata.version})`;
     logger.log(`🔍 Evaluating "${profileInfo}" from "${metadata.issuer}" dated ${metadata.date}.`);
 
@@ -206,7 +352,7 @@ export class Evaluator {
     // -1 one for the metadata document
     logger.log(`Profile contains ${this.profile.length - 1} sections with rules.`);
 
-    trustReport.sections = [];   // init an array of sections
+    let theStatements = [];   // init an array of statements
 
     for (let i = 1; i < this.profile.length; i++) {
       const section = this.profile[i].toJSON();
@@ -216,20 +362,46 @@ export class Evaluator {
 
         // eslint-disable-next-line no-unused-vars
         section.forEach((rule, _idx) => {
-          const oneSectRep = this.processOneStatement(rule, jsonData);
-          sectionReport.push(oneSectRep);
+          if (!rule.id) {
+            const oneDataBlock = this.processOneDataBlock(rule, jsonData);
+            // Up-level each key in oneDataBlock to trustReport
+            if (oneDataBlock && typeof oneDataBlock === 'object') {
+              for (const [key, value] of Object.entries(oneDataBlock)) {
+                trustReport[key] = value;
+
+                // store the value in a special entry called "profile" in the original JSON
+                // so that it can be found later
+                if (!jsonData.profile) {
+                  jsonData.profile = {};
+                }
+                jsonData.profile[key] = value;
+
+              }
+            }
+          } else {
+            const oneSectRep = this.processOneStatement(rule, jsonData);
+            sectionReport.push(oneSectRep);
+          }
         });
 
-        trustReport.sections.push(sectionReport);
+        if (sectionReport.length > 0) {
+          theStatements.push(sectionReport);
+        }
       } else {
         // If the section is not an array, it might be a single rule or a complex structure
         this.processOneStatement(section, jsonData);
       }
     }
 
-    Handlebars.unregisterHelper('formula');
+    // statements added to trustReport
+    trustReport.statements = theStatements;
 
-    // After processing all sections, we can summarize the results
+    // unregister Handlebars helpers
+    Handlebars.unregisterHelper('expr');
+    Handlebars.unregisterHelper('str');
+    Handlebars.unregisterHelper('helperMissing');
+
+    // After processing all statements, we can summarize the results
     return trustReport;
   }
 }

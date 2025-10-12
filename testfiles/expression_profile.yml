@@ -25,6 +25,12 @@ variables:
     ]
 
 ---
+# Section 0 - Output the metadata
+- block:
+    name: "profile_metadata"
+    value: |
+      {{ expr "@.metadata" }}
+---
 # Section 1
 
 - id: generalInfo

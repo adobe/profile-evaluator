@@ -6,6 +6,9 @@
     "alg": "sha256",
     "hash": "na6lb3F/uIdiAhZtZp4Oa2aNCj1UvcHVxx/p5ISE2AA="
   },
+  "sabrinas_section": {
+    "reputation": "good"
+  },
   "manifests": [
     {
       "assertions": {

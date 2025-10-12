@@ -1,0 +1,31 @@
+profile_metadata:
+  name: Testing Profile
+  issuer: JPEG Trust Committee
+  date: 2025-06-17T22:44:49.717Z
+  version: 2.0.0
+  language: en
+statements:
+  - - id: non-scalers
+      report_text: Object -
+        {"alg":"sha256","hash":"na6lb3F/uIdiAhZtZp4Oa2aNCj1UvcHVxx/p5ISE2AA="}
+    - id: non-scalers
+      report_text: Array - [{"length":7520,"start":2}]
+    - id: missing helper
+      report_text: "Foo - '🔴 Missing: foo()'"
+    - id: test_conditional_expression
+      report_text: Status -  Match
+test_map:
+  alg: sha256
+  hash: na6lb3F/uIdiAhZtZp4Oa2aNCj1UvcHVxx/p5ISE2AA=
+  noTemplate: true
+test_array:
+  - sha256
+  - na6lb3F/uIdiAhZtZp4Oa2aNCj1UvcHVxx/p5ISE2AA=
+  - 123456
+test_scaler: 4
+test_array_return:
+  - length: 7520
+    start: 2
+test_map_return:
+  c2pa.hash.data: assertion.hashedURI.match
+  c2pa.actions.v2: assertion.hashedURI.match

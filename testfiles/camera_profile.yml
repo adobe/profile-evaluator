@@ -14,6 +14,12 @@ metadata:
 ---
 # Section 0 - Metadata Output
 
+# Output the metadata
+- block:
+    name: "profile_metadata"
+    value: |
+      {{ expr "@.metadata" }}
+
 - id: metadata-output
   description: Section 0 - Metadata Output
   report_text: "{{foo:sample.description}} - {{foo:sample.number}}"
