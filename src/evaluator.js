@@ -241,6 +241,7 @@ export class Evaluator {
 
     // register a custom function to convert a JSON object to a string
     // we use the Handlebars SafeString to avoid escaping
+    // eslint-disable-next-line no-unused-vars
     Handlebars.registerHelper('str', function (arg1, options) {
       const result = JSON.stringify(arg1);
       return new Handlebars.SafeString(result);
@@ -249,9 +250,9 @@ export class Evaluator {
     // this is a special helper that gets called when a helper is missing or key is not defined
     Handlebars.registerHelper('helperMissing', function ( /* dynamic arguments */) {
       var options = arguments[arguments.length - 1];
-      var args = Array.prototype.slice.call(arguments, 0, arguments.length - 1)
-      return new Handlebars.SafeString("🔴 Missing: " + options.name + "(" + args + ")")
-    })
+      var args = Array.prototype.slice.call(arguments, 0, arguments.length - 1);
+      return new Handlebars.SafeString('🔴 Missing: ' + options.name + '(' + args + ')');
+    });
 
     // we don't use this - it was used for debugging
     // Handlebars.registerHelper('eq', function (arg1, arg2, options) {
@@ -281,7 +282,7 @@ export class Evaluator {
             if (includeDocs.length > 0) {
               const includeDoc0 = includeDocs[0].toJSON();
               for (const [key, value] of Object.entries(includeDoc0)) {
-                if (doc0.hasOwnProperty(key)) {
+                if (Object.prototype.hasOwnProperty.call(doc0, key)) {
                   // If both are objects, merge their properties
                   if (typeof doc0[key] === 'object' && typeof value === 'object' && doc0[key] !== null && value !== null) {
                     doc0[key] = { ...doc0[key], ...value };
