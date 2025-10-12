@@ -222,6 +222,23 @@
         "-y",
         "${workspaceFolder}/testfiles/includes_indicators.json"
       ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "XMP-Test",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}/src/index.js",
+      "args": [
+        "-o",
+        "${workspaceFolder}/output",
+        "-p",
+        "${workspaceFolder}/testfiles/xmp_profile.yml",
+        "-y",
+        "${workspaceFolder}/testfiles/xmp_indicators.json"
+      ]
     }
   ]
 }

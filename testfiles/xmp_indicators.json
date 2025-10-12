@@ -1,0 +1,44 @@
+{
+  "@context": [
+    "https://jpeg.org/jpegtrust"
+  ],
+  "manifests": [],
+  "content": {},
+  "metadata": {
+    "xmpMM": {
+      "OriginalDocumentID": "xmp.did:129191f5-5fa5-4ee3-abc5-47b606f3bce8",
+      "DocumentID": "xmp.did:554486fa-db03-4f9b-a7b1-232f7fb710f4",
+      "InstanceID": "xmp.iid:554486fa-db03-4f9b-a7b1-232f7fb710f4"
+    },
+    "xmp": {
+      "MetadataDate": "2025-09-30T12:30:06-04:00"
+    },
+    "plus": {
+      "ImageSupplierImageID": "d3136ee3-0fe8-4283-926a-7f644e58f461",
+      "ImageSupplier": {
+        "ImageSupplierName": "Adobe"
+      }
+    },
+    "iptc4xmpExt": {
+      "AODateCreated": "2025-09-09T16:00:49.035Z",
+      "DigitalSourceType": "http://cv.iptc.org/newscodes/digitalsourcetype/compositeWithTrainedAlgorithmicMedia",
+      "Contributor": {
+        "parseType": "Resource",
+        "Name": {
+          "lang": "x-default",
+          "value": "Adobe Firefly 3.1"
+        },
+        "Role": "http://cv.iptc.org/newscodes/contentprodpartyrole/origcont"
+      }
+    },
+    "ifd0": {
+      "XResolution": 300,
+      "YResolution": 300,
+      "ResolutionUnit": "inches"
+    },
+    "exif": {
+      "ExifVersion": "2.3.1",
+      "ColorSpace": 1
+    }
+  }
+}
