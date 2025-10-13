@@ -1,8 +1,8 @@
 ---
 name: all origin update 
-description: update all git repositories to the latest version
+description: push to all git remotes
 ---
 
 ```shell
-git remote | grep -v '^origin$' | xargs -n1 git push --all 
+git remote | xargs -n1 git push --all 
 ```

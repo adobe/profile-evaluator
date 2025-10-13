@@ -1,0 +1,28 @@
+profile_metadata:
+  name: Experimental XMP GenAI Profile
+  issuer: JPEG Trust Committee
+  date: 2025-10-12T01:03:16.443Z
+  version: 2.0.0
+  language: en
+xmp-genAI-info:
+  genAIApp: Adobe Firefly 3.1
+  supplier: Adobe
+  date: 2025-09-09T16:00:49.035Z
+  type: http://cv.iptc.org/newscodes/digitalsourcetype/compositeWithTrainedAlgorithmicMedia
+statements:
+  - - id: generalInfo
+      title: General Information
+      report_text: This section provides information about general stuff
+    - id: manifests
+      value: false
+      report_text: No Trust Manifests found in this media asset
+    - id: xmp
+      value: true
+      report_text: This media asset has XMP metadata
+    - id: genAI
+      value: true
+      report_text: The asset identifies itself as being produced by a trained
+        algorithmic media.
+    - id: jpt:profile_compliance
+      value: true
+      report_text: This media asset is compliant with this profile.

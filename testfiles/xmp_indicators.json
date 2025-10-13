@@ -1,0 +1,36 @@
+{
+  "@context": [
+    "https://jpeg.org/jpegtrust"
+  ],
+  "manifests": [],
+  "content": {},
+  "metadata": {
+    "@context": {
+      "xmp": "http://ns.adobe.com/xap/1.0/",
+      "xmpMM": "http://ns.adobe.com/xap/1.0/mm/",
+      "plus": "http://ns.adobe.com/xap/1.0/plus/",
+      "exif": "http://ns.adobe.com/exif/1.0/",
+      "exifEX": "http://cipa.jp/exif/2.32/",
+      "tiff": "http://ns.adobe.com/tiff/1.0/",
+      "Iptc4xmpCore": "http://iptc.org/std/Iptc4xmpCore/1.0/xmlns/",
+      "Iptc4xmpExt": "http://iptc.org/std/Iptc4xmpExt/2008-02-29/"
+    },
+    "xmpMM:OriginalDocumentID": "xmp.did:129191f5-5fa5-4ee3-abc5-47b606f3bce8",
+    "xmpMM:DocumentID": "xmp.did:554486fa-db03-4f9b-a7b1-232f7fb710f4",
+    "xmpMM:InstanceID": "xmp.iid:554486fa-db03-4f9b-a7b1-232f7fb710f4",
+    "xmp:MetadataDate": "2025-09-30T12:30:06-04:00",
+    "plus:ImageSupplierImageID": "d3136ee3-0fe8-4283-926a-7f644e58f461",
+    "plus:ImageSupplier:ImageSupplierName": "Adobe",
+    "iptc4xmpExt:AODateCreated": "2025-09-09T16:00:49.035Z",
+    "iptc4xmpExt:DigitalSourceType": "http://cv.iptc.org/newscodes/digitalsourcetype/compositeWithTrainedAlgorithmicMedia",
+    "iptc4xmpExt:Contributor:parseType": "Resource",
+    "iptc4xmpExt:Contributor:Name:lang": "x-default",
+    "iptc4xmpExt:Contributor:Name:value": "Adobe Firefly 3.1",
+    "iptc4xmpExt:Contributor:Role": "http://cv.iptc.org/newscodes/contentprodpartyrole/origcont",
+    "ifd0:XResolution": 300,
+    "ifd0:YResolution": 300,
+    "ifd0:ResolutionUnit": "inches",
+    "exif:ExifVersion": "2.3.1",
+    "exif:ColorSpace": 1
+  }
+}

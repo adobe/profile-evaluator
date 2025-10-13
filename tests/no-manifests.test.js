@@ -55,3 +55,48 @@ describe('CLI Integration: No Manifests Indicators', () => {
     TestUtils.validateSpecificChecks(yamlData, validateNoManifestsSpecificChecks);
   });
 });
+
+it('runs the CLI and produces valid indicators for XMP files', () => {
+  const data = TestUtils.runYAMLTest('xmp');
+
+  // It should have a profile_metadata object with required keys
+  expect(data.profile_metadata).toBeDefined();
+  expect(data.profile_metadata.name).toBe('Experimental XMP GenAI Profile');
+  expect(data.profile_metadata.issuer).toBeDefined();
+  expect(data.profile_metadata.version).toBeDefined();
+  expect(data.profile_metadata.date).toBeDefined();
+
+  // statements should have one section with expected indicators
+  expect(Array.isArray(data.statements)).toBe(true);
+  expect(data.statements.length).toBe(1);
+
+  const section1 = data.statements[0];
+
+  // Check for required checks in the section
+  const ids = section1.map(item => item.id);
+  expect(ids).toEqual(
+    expect.arrayContaining([
+      'generalInfo',
+      'manifests',
+      'xmp',
+      'genAI',
+      'jpt:profile_compliance'
+    ])
+  );
+
+  // Specific checks
+  const manifestsCheck = section1.find(item => item.id === 'manifests');
+  expect(manifestsCheck).toBeDefined();
+  expect(manifestsCheck.value).toBe(false); // since this simulates "no-manifests"
+  expect(manifestsCheck.report_text).toContain('No Trust Manifests found');
+
+  const xmpCheck = section1.find(item => item.id === 'xmp');
+  expect(xmpCheck).toBeDefined();
+  expect(xmpCheck.value).toBe(true);
+  expect(xmpCheck.report_text).toContain('XMP metadata');
+
+  const complianceCheck = section1.find(item => item.id === 'jpt:profile_compliance');
+  expect(complianceCheck).toBeDefined();
+  expect(complianceCheck.value).toBe(true);
+  expect(complianceCheck.report_text).toContain('compliant with this profile');
+});
