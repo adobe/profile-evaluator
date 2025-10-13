@@ -35,7 +35,7 @@ _metadata:
 - # check for XMP
   id: xmp
   description: does the asset contain any xmp data
-  expression: hasProperty(@.metadata, "xmp") || hasProperty(@.metadata, "xmpMM")
+  expression: hasProperty(@.metadata, "@context")
   report_text:
     "true":
       en: This media asset has XMP metadata
@@ -47,9 +47,9 @@ _metadata:
 - id: genAI
   description: Checks if the DigitalSourceType field exists, and if so, whether it is a "trainedAlgorithmicMedia" value
   expression: |
-    hasProperty(@.metadata.iptc4xmpExt, "DigitalSourceType") &&
-    (contains(@.metadata.iptc4xmpExt.DigitalSourceType, "trainedAlgorithmicMedia") || 
-     contains(@.metadata.iptc4xmpExt.DigitalSourceType, "compositeWithTrainedAlgorithmicMedia"))
+    hasProperty(@.metadata, "iptc4xmpExt:DigitalSourceType") &&
+    (contains(@.metadata.'iptc4xmpExt:DigitalSourceType', "trainedAlgorithmicMedia") || 
+     contains(@.metadata.'iptc4xmpExt:DigitalSourceType', "compositeWithTrainedAlgorithmicMedia"))
   report_text:
     "true":
       en: The asset identifies itself as being produced by a trained algorithmic media.
@@ -74,10 +74,10 @@ _metadata:
     name: "xmp-genAI-info"
     value:
       genAIApp: |
-        {{ expr "@.metadata.iptc4xmpExt.Contributor.Name.value" }}
+        {{ expr "@.metadata.'iptc4xmpExt:Contributor:Name:value'" }}
       supplier: |
-        {{ expr "@.metadata.plus.ImageSupplier.ImageSupplierName" }}
+        {{ expr "@.metadata.'plus:ImageSupplier:ImageSupplierName'" }}
       date: |
-        {{ expr "@.metadata.iptc4xmpExt.AODateCreated" }}
+        {{ expr "@.metadata.'iptc4xmpExt:AODateCreated'" }}
       type: |
-        {{ expr "@.metadata.iptc4xmpExt.DigitalSourceType" }}
+        {{ expr "@.metadata.'iptc4xmpExt:DigitalSourceType'" }}
