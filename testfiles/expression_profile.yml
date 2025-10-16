@@ -1,6 +1,6 @@
 # Example Trust Profile for experimenting with expression registration
 ---
-metadata:
+profile_metadata:
   name: Experimental Expression Registration Profile
   issuer: JPEG Trust Committee
   date: 2025-06-26T21:00:46.638Z
@@ -29,7 +29,7 @@ variables:
 - block:
     name: "profile_metadata"
     value: |
-      {{ expr "@.metadata" }}
+      {{ expr "@.profile_metadata" }}
 ---
 # Section 1
 
