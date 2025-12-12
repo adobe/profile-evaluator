@@ -1,6 +1,6 @@
 # Example Trust Profile for evaluating no_manifests_credential.json
 ---
-metadata:
+profile_metadata:
   name: Experimental Signature Validation Profile
   issuer: JPEG Trust Committee
   date: 2023-09-28T13:19:36.705Z
@@ -11,7 +11,7 @@ metadata:
 - block:
     name: "profile_metadata"
     value: |
-      {{ expr "@.metadata" }}
+      {{ expr "@.profile_metadata" }}
 ---
 # Section 1
 

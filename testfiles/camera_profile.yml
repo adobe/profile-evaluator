@@ -1,6 +1,6 @@
 # Example Trust Profile for evaluating camera_credential.json
 ---
-metadata:
+profile_metadata:
   name: Experimental Camera Profile
   issuer: JPEG Trust Committee
   date: 2025-07-05T10:20:25.844Z
@@ -18,7 +18,7 @@ metadata:
 - block:
     name: "profile_metadata"
     value: |
-      {{ expr "@.metadata" }}
+      {{ expr "@.profile_metadata" }}
 
 - id: metadata-output
   description: Section 0 - Metadata Output

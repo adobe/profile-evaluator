@@ -1,6 +1,6 @@
 # Example Trust Profile for evaluating genai_credential.json
 ---
-metadata:
+profile_metadata:
   name: Experimental Generative AI Profile
   issuer: JPEG Trust Committee
   date: 2023-10-31T00:16:40.346Z
@@ -11,7 +11,7 @@ metadata:
 - block:
     name: "profile_metadata"
     value: |
-      {{ expr "@.metadata" }}
+      {{ expr "@.profile_metadata" }}
 ---
 # Section 1
 

@@ -321,8 +321,7 @@ export class Evaluator {
     //   THIS IS NOT LONGER AUTOMATICALLY DONE!!
     //      name, version, issuer, date and are required fields
     // and add it to the report, as required by the spec
-    const metadata = doc0.metadata || doc0._metadata;
-    // trustReport.profile_metadata = metadata; // Store metadata in the report
+    const metadata = doc0.metadata || doc0.profile_metadata;
     const profileInfo = `${metadata.name} (${metadata.version})`;
     logger.log(`🔍 Evaluating "${profileInfo}" from "${metadata.issuer}" dated ${metadata.date}.`);
 
@@ -395,6 +394,9 @@ export class Evaluator {
 
     // statements added to trustReport
     trustReport.statements = theStatements;
+
+    // Store metadata in the report (do this after processing data blocks to avoid conflicts)
+    // trustReport.profile_metadata = metadata;
 
     // unregister Handlebars helpers
     Handlebars.unregisterHelper('expr');

@@ -1,6 +1,6 @@
 # Example Trust Profile for testing handlebars/template rendering
 ---
-metadata:
+profile_metadata:
   name: Testing Profile
   issuer: JPEG Trust Committee
   date: 2025-06-17T22:44:49.717Z
@@ -14,7 +14,7 @@ include:
 - block:
     name: "profile_metadata"
     value: |
-      {{ expr "@.metadata" }}
+      {{ expr "@.profile_metadata" }}
 ---
 # Section 1
 
