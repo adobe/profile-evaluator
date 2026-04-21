@@ -1,0 +1,138 @@
+{
+  "rubric_metadata": {
+    "name": "C2PA Asset Conformance 0.2 Spec 2.4 Rubric",
+    "issuer": "C2PA Conformance Task Force",
+    "date": "2026-03-31T05:00:00Z",
+    "version": "0.2.0",
+    "language": "en"
+  },
+  "statements": [
+    [
+      {
+        "id": "validation:inception_action_position",
+        "value": true,
+        "report_text": "Inception action is correctly positioned as the first item in the first created actions assertion"
+      },
+      {
+        "id": "validation:thumbnail_location",
+        "value": true,
+        "report_text": "Thumbnail assertions are correctly located in created_assertions"
+      },
+      {
+        "id": "validation:no_dst_for_opened_action",
+        "value": true,
+        "report_text": "No c2pa.opened actions have a digitalSourceType"
+      },
+      {
+        "id": "validation:mandatory_spec_version",
+        "value": false,
+        "report_text": "Missing mandatory 'specVersion' in claim_generator_info"
+      },
+      {
+        "id": "validation:well_formed_data_present",
+        "value": true,
+        "report_text": "Validation results are present for structural analysis"
+      },
+      {
+        "id": "validation:well_formed_success",
+        "value": true,
+        "report_text": "No structural failures found"
+      },
+      {
+        "id": "validation:valid_data_present",
+        "value": true,
+        "report_text": "Validation results are present for integrity analysis"
+      },
+      {
+        "id": "validation:valid_success",
+        "value": true,
+        "report_text": "No validation mismatches found"
+      },
+      {
+        "id": "validation:trusted_data_present",
+        "value": true,
+        "report_text": "Validation results are present for trust analysis"
+      },
+      {
+        "id": "validation:trusted_success",
+        "value": true,
+        "report_text": "Asset is trusted"
+      },
+      {
+        "id": "validation:active_manifest_urn",
+        "value": true,
+        "report_text": "Active manifest URN uses standard 'urn:c2pa:' prefix"
+      },
+      {
+        "id": "validation:no_deprecated_assertions",
+        "value": true,
+        "report_text": "No deprecated standard assertions found"
+      },
+      {
+        "id": "validation:no_unsupported_assertions",
+        "value": true,
+        "report_text": "All standard assertions are supported for Spec 2.4"
+      },
+      {
+        "id": "validation:no_deprecated_actions",
+        "value": true,
+        "report_text": "No deprecated actions used"
+      },
+      {
+        "id": "validation:review_ratings_datasource",
+        "value": true,
+        "report_text": "No invalid co-occurrence of reviewRatings and human entry dataSource"
+      },
+      {
+        "id": "validation:ingredient_v3_no_active_manifest",
+        "value": true,
+        "report_text": "Ingredient v3 assertions without activeManifest correctly omit validationResults"
+      },
+      {
+        "id": "validation:ingredient_relationship_values",
+        "value": true,
+        "report_text": "All ingredient assertions have valid relationship values"
+      },
+      {
+        "id": "validation:update_manifest_constraints",
+        "value": false,
+        "report_text": "Update manifest violates constraints (has thumbnail or does not have exactly one parentOf ingredient)"
+      },
+      {
+        "id": "validation:no_deprecated_claim_fields",
+        "value": true,
+        "report_text": "No deprecated claim fields found"
+      },
+      {
+        "id": "validation:mandatory_dst_for_editorial_scenarios",
+        "value": true,
+        "report_text": "Every editorial and created action has a digitalSourceType"
+      },
+      {
+        "id": "validation:ingredient_v3_choice",
+        "value": true,
+        "report_text": "No ingredient v3 assertion contains both activeManifest and digitalSourceType"
+      },
+      {
+        "id": "validation:alternative_content_representation_choice",
+        "value": true,
+        "report_text": "Alternative content representation assertions have valid choice of parameters"
+      },
+      {
+        "id": "validation:forbidden_labels_in_external_references",
+        "value": true,
+        "report_text": "No external references point to forbidden labels"
+      },
+      {
+        "id": "validation:no_url_in_hashes",
+        "value": true,
+        "report_text": "No deprecated url field found in hash assertions"
+      },
+      {
+        "id": "validation:ingredient_v3_mandatory_validation_results",
+        "value": true,
+        "report_text": "Ingredient v3 assertions with activeManifest correctly include validationResults"
+      }
+    ]
+  ]
+}
