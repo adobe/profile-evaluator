@@ -13,7 +13,7 @@ governing permissions and limitations under the License.
 const TestUtils = require('./testUtils');
 
 describe('CLI Integration: --eval Option', () => {
-  const TEST_DATA_FILE = 'testfiles/camera_indicators.json';
+  const TEST_DATA_FILE = 'testfiles/trust-profiles/camera_indicators.json';
 
   // Helper function to extract JSON result from CLI output
   function extractJsonResult(cliOutput) {
@@ -226,7 +226,7 @@ describe('CLI Integration: --eval Option', () => {
 
   // Test 18: Error handling - Both options provided
   test('should error when both --profile and --eval are provided', () => {
-    const result = TestUtils.runCLIEval([TEST_DATA_FILE, '--profile', 'testfiles/camera_profile.yml', '--eval', 'declaration']);
+    const result = TestUtils.runCLIEval([TEST_DATA_FILE, '--profile', 'testfiles/trust-profiles/camera_profile.yml', '--eval', 'declaration']);
     expect(result.exitCode).toBe(1);
     expect(result.stderr).toContain('Cannot use both --profile and --eval options together');
   });
