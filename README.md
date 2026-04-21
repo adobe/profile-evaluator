@@ -1,6 +1,9 @@
-# JPEG Trust Evaluator
+# C2PA / JPEG Trust Evaluator
 
-This project is a command line tool that evaluates a JSON file containing a Trust Indicator Set according to the (YAML-based) Trust Profile, based on the details from the JPEG Trust (ISO 21617-1:2025) standard.
+This project is a command line tool that evaluates a JSON file containing an asset's provenance data against a YAML-based evaluation document. It supports two types of evaluation documents:
+
+- **JPEG Trust Profiles** — based on the JPEG Trust standard (ISO 21617-1:2025), used to evaluate a Trust Indicator Set
+- **C2PA Asset Rubrics** — based on C2PA conformance specifications, used to evaluate C2PA manifest data
 
 This tool also serves to validate forthcoming work in the 2nd Edition of JPEG Trust Part 1 as well as JPEG Trust Part 2 (ISO 21617-2).
 
@@ -38,10 +41,10 @@ node src/index.js [options] <jsonFile>
 ```
 
 ### Required Arguments
-- `<jsonFile>` - Path to the JSON file containing Trust Indicator Set to evaluate
+- `<jsonFile>` - Path to the JSON file containing the asset data to evaluate (Trust Indicator Set or C2PA manifest report)
 
 ### Required Options
-- `-p, --profile <path>` - Path to the Trust Profile file (YAML format)
+- `-p, --profile <path>` - Path to the evaluation document file (YAML format) — either a JPEG Trust Profile or a C2PA Asset Rubric
 
 **OR**
 
@@ -50,51 +53,62 @@ node src/index.js [options] <jsonFile>
 ### Optional Options
 - `-o, --output <directory>` - Output directory for reports (if not specified, results are printed to console)
 - `-y, --yaml` - Output report in YAML format (default)
-- `-j, --json` - Output report in YAML format
+- `-j, --json` - Output report in JSON format
 - `--html <path>` - Path to HTML template file for generating HTML reports
 - `-h, --help` - Display help information
 - `-V, --version` - Display version number
 
 ## Examples
 
+### JPEG Trust Profile evaluation
+
 1. **Basic evaluation** (output to console):
    ```
-   node src/index.js -p testfiles/camera_profile.yml testfiles/camera_indicators.json
+   node src/index.js -p testfiles/trust-profiles/camera_profile.yml testfiles/trust-profiles/camera_indicators.json
    ```
 
 2. **Generate YAML report** in output directory:
    ```
-   node src/index.js -p testfiles/genai_profile.yml -o output testfiles/genai_indicators.json
+   node src/index.js -p testfiles/trust-profiles/genai_profile.yml -o output testfiles/trust-profiles/genai_indicators.json
    ```
 
 3. **Generate JSON report**:
    ```
-   node src/index.js -p testfiles/no_manifests_profile.yml -o output --json testfiles/no_manifests_indicators.json
+   node src/index.js -p testfiles/trust-profiles/no_manifests_profile.yml -o output --json testfiles/trust-profiles/no_manifests_indicators.json
    ```
 
 4. **Generate HTML report** using a template:
    ```
-   node src/index.js -p testfiles/camera_profile.yml -o output --html testfiles/report_template.html testfiles/camera_indicators.json
+   node src/index.js -p testfiles/trust-profiles/camera_profile.yml -o output --html testfiles/trust-profiles/report_template.html testfiles/trust-profiles/camera_indicators.json
    ```
 
-5. **Evaluate a simple expression** against Trust Indicator Set data:
+### C2PA Asset Rubric evaluation
+
+5. **Evaluate a C2PA asset against the conformance rubric**:
    ```
-   node src/index.js --eval "declaration.'claim.v2'.alg" testfiles/camera_indicators.json
+   node src/index.js -p testfiles/asset-rubrics/asset-rubric-conformance0.2-spec2.4.yml testfiles/asset-rubrics/capture-non-ai-then-ai-edits.json
    ```
 
-6. **Check if a property exists**:
+### Expression evaluation
+
+6. **Evaluate a simple expression** against asset data:
    ```
-   node src/index.js --eval "has(declaration.assertions)" testfiles/camera_indicators.json
+   node src/index.js --eval "declaration.'claim.v2'.alg" testfiles/trust-profiles/camera_indicators.json
+   ```
+
+7. **Check if a property exists**:
+   ```
+   node src/index.js --eval "has(declaration.assertions)" testfiles/trust-profiles/camera_indicators.json
    ```
 
 ## Evaluation Mode
 
-The `--eval` option allows you to run JSON formula expressions directly against Trust Indicator Set data without requiring a Trust Profile. This is useful for:
+The `--eval` option allows you to run JSON formula expressions directly against asset data without requiring a Trust Profile or Asset Rubric. This is useful for:
 
-- **Quick data exploration**: Extract specific values from Trust Indicator Sets
+- **Quick data exploration**: Extract specific values from asset data
 - **Property validation**: Check if certain fields exist in the data
 - **Data transformation**: Apply expressions to compute derived values
-- **Debugging**: Test expressions before including them in Trust Profiles
+- **Debugging**: Test expressions before including them in Trust Profiles or Asset Rubrics
 
 ### Expression Syntax
 
@@ -110,16 +124,16 @@ The tool supports JSON formula expressions with the following features:
 
 ```bash
 # Extract a simple property
-node src/index.js --eval "declaration" testfiles/camera_indicators.json
+node src/index.js --eval "declaration" testfiles/trust-profiles/camera_indicators.json
 
 # Access nested properties with special characters
-node src/index.js --eval "declaration.'claim.v2'.alg" testfiles/camera_indicators.json
+node src/index.js --eval "declaration.'claim.v2'.alg" testfiles/trust-profiles/camera_indicators.json
 
 # Check if a property exists
-node src/index.js --eval "has(declaration.assertions)" testfiles/camera_indicators.json
+node src/index.js --eval "has(declaration.assertions)" testfiles/trust-profiles/camera_indicators.json
 
 # Get array length
-node src/index.js --eval "length(declaration.assertions)" testfiles/camera_indicators.json
+node src/index.js --eval "length(declaration.assertions)" testfiles/trust-profiles/camera_indicators.json
 ```
 
 **Note**: The `--eval` and `--profile` options are mutually exclusive - you cannot use both in the same command.
@@ -210,6 +224,12 @@ Contributions are welcome! Please open an issue or submit a pull request for any
 This project is licensed under the Apache 2.0 License. See the LICENSE file for more details.
 
 ## Changelog
+
+### v1.2
+- Expanded tool to support C2PA Asset Rubrics in addition to JPEG Trust Profiles
+- Updated documentation to reflect support for both evaluation document types
+- Updated examples and fixed `-j` option description typo
+- Reorganized test files into `testfiles/trust-profiles/` and `testfiles/asset-rubrics/` subdirectories
 
 ### v1.1
 - Changed default output format to YAML

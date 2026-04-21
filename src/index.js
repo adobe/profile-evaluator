@@ -23,10 +23,10 @@ const program = new Command();
 
 program
   .name('profile-evaluator')
-  .description('A command line tool to evaluate Trust Indicator Sets data against Trust Profiles.')
-  .version('1.1.0')
-  .argument('<jsonFile>', 'path to the Trust Indicator Set to evaluate')
-  .option('-p, --profile <path>', 'path to Trust Profile')
+  .description('A command line tool to evaluate asset data against JPEG Trust Profiles and C2PA Asset Rubrics.')
+  .version('1.2.0')
+  .argument('<jsonFile>', 'path to the JSON file containing asset data to evaluate')
+  .option('-p, --profile <path>', 'path to JPEG Trust Profile or C2PA Asset Rubric (YAML)')
   .option('-e, --eval <expression>', 'JSON formula expression to evaluate against the data')
   .option('-o, --output <directory>', 'output directory for reports')
   .option('-y, --yaml', 'output report in YAML format, default')
@@ -58,7 +58,7 @@ const evaluator = new Evaluator();
 
 async function main() {
   try {
-    console.log(`🤝 Loading Trust Indicator Set from: ${jsonFilePath}`);
+    console.log(`📋 Loading asset data from: ${jsonFilePath}`);
     const jsonData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf-8'));
 
     let result;
