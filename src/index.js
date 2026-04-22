@@ -27,6 +27,7 @@ program
   .version('1.2.0')
   .argument('<jsonFile>', 'path to the JSON file containing asset data to evaluate')
   .option('-p, --profile <path>', 'path to JPEG Trust Profile or C2PA Asset Rubric (YAML)')
+  .option('-r, --rubric <path>', 'alias for --profile; defaults output to JSON format')
   .option('-e, --eval <expression>', 'JSON formula expression to evaluate against the data')
   .option('-o, --output <directory>', 'output directory for reports')
   .option('-y, --yaml', 'output report in YAML format, default')
@@ -38,19 +39,20 @@ program.parse();
 const options = program.opts();
 const args = program.args;
 
-const profilePath = options.profile;
+const isRubric = !!options.rubric;
+const profilePath = options.profile || options.rubric;
 const evalExpression = options.eval;
 const jsonFilePath = args[0];
 const outputDir = options.output;
 
 // Validate that either profile or eval is provided, but not both
 if (!profilePath && !evalExpression) {
-  console.error('❌ Error: Either --profile or --eval option must be provided');
+  console.error('❌ Error: Either --profile (--rubric) or --eval option must be provided');
   process.exit(1);
 }
 
 if (profilePath && evalExpression) {
-  console.error('❌ Error: Cannot use both --profile and --eval options together');
+  console.error('❌ Error: Cannot use both --profile/--rubric and --eval options together');
   process.exit(1);
 }
 
@@ -93,7 +95,7 @@ async function main() {
         const outReport = template(result);
         fs.writeFileSync(htmlOutputPath, outReport);
         console.log(`📝 HTML report written to ${htmlOutputPath}`);
-      } else if (options.json) {
+      } else if (options.json || (isRubric && !options.yaml)) {
         const ext = 'json';
         const outputPath = path.join(outputDir, `${inputFileName}_report.${ext}`);
         fs.writeFileSync(outputPath, JSON.stringify(result, null, 2));

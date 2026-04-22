@@ -3,7 +3,7 @@
 This project is a command line tool that evaluates a JSON file containing an asset's provenance data against a YAML-based evaluation document. It supports two types of evaluation documents:
 
 - **JPEG Trust Profiles** — based on the JPEG Trust standard (ISO 21617-1:2025), used to evaluate a Trust Indicator Set
-- **C2PA Asset Rubrics** — based on C2PA conformance specifications, used to evaluate C2PA manifest data
+- **C2PA Asset Rubrics** — based on C2PA conformance specifications, used to evaluate [crJSON](https://spec.c2pa.org/specifications/specifications/2.4/crJSON/crjson-format.html)
 
 This tool also serves to validate forthcoming work in the 2nd Edition of JPEG Trust Part 1 as well as JPEG Trust Part 2 (ISO 21617-2).
 
@@ -44,16 +44,16 @@ node src/index.js [options] <jsonFile>
 - `<jsonFile>` - Path to the JSON file containing the asset data to evaluate (Trust Indicator Set or C2PA manifest report)
 
 ### Required Options
-- `-p, --profile <path>` - Path to the evaluation document file (YAML format) — either a JPEG Trust Profile or a C2PA Asset Rubric
+- `-p, --profile <path>` / `-r, --rubric <path>` - Path to the evaluation document file (YAML format) — either a JPEG Trust Profile or a C2PA Asset Rubric (`--rubric` is an alias for `--profile`, and defaults output to JSON format)
 
 **OR**
 
-- `-e, --eval <expression>` - JSON formula expression to evaluate against the data (cannot be used with --profile)
+- `-e, --eval <expression>` - JSON formula expression to evaluate against the data (cannot be used with --profile/--rubric)
 
 ### Optional Options
 - `-o, --output <directory>` - Output directory for reports (if not specified, results are printed to console)
-- `-y, --yaml` - Output report in YAML format (default)
-- `-j, --json` - Output report in JSON format
+- `-y, --yaml` - Output report in YAML format (default for profiles)
+- `-j, --json` - Output report in JSON format (default for rubrics)
 - `--html <path>` - Path to HTML template file for generating HTML reports
 - `-h, --help` - Display help information
 - `-V, --version` - Display version number
@@ -86,7 +86,7 @@ node src/index.js [options] <jsonFile>
 
 5. **Evaluate a C2PA asset against the conformance rubric**:
    ```
-   node src/index.js -p testfiles/asset-rubrics/asset-rubric-conformance0.2-spec2.4.yml testfiles/asset-rubrics/capture-non-ai-then-ai-edits.json
+   node src/index.js -r testfiles/asset-rubrics/asset-rubric-conformance0.2-spec2.4.yml testfiles/asset-rubrics/capture-non-ai-then-ai-edits.json
    ```
 
 ### Expression evaluation
@@ -136,7 +136,7 @@ node src/index.js --eval "has(declaration.assertions)" testfiles/trust-profiles/
 node src/index.js --eval "length(declaration.assertions)" testfiles/trust-profiles/camera_indicators.json
 ```
 
-**Note**: The `--eval` and `--profile` options are mutually exclusive - you cannot use both in the same command.
+**Note**: The `--eval` and `--profile`/`--rubric` options are mutually exclusive - you cannot use both in the same command.
 
 ## Development
 
@@ -224,6 +224,10 @@ Contributions are welcome! Please open an issue or submit a pull request for any
 This project is licensed under the Apache 2.0 License. See the LICENSE file for more details.
 
 ## Changelog
+
+### v1.3
+- Added `-r`/`--rubric` as an alias for `-p`/`--profile`
+- Default output format is now JSON for rubrics and YAML for profiles, with the option to override using `-y` or `-j`
 
 ### v1.2
 - Expanded tool to support C2PA Asset Rubrics in addition to JPEG Trust Profiles
