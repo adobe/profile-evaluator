@@ -129,12 +129,104 @@ class TestUtils {
   static getTestPaths(testName) {
     const baseDir = path.resolve(__dirname);
     return {
-      profilePath: path.resolve(baseDir, `../testfiles/${testName}_profile.yml`),
-      indicatorsPath: path.resolve(baseDir, `../testfiles/${testName}_indicators.json`),
+      profilePath: path.resolve(baseDir, `../testfiles/trust-profiles/${testName}_profile.yml`),
+      indicatorsPath: path.resolve(baseDir, `../testfiles/trust-profiles/${testName}_indicators.json`),
       outputDir: path.resolve(baseDir, '../output'),
       jsonOutput: path.join(path.resolve(baseDir, '../output'), `${testName}_indicators_report.json`),
       yamlOutput: path.join(path.resolve(baseDir, '../output'), `${testName}_indicators_report.yml`)
     };
+  }
+
+  /**
+   * Get rubric test file paths for a given JSON test data file name
+   * @param {string} jsonName - Name of the JSON file (without extension)
+   * @returns {Object} Object containing all relevant file paths
+   */
+  static getRubricPaths(jsonName) {
+    const baseDir = path.resolve(__dirname);
+    return {
+      rubricPath: path.resolve(baseDir, '../testfiles/asset-rubrics/asset-rubric-conformance0.2-spec2.4.yml'),
+      jsonPath: path.resolve(baseDir, `../testfiles/asset-rubrics/${jsonName}.json`),
+      outputDir: path.resolve(baseDir, '../output'),
+      jsonOutput: path.join(path.resolve(baseDir, '../output'), `${jsonName}_report.json`),
+      yamlOutput: path.join(path.resolve(baseDir, '../output'), `${jsonName}_report.yml`)
+    };
+  }
+
+  /**
+   * Validate rubric output structure (uses rubric_metadata instead of profile_metadata)
+   * @param {Object} data - The parsed JSON/YAML data
+   */
+  static validateRubricData(data) {
+    expect(typeof data).toBe('object');
+    expect(data).not.toBeNull();
+    expect(Object.keys(data).length).toBeGreaterThan(0);
+    expect(data).toHaveProperty('rubric_metadata');
+    expect(data.rubric_metadata).toHaveProperty('name');
+    expect(data).toHaveProperty('statements');
+    expect(Array.isArray(data.statements)).toBe(true);
+    expect(data.statements.length).toBeGreaterThan(0);
+    data.statements.forEach(sectionGroup => {
+      expect(Array.isArray(sectionGroup)).toBe(true);
+      sectionGroup.forEach(section => {
+        expect(typeof section).toBe('object');
+        expect(section).not.toBeNull();
+        expect(section).toHaveProperty('id');
+        expect(typeof section.id).toBe('string');
+        expect(section.hasOwnProperty('report_text') || section.hasOwnProperty('value')).toBe(true);
+        if (section.hasOwnProperty('value')) {
+          expect(section.value).toBeDefined();
+        }
+      });
+    });
+  }
+
+  /**
+   * Validate rubric JSON output file
+   * @param {string} filePath - Path to the JSON file
+   * @returns {Object} Parsed JSON data
+   */
+  static validateRubricJSONOutput(filePath) {
+    this.validateFileExists(filePath);
+    const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+    this.validateRubricData(data);
+    return data;
+  }
+
+  /**
+   * Validate rubric YAML output file
+   * @param {string} filePath - Path to the YAML file
+   * @returns {Object} Parsed YAML data
+   */
+  static validateRubricYAMLOutput(filePath) {
+    this.validateFileExists(filePath);
+    const yamlData = yaml.parse(fs.readFileSync(filePath, 'utf-8'));
+    this.validateRubricData(yamlData);
+    return yamlData;
+  }
+
+  /**
+   * Run a complete JSON rubric test for a given JSON data file name
+   * @param {string} jsonName - Name of the JSON file (without extension)
+   * @returns {Object} Parsed JSON output data
+   */
+  static runRubricJSONTest(jsonName) {
+    const paths = this.getRubricPaths(jsonName);
+    this.cleanupFiles([paths.jsonOutput]);
+    this.runCLI(paths.rubricPath, paths.outputDir, paths.jsonPath, false);
+    return this.validateRubricJSONOutput(paths.jsonOutput);
+  }
+
+  /**
+   * Run a complete YAML rubric test for a given JSON data file name
+   * @param {string} jsonName - Name of the JSON file (without extension)
+   * @returns {Object} Parsed YAML output data
+   */
+  static runRubricYAMLTest(jsonName) {
+    const paths = this.getRubricPaths(jsonName);
+    this.cleanupFiles([paths.yamlOutput]);
+    this.runCLI(paths.rubricPath, paths.outputDir, paths.jsonPath, true);
+    return this.validateRubricYAMLOutput(paths.yamlOutput);
   }
 
   /**

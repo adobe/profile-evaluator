@@ -1,7 +1,7 @@
 const TestUtils = require('./testUtils');
 
 describe('CLI Integration: --eval Option (Simple)', () => {
-  const TEST_DATA_FILE = 'testfiles/camera_indicators.json';
+  const TEST_DATA_FILE = 'testfiles/trust-profiles/camera_indicators.json';
 
   // Helper function to extract JSON result from CLI output
   function extractJsonResult(cliOutput) {

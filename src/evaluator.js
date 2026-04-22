@@ -22,10 +22,11 @@ export class Evaluator {
     this.profile = null;
     this.formRunner = new FormulaRunner();
     this.formulaGlobals = {};
+    this.registeredFunctionNames = [];
   }
 
   loadProfile(profilePath) {
-    console.log(`📄 Loading Trust Profile from: ${profilePath}`);
+    console.log(`📄 Loading evaluation document from: ${profilePath}`);
 
     const fullPath = path.resolve(profilePath);
     const profileData = fs.readFileSync(fullPath, 'utf-8');
@@ -175,34 +176,54 @@ export class Evaluator {
       //     statementReport.title = statement.description;
       // }
 
+      // Preprocess expression: registered functions called with no args receive null as @,
+      // not the outer data context. Rewrite fname() → fname(@) so they get current data.
+      let expression = statement.expression.trim();
+      if (this.registeredFunctionNames && this.registeredFunctionNames.length > 0) {
+        for (const fnName of this.registeredFunctionNames) {
+          const escaped = fnName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+          expression = expression.replace(new RegExp(escaped + '\\(\\)', 'g'), fnName + '(@)');
+        }
+      }
+
       // Here we would evaluate the expression against the JSON data
-      const result = this.formRunner.run(statement.expression, jsonData, this.formulaGlobals);
+      const result = this.formRunner.run(expression, jsonData, this.formulaGlobals);
       logger.log('\t\tResult:', result);
-      statementReport.value = result;
+
+      // Handle failIfMatched: an array result is converted to boolean
+      // (empty array = pass = true, non-empty = fail = false)
+      let statementValue = result;
+      let booleanResult = typeof result === 'boolean' ? result : null;
+      if (statement.failIfMatched && Array.isArray(result)) {
+        booleanResult = result.length === 0;
+        statementValue = booleanResult;
+      }
+      statementReport.value = statementValue;
 
       // store the value in a special entry called "profile" in the original JSON
       // so that it can be found later
       if (!jsonData.profile) {
         jsonData.profile = {};
       }
-      jsonData.profile[statement.id] = result;
+      jsonData.profile[statement.id] = statementValue;
 
       // check if there is some report_text to log
-      // we convert the boolean result to a string, then look for a match
-      if (statement.report_text) {
-        if (typeof result === 'boolean') {
-          const reportTextObj = statement.report_text[result ? 'true' : 'false'];
+      // support both snake_case (report_text) and camelCase (reportText) keys
+      const reportTextDef = statement.report_text || statement.reportText;
+      if (reportTextDef) {
+        if (booleanResult !== null) {
+          const reportTextObj = reportTextDef[booleanResult ? 'true' : 'false'];
           if (typeof reportTextObj === 'object') {
             const repLang = 'en'; // default to English
             let reportText = reportTextObj[repLang];
 
-            // see if the report text contains a template
-            // if it does, we compile it with Handlebars
-            // and pass the jsonData to it
-            // otherwise we just use the report text as is
             if (reportText && reportText.includes('{{')) {
+              // When failIfMatched, inject matches into the template context
+              const templateContext = (statement.failIfMatched && Array.isArray(result))
+                ? { ...jsonData, matches: JSON.stringify(result) }
+                : jsonData;
               const template = Handlebars.compile(reportText);
-              reportText = template(jsonData);
+              reportText = template(templateContext);
             }
 
             logger.log(`\t\tReport Text: ${reportText}`);
@@ -221,7 +242,7 @@ export class Evaluator {
 
   evaluate(jsonData, profilePath) {
     if (!this.profile) {
-      throw new Error('❌ Trust Profile not loaded. Please load a profile before evaluation.');
+      throw new Error('❌ Evaluation document not loaded. Please load a profile or rubric before evaluation.');
     }
 
     // need to do this to get access to them inside Handlebars
@@ -321,7 +342,9 @@ export class Evaluator {
     //   THIS IS NOT LONGER AUTOMATICALLY DONE!!
     //      name, version, issuer, date and are required fields
     // and add it to the report, as required by the spec
-    const metadata = doc0.metadata || doc0.profile_metadata;
+    const metadata = doc0.metadata || doc0.profile_metadata || doc0.rubric_metadata;
+    const metadataKey = doc0.rubric_metadata ? 'rubric_metadata' : (doc0.profile_metadata ? 'profile_metadata' : 'metadata');
+    trustReport[metadataKey] = metadata;
     const profileInfo = `${metadata.name} (${metadata.version})`;
     logger.log(`🔍 Evaluating "${profileInfo}" from "${metadata.issuer}" dated ${metadata.date}.`);
 
@@ -343,9 +366,13 @@ export class Evaluator {
       logger.log('🔍 Registering expressions from the profile:');
       for (const [name, expression] of Object.entries(doc0.expressions)) {
         logger.log(`\t- ${name}: ${expression}`);
-        // register the expression as a function
       }
       this.formRunner.registerFunctions(doc0.expressions, doc0.variables);
+      // Track registered function names so we can rewrite no-arg calls to pass @
+      // (json-formula lambdas called with no args receive null as @, not the outer data)
+      this.registeredFunctionNames = Object.keys(doc0.expressions);
+    } else {
+      this.registeredFunctionNames = [];
     }
 
     // -1 one for the metadata document

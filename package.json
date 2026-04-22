@@ -1,8 +1,8 @@
 {
-  "name": "jpeg-trust-evaluator",
+  "name": "c2pa-jpeg-trust-evaluator",
   "type": "module",
-  "version": "1.0.0",
-  "description": "A command line tool to evaluate JSON data against JPEG Trust Profiles using json-formula rules.",
+  "version": "1.2.0",
+  "description": "A command line tool to evaluate JSON data against JPEG Trust Profiles and C2PA Asset Rubrics using json-formula rules.",
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
@@ -28,6 +28,8 @@
   "keywords": [
     "jpeg",
     "trust",
+    "c2pa",
+    "rubric",
     "evaluator",
     "json",
     "command-line"

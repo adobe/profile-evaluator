@@ -1,7 +1,7 @@
 const TestUtils = require('./testUtils');
 
 describe('Debug CLI Eval', () => {
-  const TEST_DATA_FILE = 'testfiles/camera_indicators.json';
+  const TEST_DATA_FILE = 'testfiles/trust-profiles/camera_indicators.json';
 
   test('debug nested property access', () => {
     const result = TestUtils.runCLIEval([TEST_DATA_FILE, '--eval', "declaration.'claim.v2'.alg"]);
